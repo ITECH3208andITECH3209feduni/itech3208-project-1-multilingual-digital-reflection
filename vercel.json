@@ -5,6 +5,6 @@
       "destination": "/login.html"
     }
   ],
-  "cleanUrls": true,
+  "cleanUrls": false,
   "trailingSlash": false
 }
