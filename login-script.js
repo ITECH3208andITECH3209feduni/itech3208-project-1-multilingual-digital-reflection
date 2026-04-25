@@ -140,14 +140,14 @@ const App = {
     DOM.setLoading(btn, false);
     
     if (success) {
-      DOM.show(successBanner, 'is-visible');
-      // Redirect to home page after 1.5 seconds
-      setTimeout(() => {
-       window.location.href = '/index.html';
-      }, 1500);
-    } else {
-      DOM.showError(email, '❌ Wrong username or password. Try again!', emailErr);
-    }
+  DOM.show(successBanner, 'is-visible');
+
+  setTimeout(() => {
+    window.location.assign("index.html");
+  }, 1500);
+} else {
+  DOM.showError(email, '❌ Wrong username or password. Try again!', emailErr);
+}
   },
 
 };
