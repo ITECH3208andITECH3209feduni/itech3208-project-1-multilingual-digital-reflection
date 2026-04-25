@@ -139,11 +139,11 @@ const App = {
     const success = await Auth.login(emailVal, passwordVal);
     DOM.setLoading(btn, false);
     
-    if (success) {
+ if (success) {
   DOM.show(successBanner, 'is-visible');
 
   setTimeout(() => {
-    window.location.assign("index.html");
+    window.location.href = '/index.html';
   }, 1500);
 } else {
   DOM.showError(email, '❌ Wrong username or password. Try again!', emailErr);
