@@ -143,7 +143,7 @@ const App = {
       DOM.show(successBanner, 'is-visible');
       // Redirect to home page after 1.5 seconds
       setTimeout(() => {
-        window.location.href = '/';
+       window.location.href = '/index.html';
       }, 1500);
     } else {
       DOM.showError(email, '❌ Wrong username or password. Try again!', emailErr);
