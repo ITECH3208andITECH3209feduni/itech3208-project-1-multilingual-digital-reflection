@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StoryBond – Login</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Linking CSS file -->
+  <link rel="stylesheet" href="login-style.css" />
+</head>
+<body>
+
+  <!-- Animated background blobs -->
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="bubble bubble--1"></div>
+    <div class="bubble bubble--2"></div>
+    <div class="bubble bubble--3"></div>
+    <div class="bubble bubble--4"></div>
+    <div class="bubble bubble--5"></div>
+  </div>
+
+  <!-- Floating emoji decorations -->
+  <span class="emoji-deco" aria-hidden="true">🌟</span>
+  <span class="emoji-deco" aria-hidden="true">🎈</span>
+  <span class="emoji-deco" aria-hidden="true">🦄</span>
+  <span class="emoji-deco" aria-hidden="true">🍭</span>
+  <span class="emoji-deco" aria-hidden="true">🎀</span>
+  <span class="emoji-deco" aria-hidden="true">🌈</span>
+
+  <!-- Login card -->
+  <div class="card" role="main">
+
+    <!-- Header -->
+    <div class="header">
+      <span class="mascot" aria-hidden="true">🦊</span>
+      <h1><span class="brand-name">StoryBond</span></h1>
+      <p class="header__subtitle">Log in to start your adventure 🚀</p>
+    </div>
+
+    <!-- Success message (shown by script.js on correct login) -->
+    <div class="success-banner" id="successBanner" role="alert" aria-live="polite">
+      🎉 Yay! You're in! Let's go! 🎊
+    </div>
+
+    <!-- Login form -->
+    <form class="form" id="loginForm" novalidate>
+
+      <!-- Email / Username field -->
+      <div class="field">
+        <label class="field__label" for="email">
+          <span></span> Your Email or Username
+        </label>
+        <div class="field__input-wrap">
+          <svg class="field__svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <input class="field__input" type="text" id="email"
+                 placeholder="e.g. coolkid123" autocomplete="username"
+                 aria-describedby="emailError" />
+        </div>
+        <span class="field__error" id="emailError" role="alert"></span>
+      </div>
+
+      <!-- Password field -->
+      <div class="field">
+        <label class="field__label" for="password">
+          <span></span> Password
+        </label>
+        <div class="field__input-wrap">
+          <svg class="field__svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>
+          <input class="field__input" type="password" id="password"
+                 placeholder="password" autocomplete="current-password"
+                 aria-describedby="passwordError" />
+        </div>
+        <span class="field__error" id="passwordError" role="alert"></span>
+      </div>
+
+      <!-- Remember me + forgot password -->
+      <div class="extras">
+        <label class="remember">
+          <input type="checkbox" id="remember" /> Remember me
+        </label>
+        <a class="forgot-link" href="#">Forgot password?</a>
+      </div>
+
+      <!-- Submit button (click handled by script.js) -->
+      <button class="btn-login" type="button" id="loginBtn">
+        <span class="btn-login__text">🚀 Let's Go!</span>
+        <span class="btn-login__spinner" aria-hidden="true"></span>
+      </button>
+
+    </form>
+
+    <!-- Footer -->
+    <div class="stars-row" aria-hidden="true">⭐ ⭐ ⭐</div>
+    <div class="footer">New here? <a href="login.html">Create an account!</a></div>
+
+  </div>
+
+  <!-- Linking JS file (at bottom so HTML loads first) -->
+  <script src="login-script.js"></script>
+
+</body>
+</html>

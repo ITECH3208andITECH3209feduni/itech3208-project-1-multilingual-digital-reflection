@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryBond - Upload</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Rainbow Magic Bar -->
+    <div class="rainbow-top"></div>
+    
+    <div class="app-wrapper">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <!-- Brand -->
+            <div class="brand">
+                <div class="logo">🦊</div>
+                <h1 class="brand-name">StoryBond</h1>
+                <p class="brand-tagline">Learning Journey Tracker</p>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="nav">
+                <p class="nav-heading">NAVIGATION</p>
+                <a href="index.html" class="nav-link">
+                    <span class="nav-emoji">🏠</span>
+                    <span>Home</span>
+                </a>
+                <a href="journal.html" class="nav-link">
+                    <span class="nav-emoji">📖</span>
+                    <span>Journal</span>
+                </a>
+                <a href="upload.html" class="nav-link active">
+                    <span class="nav-emoji">📤</span>
+                    <span>Upload</span>
+                </a>
+                <a href="weekly.html" class="nav-link">
+                    <span class="nav-emoji">📊</span>
+                    <span>Weekly recap</span>
+                </a>
+            </nav>
+
+            <!-- Children -->
+            <div class="children">
+                <p class="nav-heading">CHILDREN</p>
+                <button class="add-child-btn">
+                    <span class="plus">+</span>
+                    <span>Add child</span>
+                </button>
+            </div>
+
+            <!-- User Profile -->
+            <div class="user-card">
+                <div class="user-avatar">PA</div>
+                <div class="user-details">
+                    <p class="user-name">Parent Account</p>
+                    <p class="user-role">Parent 💝</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <h1 class="greeting">Upload Media 📤</h1>
+                    <p class="date">Share your child's learning moments</p>
+                </div>
+                <div class="lang-switcher">
+                    <button class="lang-btn active">EN</button>
+                    <button class="lang-btn">TR</button>
+                </div>
+            </header>
+
+            <!-- Upload Options -->
+            <section class="upload-section">
+                <h3 class="section-heading">CHOOSE MEDIA TYPE</h3>
+                
+                <div class="upload-grid">
+                    <!-- Photos Upload -->
+                    <div class="upload-card photo-card">
+                        <div class="upload-icon">📷</div>
+                        <h3 class="upload-title">Photos</h3>
+                        <p class="upload-description">Upload images of your child's activities, artwork, and achievements</p>
+                        
+                        <div class="upload-dropzone" id="photo-dropzone">
+                            <div class="dropzone-content">
+                                <div class="dropzone-icon">🖼️</div>
+                                <p class="dropzone-text">Drag & drop photos here</p>
+                                <p class="dropzone-subtext">or</p>
+                                <button class="browse-btn" onclick="document.getElementById('photo-input').click()">
+                                    Browse Files
+                                </button>
+                                <input type="file" id="photo-input" accept="image/*" multiple hidden>
+                                <p class="dropzone-formats">JPG, PNG, GIF up to 10MB each</p>
+                            </div>
+                        </div>
+
+                        <div id="photo-preview" class="preview-area"></div>
+                    </div>
+
+                    <!-- Videos Upload -->
+                    <div class="upload-card video-card">
+                        <div class="upload-icon">🎥</div>
+                        <h3 class="upload-title">Videos</h3>
+                        <p class="upload-description">Capture learning moments, storytelling sessions, and digital activities</p>
+                        
+                        <div class="upload-dropzone" id="video-dropzone">
+                            <div class="dropzone-content">
+                                <div class="dropzone-icon">🎬</div>
+                                <p class="dropzone-text">Drag & drop videos here</p>
+                                <p class="dropzone-subtext">or</p>
+                                <button class="browse-btn" onclick="document.getElementById('video-input').click()">
+                                    Browse Files
+                                </button>
+                                <input type="file" id="video-input" accept="video/*" multiple hidden>
+                                <p class="dropzone-formats">MP4, MOV, AVI up to 100MB each</p>
+                            </div>
+                        </div>
+
+                        <div id="video-preview" class="preview-area"></div>
+                    </div>
+                </div>
+
+                <!-- Upload Actions -->
+                <div class="upload-actions" id="upload-actions" style="display: none;">
+                    <button class="cancel-upload-btn" onclick="cancelUpload()">
+                        Cancel
+                    </button>
+                    <button class="submit-upload-btn" onclick="submitUpload()">
+                        <span>✓</span>
+                        Upload Files
+                    </button>
+                </div>
+            </section>
+
+            <!-- Recent Uploads -->
+            <section class="recent-uploads-section">
+                <h3 class="section-heading">RECENT UPLOADS</h3>
+                
+                <div class="empty-uploads">
+                    <div class="empty-icon">📁</div>
+                    <h3 class="empty-title">No uploads yet</h3>
+                    <p class="empty-text">Start uploading photos and videos to build your child's learning portfolio</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // File selection counters
+        let selectedPhotos = [];
+        let selectedVideos = [];
+
+        // Photo Upload Handler
+        const photoInput = document.getElementById('photo-input');
+        const photoDropzone = document.getElementById('photo-dropzone');
+        const photoPreview = document.getElementById('photo-preview');
+
+        photoInput.addEventListener('change', function(e) {
+            handlePhotoSelection(e.target.files);
+        });
+
+        // Drag and drop for photos
+        photoDropzone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--pink)';
+            this.style.backgroundColor = 'rgba(255, 107, 157, 0.05)';
+        });
+
+        photoDropzone.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#E8D8F5';
+            this.style.backgroundColor = 'transparent';
+        });
+
+        photoDropzone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#E8D8F5';
+            this.style.backgroundColor = 'transparent';
+            handlePhotoSelection(e.dataTransfer.files);
+        });
+
+        // Video Upload Handler
+        const videoInput = document.getElementById('video-input');
+        const videoDropzone = document.getElementById('video-dropzone');
+        const videoPreview = document.getElementById('video-preview');
+
+        videoInput.addEventListener('change', function(e) {
+            handleVideoSelection(e.target.files);
+        });
+
+        // Drag and drop for videos
+        videoDropzone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--blue)';
+            this.style.backgroundColor = 'rgba(78, 201, 248, 0.05)';
+        });
+
+        videoDropzone.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#E8D8F5';
+            this.style.backgroundColor = 'transparent';
+        });
+
+        videoDropzone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#E8D8F5';
+            this.style.backgroundColor = 'transparent';
+            handleVideoSelection(e.dataTransfer.files);
+        });
+
+        function handlePhotoSelection(files) {
+            selectedPhotos = Array.from(files);
+            displayPhotoPreviews();
+            showUploadActions();
+        }
+
+        function handleVideoSelection(files) {
+            selectedVideos = Array.from(files);
+            displayVideoPreviews();
+            showUploadActions();
+        }
+
+        function displayPhotoPreviews() {
+            photoPreview.innerHTML = '';
+            selectedPhotos.forEach((file, index) => {
+                const previewItem = document.createElement('div');
+                previewItem.className = 'preview-item';
+                previewItem.innerHTML = `
+                    <div class="preview-thumb">
+                        <img src="${URL.createObjectURL(file)}" alt="Photo preview">
+                    </div>
+                    <div class="preview-info">
+                        <p class="preview-name">${file.name}</p>
+                        <p class="preview-size">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
+                    <button class="remove-preview" onclick="removePhoto(${index})">✕</button>
+                `;
+                photoPreview.appendChild(previewItem);
+            });
+        }
+
+        function displayVideoPreviews() {
+            videoPreview.innerHTML = '';
+            selectedVideos.forEach((file, index) => {
+                const previewItem = document.createElement('div');
+                previewItem.className = 'preview-item';
+                previewItem.innerHTML = `
+                    <div class="preview-thumb video-thumb">
+                        <span class="video-icon">🎥</span>
+                    </div>
+                    <div class="preview-info">
+                        <p class="preview-name">${file.name}</p>
+                        <p class="preview-size">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
+                    <button class="remove-preview" onclick="removeVideo(${index})">✕</button>
+                `;
+                videoPreview.appendChild(previewItem);
+            });
+        }
+
+        function removePhoto(index) {
+            selectedPhotos.splice(index, 1);
+            photoInput.value = '';
+            displayPhotoPreviews();
+            if (selectedPhotos.length === 0 && selectedVideos.length === 0) {
+                hideUploadActions();
+            }
+        }
+
+        function removeVideo(index) {
+            selectedVideos.splice(index, 1);
+            videoInput.value = '';
+            displayVideoPreviews();
+            if (selectedPhotos.length === 0 && selectedVideos.length === 0) {
+                hideUploadActions();
+            }
+        }
+
+        function showUploadActions() {
+            document.getElementById('upload-actions').style.display = 'flex';
+        }
+
+        function hideUploadActions() {
+            document.getElementById('upload-actions').style.display = 'none';
+        }
+
+        function cancelUpload() {
+            selectedPhotos = [];
+            selectedVideos = [];
+            photoInput.value = '';
+            videoInput.value = '';
+            photoPreview.innerHTML = '';
+            videoPreview.innerHTML = '';
+            hideUploadActions();
+        }
+
+        function submitUpload() {
+            const totalFiles = selectedPhotos.length + selectedVideos.length;
+            alert(`Uploading ${totalFiles} file(s)...\n\n` +
+                  `Photos: ${selectedPhotos.length}\n` +
+                  `Videos: ${selectedVideos.length}\n\n` +
+                  `(In production, files would be uploaded to the server)`);
+            
+            // Simulate upload success
+            setTimeout(() => {
+                cancelUpload();
+                alert('Upload successful! ✓');
+            }, 1000);
+        }
+
+        // Language Switcher
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Add Child Button
+        document.querySelector('.add-child-btn').addEventListener('click', function() {
+            alert('Opening add child form...');
+        });
+
+        // User Profile Click
+        document.querySelector('.user-card').addEventListener('click', function() {
+            alert('Opening profile settings...');
+        });
+    </script>
+</body>
+</html>
