@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryBond - New Journal Entry</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Rainbow Magic Bar -->
+    <div class="rainbow-top"></div>
+    
+    <div class="app-wrapper">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <!-- Brand -->
+            <div class="brand">
+                <div class="logo">🦊</div>
+                <h1 class="brand-name">StoryBond</h1>
+                <p class="brand-tagline">The Family Digital Journal</p>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="nav">
+                <p class="nav-heading">NAVIGATION</p>
+                <a href="index.html" class="nav-link">
+                    <span class="nav-emoji">🏠</span>
+                    <span>Home</span>
+                </a>
+				<a href="new-entry.html" class="nav-link active">
+                    <span class="nav-emoji">📖</span>
+                    <span>Journal</span>
+                </a>
+                <a href="weekly.html" class="nav-link">
+                    <span class="nav-emoji">📊</span>
+                    <span>Weekly Recap</span>
+                </a>
+                
+            </nav>
+
+            <!-- Children -->
+            <div class="children">
+                <p class="nav-heading">CHILDREN</p>
+                <div class="no-children">No children yet</div>
+                <button class="add-child-btn" onclick="window.location.href='add-child.html'">
+                    <span class="plus">+</span>
+                    <span>Add Child</span>
+                </button>
+            </div>
+
+            <!-- User Profile -->
+            <div class="user-card">
+                <div class="user-avatar">PA</div>
+                <div class="user-details">
+                    <p class="user-name">Parent Account</p>
+                    <p class="user-role">Parent</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <h1 class="greeting">Hello,Parent!</h1>
+                    <p class="date">Wednesday, April 22, 2026</p>
+                </div>
+                <div class="lang-switcher">
+                    <button class="lang-btn active">EN</button>
+                    <button class="lang-btn">TR</button>
+                </div>
+            </header>
+
+            <!-- Journal Entry Form -->
+            <div class="journal-entry-container">
+                <h2 class="journal-heading">New journal entry</h2>
+                <p class="journal-subheading">Capture today's moments</p>
+
+                <form class="journal-form" id="journalForm">
+                    <!-- Entry Title and Date -->
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <input 
+                                type="text" 
+                                id="entryTitle" 
+                                placeholder="Entry title (e.g. Lena's big day)"
+                                class="form-input"
+                            />
+                        </div>
+                        <div class="form-group flex-1">
+                            <input 
+                                type="text" 
+                                id="entryDate" 
+                                placeholder="Date: mm/dd/yyyy"
+                                class="form-input"
+                                maxlength="10"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Who is this entry about? -->
+                    <div class="form-section">
+                        <label class="section-label">WHO IS THIS ENTRY ABOUT?</label>
+                        <div class="button-group">
+                            <button type="button" class="tag-btn add-child-option" onclick="window.location.href='add-child.html'">
+                                <span>+</span> Add Child
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- What happened? -->
+                    <div class="form-section">
+                        <label class="section-label">WHAT HAPPENED?</label>
+                        <textarea 
+                            id="storyText" 
+                            placeholder="Write your story here..."
+                            class="story-textarea"
+                            rows="6"
+                        ></textarea>
+                    </div>
+
+                    <!-- Mood -->
+                    <div class="form-section">
+                        <label class="section-label">MOOD</label>
+                        <div class="button-group">
+                            <button type="button" class="mood-btn selected" data-mood="happy">
+                                😊 Happy
+                            </button>
+                            <button type="button" class="mood-btn" data-mood="excited">
+                                🤩 Excited
+                            </button>
+                            <button type="button" class="mood-btn" data-mood="loved">
+                                🥰 Loved
+                            </button>
+                            <button type="button" class="mood-btn" data-mood="tired">
+                                😴 Tired
+                            </button>
+                            <button type="button" class="mood-btn" data-mood="sad">
+                                😢 Sad
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="form-section">
+                        <label class="section-label">TAGS</label>
+                        <div class="button-group">
+                            <button type="button" class="tag-btn" data-tag="milestone"># Milestone</button>
+                            <button type="button" class="tag-btn" data-tag="funny"># Funny</button>
+                            <button type="button" class="tag-btn" data-tag="firsttime"># First Time</button>
+                            <button type="button" class="tag-btn" data-tag="familytime"># Family Time</button>
+                            <button type="button" class="tag-btn add-tag-btn">+ Add tag</button>
+                        </div>
+                    </div>
+
+                    <!-- Add Photos / Videos -->
+                    <div class="form-section">
+                        <label class="section-label">ADD PHOTOS / VIDEOS</label>
+                        <div class="media-upload-grid-3">
+                            <div class="media-upload-box" onclick="document.getElementById('photoInput').click()">
+                                <span class="upload-icon">📷</span>
+                                <span class="upload-label">Photo</span>
+                                <input type="file" id="photoInput" accept="image/*" multiple hidden>
+                            </div>
+                            <div class="media-upload-box" onclick="document.getElementById('videoInput').click()">
+                                <span class="upload-icon">🎥</span>
+                                <span class="upload-label">Video</span>
+                                <input type="file" id="videoInput" accept="video/*" multiple hidden>
+                            </div>
+                            <div class="media-upload-box" onclick="handleAddMore()">
+                                <span class="upload-icon">+</span>
+                                <span class="upload-label">Add</span>
+                            </div>
+                        </div>
+                        <div id="mediaPreview" class="media-preview-area"></div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="form-actions-journal">
+                        <button type="button" class="cancel-btn-journal" onclick="window.location.href='index.html'">
+                            Cancel
+                        </button>
+                        <button type="submit" class="save-btn-journal">
+                            <span>💾</span>
+                            <span>Save Entry</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="journal-script.js"></script>
+</body>
+</html>

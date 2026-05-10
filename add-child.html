@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryBond - Add Child</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Rainbow Magic Bar -->
+    <div class="rainbow-top"></div>
+    
+    <div class="app-wrapper">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <!-- Brand -->
+            <div class="brand">
+                <div class="logo">🦊</div>
+                <h1 class="brand-name">StoryBond</h1>
+                <p class="brand-tagline">Learning Journey Tracker</p>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="nav">
+                <p class="nav-heading">NAVIGATION</p>
+                <a href="index.html" class="nav-link">
+                    <span class="nav-emoji">🏠</span>
+                    <span>Home</span>
+                </a>
+                <a href="new-entry.html" class="nav-link">
+                    <span class="nav-emoji">📖</span>
+                    <span>Journal</span>
+                </a>
+                <a href="weekly.html" class="nav-link">
+                    <span class="nav-emoji">📊</span>
+                    <span>Weekly recap</span>
+                </a>
+            </nav>
+
+            <!-- Children -->
+            <div class="children">
+                <p class="nav-heading">CHILDREN</p>
+                <div class="no-children">No children yet</div>
+                <button class="add-child-btn active" onclick="window.location.href='add-child.html'">
+                    <span class="plus">+</span>
+                    <span>Add child</span>
+                </button>
+            </div>
+
+            <!-- User Profile -->
+            <div class="user-card">
+                <div class="user-avatar">PA</div>
+                <div class="user-details">
+                    <p class="user-name">Parent Account</p>
+                    <p class="user-role">Parent 💝</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Header -->
+            <header class="header">
+                <div>
+                    <h1 class="greeting">Add child</h1>
+                    <p class="date">Saturday, May 9, 2026</p>
+                </div>
+                <a href="index.html" class="back-link">
+                    <span>←</span> Back
+                </a>
+            </header>
+
+            <!-- Add Child Form Card -->
+            <div class="add-child-container">
+                <div class="add-child-card">
+                    <div class="card-header">
+                        <div class="card-icon">👶</div>
+                        <div>
+                            <h2 class="card-title">New child</h2>
+                            <p class="card-subtitle">Add your first child to get started</p>
+                        </div>
+                    </div>
+
+                    <form class="child-form" id="childForm">
+                        <!-- Child's Name -->
+                        <div class="form-group">
+                            <label for="childName">Child's name</label>
+                            <input 
+                                type="text" 
+                                id="childName" 
+                                placeholder="e.g. Emma"
+                                class="form-input"
+                            />
+                            <span class="error-message" id="nameError"></span>
+                        </div>
+
+                        <!-- Birthday -->
+                        <div class="form-group">
+                            <label for="birthday">Birthday</label>
+                            <div class="date-input-wrapper">
+                                <input 
+                                    type="text" 
+                                    id="birthday" 
+                                    placeholder="dd/mm/yyyy"
+                                    class="form-input"
+                                    maxlength="10"
+                                />
+                                <span class="calendar-icon">📅</span>
+                            </div>
+                            <span class="error-message" id="dateError"></span>
+                        </div>
+
+                        <!-- Color Selection -->
+                        <div class="form-group">
+                            <label>Color</label>
+                            <div class="color-picker">
+                                <input type="radio" name="color" value="yellow" id="color-yellow" class="color-radio">
+                                <label for="color-yellow" class="color-option yellow-color">
+                                    <span class="color-check">✓</span>
+                                </label>
+
+                                <input type="radio" name="color" value="pink" id="color-pink" class="color-radio">
+                                <label for="color-pink" class="color-option pink-color">
+                                    <span class="color-check">✓</span>
+                                </label>
+
+                                <input type="radio" name="color" value="blue" id="color-blue" class="color-radio" checked>
+                                <label for="color-blue" class="color-option blue-color">
+                                    <span class="color-check">✓</span>
+                                </label>
+
+                                <input type="radio" name="color" value="green" id="color-green" class="color-radio">
+                                <label for="color-green" class="color-option green-color">
+                                    <span class="color-check">✓</span>
+                                </label>
+
+                                <input type="radio" name="color" value="purple" id="color-purple" class="color-radio">
+                                <label for="color-purple" class="color-option purple-color">
+                                    <span class="color-check">✓</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="form-actions">
+                            <button type="button" class="cancel-btn" onclick="window.location.href='index.html'">
+                                Cancel
+                            </button>
+                            <button type="submit" class="submit-btn">
+                                <span>Add child</span>
+                                <span class="btn-icon">+</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Empty State Message -->
+                <div class="empty-state-message">
+                    <span class="sparkle-icon">✨</span>
+                    <span>Add a child to start capturing memories</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="add-child-script.js"></script>
+</body>
+</html>
