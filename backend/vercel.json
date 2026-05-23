@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/login.html"
+    }
+  ],
+  "cleanUrls": false,
+  "trailingSlash": false
+}
