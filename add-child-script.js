@@ -1,5 +1,9 @@
 // Add Child Script for StoryBond
 
+const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-654tu2n26.vercel.app';
+
+const AVATARS = ['🌙', '🚀', '🌸', '🐻', '⚡', '🌺', '🦁', '🦋', '🐆', '⭐'];
+
 const ChildForm = {
     init() {
         const form = document.getElementById('childForm');
@@ -10,6 +14,30 @@ const ChildForm = {
         
         // Form submission
         form.addEventListener('submit', ChildForm.handleSubmit);
+        
+        // Initialize avatar selector
+        ChildForm.initAvatarSelector();
+    },
+
+    initAvatarSelector() {
+        const avatarContainer = document.querySelector('.avatar-selector');
+        if (!avatarContainer) return;
+        
+        AVATARS.forEach(avatar => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.textContent = avatar;
+            btn.className = 'avatar-btn';
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.avatar-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            });
+            avatarContainer.appendChild(btn);
+        });
+        
+        // Select first avatar by default
+        document.querySelector('.avatar-btn').classList.add('selected');
     },
 
     formatDate(e) {
@@ -81,12 +109,20 @@ const ChildForm = {
         });
     },
 
-    handleSubmit(e) {
+    convertDateFormat(dateStr) {
+        // Convert dd/mm/yyyy to yyyy-mm-dd
+        const [day, month, year] = dateStr.split('/');
+        return `${year}-${month}-${day}`;
+    },
+
+    async handleSubmit(e) {
         e.preventDefault();
         
         const name = document.getElementById('childName').value.trim();
         const birthday = document.getElementById('birthday').value;
         const selectedColor = document.querySelector('input[name="color"]:checked');
+        const selectedAvatarBtn = document.querySelector('.avatar-btn.selected');
+        const userId = localStorage.getItem('userId');
         
         // Clear previous errors
         ChildForm.clearErrors();
@@ -106,19 +142,60 @@ const ChildForm = {
             return;
         }
         
-        // Get selected color
+        if (!userId) {
+            alert('⚠️ Please log in first');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        // Get selected color and avatar
         const color = selectedColor ? selectedColor.value : 'blue';
+        const avatar = selectedAvatarBtn ? selectedAvatarBtn.textContent : '🌙';
         
-        // Success! (In production, this would save to backend)
-        console.log('Child added:', { name, birthday, color });
+        // Convert date format
+        const formattedDate = ChildForm.convertDateFormat(birthday);
         
-        // Show success message
-        alert(`✅ ${name} has been added successfully!`);
+        // Show loading
+        const submitBtn = document.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ Adding...';
         
-        // Redirect to home page
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 500);
+        try {
+            // Add child to backend
+            const response = await fetch(`${API_URL}/api/children`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    parent_id: userId,
+                    name: name,
+                    date_of_birth: formattedDate,
+                    avatar: avatar,
+                    color: color
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Success message
+                alert(`✅ ${name} has been added successfully!`);
+                
+                // Reset form
+                document.getElementById('childForm').reset();
+                
+                // Redirect to home page
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 500);
+            } else {
+                throw new Error(data.error);
+            }
+        } catch (error) {
+            console.error('Error adding child:', error);
+            alert(`❌ Error: ${error.message}`);
+            submitBtn.disabled = false;
+            submitBtn.textContent = '✅ Add Child';
+        }
     }
 };
 
