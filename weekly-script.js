@@ -1,5 +1,7 @@
 // Weekly Recap Script for StoryBond
 
+const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-654tu2n26.vercel.app';
+
 const WeeklyRecap = {
     currentWeekOffset: 0,
     
@@ -15,6 +17,59 @@ const WeeklyRecap = {
         if (nextBtn) {
             nextBtn.addEventListener('click', () => WeeklyRecap.navigateWeek(1));
         }
+        
+        // Load initial week data
+        WeeklyRecap.loadWeeklyData();
+    },
+    
+    async loadWeeklyData() {
+        const userId = localStorage.getItem('userId');
+        
+        if (!userId) {
+            console.log('User not logged in');
+            return;
+        }
+        
+        try {
+            // Fetch entries for the user
+            const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                WeeklyRecap.updateWeeklyStats(data.data);
+            }
+        } catch (error) {
+            console.error('Error loading weekly data:', error);
+        }
+    },
+    
+    updateWeeklyStats(entries) {
+        // Calculate this week's entries
+        const today = new Date();
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay());
+        
+        const thisWeekEntries = entries.filter(entry => {
+            const entryDate = new Date(entry.entry_date);
+            return entryDate >= startOfWeek && entryDate <= today;
+        });
+        
+        // Update stats
+        const statBoxes = document.querySelectorAll('.stat-box');
+        if (statBoxes.length >= 3) {
+            statBoxes[0].querySelector('.stat-number').textContent = thisWeekEntries.length;
+            statBoxes[1].querySelector('.stat-number').textContent = thisWeekEntries.filter(e => e.media).length || 0;
+            
+            // Count unique languages
+            const languages = new Set(thisWeekEntries.map(e => e.language));
+            statBoxes[2].querySelector('.stat-number').textContent = languages.size;
+        }
+        
+        console.log('Updated weekly stats:', {
+            entries: thisWeekEntries.length,
+            uploads: thisWeekEntries.filter(e => e.media).length,
+            languages: new Set(thisWeekEntries.map(e => e.language)).size
+        });
     },
     
     navigateWeek(direction) {
@@ -40,8 +95,33 @@ const WeeklyRecap = {
             weekRangeEl.textContent = `${startFormatted} – ${endFormatted}`;
         }
         
-        // In a real app, this would fetch new data for the selected week
-        console.log('Navigated to week:', startFormatted, '-', endFormatted);
+        // Load data for selected week
+        WeeklyRecap.loadWeeklyDataForRange(startOfWeek, endOfWeek);
+    },
+    
+    async loadWeeklyDataForRange(startDate, endDate) {
+        const userId = localStorage.getItem('userId');
+        
+        if (!userId) {
+            console.log('User not logged in');
+            return;
+        }
+        
+        try {
+            const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                const filteredEntries = data.data.filter(entry => {
+                    const entryDate = new Date(entry.entry_date);
+                    return entryDate >= startDate && entryDate <= endDate;
+                });
+                
+                WeeklyRecap.updateWeeklyStats(filteredEntries);
+            }
+        } catch (error) {
+            console.error('Error loading weekly data:', error);
+        }
     }
 };
 
