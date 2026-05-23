@@ -1,6 +1,9 @@
 // Journal Entry Script for StoryBond
 
+const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-654tu2n26.vercel.app';
+
 let selectedMedia = [];
+let selectedFiles = [];
 
 const JournalEntry = {
     init() {
@@ -65,19 +68,16 @@ const JournalEntry = {
                 const mediaItem = {
                     type: type,
                     url: e.target.result,
-                    name: file.name
+                    name: file.name,
+                    file: file
                 };
                 
                 selectedMedia.push(mediaItem);
+                selectedFiles.push(file);
                 JournalEntry.renderMediaPreview();
             };
             
-            if (type === 'photo') {
-                reader.readAsDataURL(file);
-            } else {
-                // For videos, create a thumbnail
-                reader.readAsDataURL(file);
-            }
+            reader.readAsDataURL(file);
         });
     },
     
@@ -109,17 +109,48 @@ const JournalEntry = {
     
     removeMedia(index) {
         selectedMedia.splice(index, 1);
+        selectedFiles.splice(index, 1);
         JournalEntry.renderMediaPreview();
     },
     
-    handleSubmit(e) {
+    async uploadMedia(entryId) {
+        if (selectedFiles.length === 0) return [];
+        
+        const uploadedUrls = [];
+        const userId = localStorage.getItem('userId');
+        
+        for (const file of selectedFiles) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('parent_id', userId);
+            formData.append('entry_id', entryId);
+            
+            try {
+                const response = await fetch(`${API_URL}/api/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    uploadedUrls.push(data.data.file_url);
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+            }
+        }
+        
+        return uploadedUrls;
+    },
+    
+    async handleSubmit(e) {
         e.preventDefault();
         
         const title = document.getElementById('entryTitle').value.trim();
         const date = document.getElementById('entryDate').value;
         const story = document.getElementById('storyText').value.trim();
+        const userId = localStorage.getItem('userId');
         
-        const selectedWho = document.querySelector('.tag-btn[data-who].selected');
         const selectedMood = document.querySelector('.mood-btn.selected');
         const selectedTags = Array.from(document.querySelectorAll('.tag-btn[data-tag].selected'))
             .map(btn => btn.dataset.tag);
@@ -135,26 +166,69 @@ const JournalEntry = {
             return;
         }
         
-        // Collect form data
-        const entryData = {
-            title,
-            date,
-            who: selectedWho ? selectedWho.dataset.who : null,
-            story,
-            mood: selectedMood ? selectedMood.dataset.mood : 'happy',
-            tags: selectedTags,
-            media: selectedMedia
-        };
+        if (!userId) {
+            alert('⚠️ Please log in first');
+            window.location.href = 'login.html';
+            return;
+        }
         
-        console.log('Journal Entry:', entryData);
+        // Show loading
+        const submitBtn = document.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ Saving...';
         
-        // Success message
-        alert('✅ Journal entry saved successfully!');
-        
-        // Redirect to home
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 500);
+        try {
+            // For now, we'll use a default child ID
+            // In a real app, user would select which child
+            const childId = '142a8a01-6d48-4687-824f-030a9067c23e'; // Luna's ID (demo)
+            
+            // Create journal entry
+            const entryResponse = await fetch(`${API_URL}/api/entries-new`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    parent_id: userId,
+                    child_id: childId,
+                    title: title,
+                    entry_date: date || new Date().toISOString().split('T')[0],
+                    content: story,
+                    mood: selectedMood ? selectedMood.dataset.mood : 'happy',
+                    language: document.querySelector('.lang-btn.active')?.textContent === 'TR' ? 'TR' : 'EN',
+                    is_milestone: selectedTags.includes('milestone')
+                })
+            });
+            
+            const entryData = await entryResponse.json();
+            
+            if (!entryData.success) {
+                throw new Error(entryData.error);
+            }
+            
+            // Upload media if any
+            if (selectedFiles.length > 0) {
+                await JournalEntry.uploadMedia(entryData.data.id);
+            }
+            
+            // Success message
+            alert('✅ Journal entry saved successfully!');
+            
+            // Reset form
+            document.getElementById('journalForm').reset();
+            selectedMedia = [];
+            selectedFiles = [];
+            JournalEntry.renderMediaPreview();
+            
+            // Redirect to home
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 500);
+            
+        } catch (error) {
+            console.error('Error saving entry:', error);
+            alert(`❌ Error: ${error.message}`);
+            submitBtn.disabled = false;
+            submitBtn.textContent = '✏️ Save Entry';
+        }
     }
 };
 
