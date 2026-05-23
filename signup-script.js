@@ -1,5 +1,7 @@
 // Signup Script for StoryBond
 
+const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-654tu2n26.vercel.app';
+
 const CONFIG = {
   MIN_PASSWORD: 6,
   DELAY_MS: 1400,
@@ -73,16 +75,33 @@ const Validator = {
 };
 
 const Auth = {
-  signup: (email, username, password) => {
-    return new Promise((resolve) => {
-      // Simulating account creation delay
-      setTimeout(() => {
-        // For demo purposes, always succeed
-        // In production, this would call your backend API
-        console.log('Account created:', { email, username });
-        resolve(true);
-      }, CONFIG.DELAY_MS);
-    });
+  signup: async (email, username, password) => {
+    try {
+      const response = await fetch(`${API_URL}/api/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          username: username,
+          password: password,
+          full_name: username
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        // Save user info to localStorage
+        localStorage.setItem('userId', data.data.user.id);
+        localStorage.setItem('userName', data.data.user.username);
+        localStorage.setItem('userEmail', data.data.user.email);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Signup error:', error);
+      return false;
+    }
   },
 };
 
@@ -143,7 +162,6 @@ const App = {
     if (errors.confirmPassword) DOM.showError(confirmPassword, errors.confirmPassword, confirmPasswordErr);
     
     if (errors.terms) {
-      // Show terms error near the button
       alert(errors.terms);
     }
 
@@ -157,12 +175,11 @@ const App = {
     
     if (success) {
       DOM.show(successBanner, 'is-visible');
-      // Redirect to login page after 2 seconds
       setTimeout(() => {
         window.location.href = 'login.html';
       }, 2000);
     } else {
-      DOM.showError(email, '❌ Something went wrong. Please try again!', emailErr);
+      DOM.showError(email, '❌ Username or email already exists!', emailErr);
     }
   },
 };
