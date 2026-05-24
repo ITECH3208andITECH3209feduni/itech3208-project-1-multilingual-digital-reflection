@@ -165,15 +165,32 @@ async function loadChildren() {
             
             // Add each child
             data.data.forEach(child => {
-                const childEl = document.createElement('div');
-                childEl.className = 'child-item';
-                childEl.innerHTML = `
-                    <span class="child-avatar">${child.avatar}</span>
-                    <span class="child-name">${child.name}</span>
-                `;
-                childrenContainer.appendChild(childEl);
-            });
-            
+    const childEl = document.createElement('div');
+    childEl.className = 'child-item';
+    childEl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:8px; cursor:pointer; border-radius:8px; margin:4px 0;';
+    childEl.innerHTML = `
+        <span style="font-size:24px;">${child.avatar}</span>
+        <span style="font-size:14px; font-weight:500;">${child.name}</span>
+    `;
+    
+    // Make it clickable
+    childEl.addEventListener('click', () => {
+        localStorage.setItem('selectedChildId', child.id);
+        localStorage.setItem('selectedChildName', child.name);
+        localStorage.setItem('selectedChildAvatar', child.avatar);
+        alert(`Selected: ${child.avatar} ${child.name}`);
+    });
+    
+    // Hover effect
+    childEl.addEventListener('mouseover', () => {
+        childEl.style.background = '#F0E8F5';
+    });
+    childEl.addEventListener('mouseout', () => {
+        childEl.style.background = 'transparent';
+    });
+    
+    childrenContainer.appendChild(childEl);
+});
             // Add the button back
             childrenContainer.appendChild(addBtn);
             
