@@ -64,7 +64,7 @@ app.use((req, res, next) => {
 
 // Test route
 app.get('/', (req, res) => {
-  res.json({ message: 'StoryBond API is running!' });
+  res.json({ message: 'StoryBond API v2 is running!' });
 });
 
 // ============= AUTH ROUTES =============
