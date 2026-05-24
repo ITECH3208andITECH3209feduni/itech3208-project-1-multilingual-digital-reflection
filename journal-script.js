@@ -1,14 +1,95 @@
 // Journal Entry Script for StoryBond
 
 const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-654tu2n26.vercel.app';
+// Load children for selector
+async function loadChildrenSelector() {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/api/children/parent/${userId}`);
+        const data = await response.json();
+        
+        if (data.success && data.data.length > 0) {
+            // Find the "who" section in the form
+            const whoSection = document.querySelector('.who-section') || 
+                               document.querySelector('[data-section="who"]');
+            
+            // Create children selector
+            const selectorHTML = `
+                <div id="childSelector" style="margin: 15px 0;">
+                    <p style="font-weight:600; margin-bottom:8px;">👶 Who is this about?</p>
+                    <div id="childButtons" style="display:flex; gap:10px; flex-wrap:wrap;">
+                        ${data.data.map(child => `
+                            <button 
+                                type="button"
+                                class="child-select-btn"
+                                data-child-id="${child.id}"
+                                data-child-name="${child.name}"
+                                style="
+                                    padding: 10px 16px;
+                                    border: 2px solid #E0D0F0;
+                                    border-radius: 20px;
+                                    background: white;
+                                    cursor: pointer;
+                                    font-size: 14px;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 6px;
+                                "
+                            >
+                                <span style="font-size:20px;">${child.avatar}</span>
+                                <span>${child.name}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Insert at top of form
+            const form = document.getElementById('journalForm');
+            form.insertAdjacentHTML('afterbegin', selectorHTML);
+            
+            // Add click handlers
+            document.querySelectorAll('.child-select-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Deselect all
+                    document.querySelectorAll('.child-select-btn').forEach(b => {
+                        b.style.border = '2px solid #E0D0F0';
+                        b.style.background = 'white';
+                    });
+                    
+                    // Select this one
+                    this.style.border = '2px solid #C77CF9';
+                    this.style.background = '#F0E8F5';
+                    
+                    // Save selection
+                    localStorage.setItem('journalChildId', this.dataset.childId);
+                    localStorage.setItem('journalChildName', this.dataset.childName);
+                });
+            });
+            
+            // Auto-select first child
+            const firstBtn = document.querySelector('.child-select-btn');
+            if (firstBtn) {
+                firstBtn.click();
+            }
+        }
+    } catch (error) {
+        console.error('Error loading children:', error);
+    }
+}
 
 let selectedMedia = [];
 let selectedFiles = [];
 
 const JournalEntry = {
-    init() {
-        // Form submission
-        const form = document.getElementById('journalForm');
+   init() {
+    // Load children selector
+    loadChildrenSelector();
+    
+    // Form submission
+    const form = document.getElementById('journalForm');
         form.addEventListener('submit', JournalEntry.handleSubmit);
         
         // Date input formatting
@@ -180,7 +261,11 @@ const JournalEntry = {
         try {
             // For now, we'll use a default child ID
             // In a real app, user would select which child
-            const childId = '142a8a01-6d48-4687-824f-030a9067c23e'; // Luna's ID (demo)
+           const childId = localStorage.getItem('journalChildId');
+if (!childId) {
+    alert('⚠️ Please select a child first!');
+    return;
+}
             
             // Create journal entry
             const entryResponse = await fetch(`${API_URL}/api/entries-new`, {
