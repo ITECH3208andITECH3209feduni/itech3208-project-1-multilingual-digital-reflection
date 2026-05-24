@@ -37,7 +37,16 @@ const supabase = createClient(
 );
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://itech3208-project-1-multilingual-di.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Increase timeout for large file uploads
