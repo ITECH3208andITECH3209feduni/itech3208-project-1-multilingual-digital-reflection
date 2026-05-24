@@ -13,7 +13,9 @@
     <div class="rainbow-top"></div>
     
     <div class="app-wrapper">
-        <aside class="sidebar">
+        <aside class="sidebar">} catch (error) {
+    document.getElementById(`entryMedia_${id}`).innerHTML = '';
+}
             <div class="brand">
                 <div class="logo">🦊</div>
                 <h1 class="brand-name">StoryBond</h1>
@@ -356,9 +358,10 @@
             } else {
                 mediaContainer.innerHTML = '';
             }
-        } catch (error) {
-            document.getElementById(`entryMedia_${id}`).innerHTML = '';
-        }
+       } catch (error) {
+    console.log('No media for this entry');
+    document.getElementById(`entryMedia_${id}`).innerHTML = '';
+}
     }
 
     // ============= LOAD RECENT ENTRIES =============
