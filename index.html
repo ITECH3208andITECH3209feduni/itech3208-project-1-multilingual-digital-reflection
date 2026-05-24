@@ -13,9 +13,7 @@
     <div class="rainbow-top"></div>
     
     <div class="app-wrapper">
-        <aside class="sidebar">} catch (error) {
-    document.getElementById(`entryMedia_${id}`).innerHTML = '';
-}
+        <aside class="sidebar">
             <div class="brand">
                 <div class="logo">🦊</div>
                 <h1 class="brand-name">StoryBond</h1>
@@ -227,6 +225,7 @@
                 const safeTitle = entry.title.replace(/'/g, "\\'");
                 const safeContent = entry.content.replace(/'/g, "\\'").replace(/\n/g, ' ');
                 const safeMood = entry.mood.replace(/'/g, "\\'");
+                const entryMedia = JSON.stringify(entry.media || []).replace(/'/g, "\\'");
                 
                 entryEl.innerHTML = `
                     <div style="flex:1; margin-right:10px;">
@@ -241,6 +240,24 @@
                     </div>
                     <button class="view-btn" onclick="viewEntry('${entry.id}', '${safeTitle}', '${safeContent}', '${entry.entry_date}', '${safeMood}', ${entry.is_milestone})" style="white-space:nowrap;">View ›</button>
                 `;
+
+                // Store media data on the element
+                entryEl.dataset.media = JSON.stringify(entry.media || []);
+                
+                // Add click handler for view button
+                const viewBtn = entryEl.querySelector('.view-btn');
+                viewBtn.addEventListener('click', () => {
+                    viewEntry(
+                        entry.id,
+                        entry.title,
+                        entry.content,
+                        entry.entry_date,
+                        entry.mood,
+                        entry.is_milestone,
+                        entry.media || []
+                    );
+                });
+
                 entriesList.appendChild(entryEl);
             });
             
@@ -263,7 +280,11 @@
     }
 
     // ============= VIEW ENTRY MODAL =============
-    async function viewEntry(id, title, content, date, mood, isMilestone) {
+    function viewEntry(id, title, content, date, mood, isMilestone, media) {
+        // Remove existing modal
+        const existing = document.querySelector('.modal-overlay');
+        if (existing) existing.remove();
+
         const modal = document.createElement('div');
         modal.style.cssText = `
             position: fixed;
@@ -278,6 +299,30 @@
             z-index: 1000;
         `;
         
+        // Build media HTML
+        let mediaHTML = '';
+        if (media && media.length > 0) {
+            mediaHTML = '<p style="font-weight:600; margin-bottom:10px;">📸 Media</p>';
+            media.forEach(m => {
+                if (m.media_type === 'image') {
+                    mediaHTML += `
+                        <img src="${m.file_url}" style="
+                            width: 100%;
+                            border-radius: 12px;
+                            margin-bottom: 10px;
+                            object-fit: cover;
+                        " alt="Entry photo">
+                    `;
+                } else if (m.media_type === 'video') {
+                    mediaHTML += `
+                        <video controls style="width:100%; border-radius:12px; margin-bottom:10px;">
+                            <source src="${m.file_url}">
+                        </video>
+                    `;
+                }
+            });
+        }
+
         modal.innerHTML = `
             <div style="
                 background: white;
@@ -317,8 +362,8 @@
                 <hr style="border: 1px solid #F0E8F5; margin-bottom: 16px;">
                 <p style="line-height: 1.6; color: #333; margin-bottom: 20px;">${content}</p>
                 
-                <div id="entryMedia_${id}" style="margin-top: 16px;">
-                    <p style="color: #888; font-size: 13px;">⏳ Loading media...</p>
+                <div style="margin-top: 16px;">
+                    ${mediaHTML}
                 </div>
             </div>
         `;
@@ -328,40 +373,6 @@
             if (e.target === modal) modal.remove();
         });
         document.body.appendChild(modal);
-        
-        // Load media
-        try {
-            const response = await fetch(`${API_URL}/api/media/entry/${id}`);
-            const data = await response.json();
-            const mediaContainer = document.getElementById(`entryMedia_${id}`);
-            
-            if (data.success && data.data.length > 0) {
-                mediaContainer.innerHTML = '<p style="font-weight:600; margin-bottom:10px;">📸 Media</p>';
-                data.data.forEach(media => {
-                    if (media.media_type === 'image') {
-                        mediaContainer.innerHTML += `
-                            <img src="${media.file_url}" style="
-                                width: 100%;
-                                border-radius: 12px;
-                                margin-bottom: 10px;
-                                object-fit: cover;
-                            " alt="Entry photo">
-                        `;
-                    } else if (media.media_type === 'video') {
-                        mediaContainer.innerHTML += `
-                            <video controls style="width:100%; border-radius:12px; margin-bottom:10px;">
-                                <source src="${media.file_url}">
-                            </video>
-                        `;
-                    }
-                });
-            } else {
-                mediaContainer.innerHTML = '';
-            }
-       } catch (error) {
-    console.log('No media for this entry');
-    document.getElementById(`entryMedia_${id}`).innerHTML = '';
-}
     }
 
     // ============= LOAD RECENT ENTRIES =============
@@ -382,10 +393,6 @@
                     entryEl.className = 'empty-entry-item';
                     entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
                     
-                    const safeTitle = entry.title.replace(/'/g, "\\'");
-                    const safeContent = entry.content.replace(/'/g, "\\'").replace(/\n/g, ' ');
-                    const safeMood = entry.mood.replace(/'/g, "\\'");
-                    
                     entryEl.innerHTML = `
                         <div style="flex:1; margin-right:10px;">
                             <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
@@ -394,8 +401,23 @@
                                 ${entry.is_milestone ? ' ⭐' : ''}
                             </p>
                         </div>
-                        <button class="view-btn" onclick="viewEntry('${entry.id}', '${safeTitle}', '${safeContent}', '${entry.entry_date}', '${safeMood}', ${entry.is_milestone})" style="white-space:nowrap;">View ›</button>
+                        <button class="view-btn" style="white-space:nowrap;">View ›</button>
                     `;
+
+                    // Add click handler
+                    const viewBtn = entryEl.querySelector('.view-btn');
+                    viewBtn.addEventListener('click', () => {
+                        viewEntry(
+                            entry.id,
+                            entry.title,
+                            entry.content,
+                            entry.entry_date,
+                            entry.mood,
+                            entry.is_milestone,
+                            entry.media || []
+                        );
+                    });
+
                     entriesList.appendChild(entryEl);
                 });
             }
