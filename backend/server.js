@@ -208,7 +208,8 @@ app.get('/api/entries-new/parent/:parentId', async (req, res) => {
       .from('journal_entries')
       .select(`
         *,
-        children(name, avatar, color)
+        children(name, avatar, color),
+        media(file_url, media_type, thumbnail_url)
       `)
       .eq('parent_id', parentId)
       .order('entry_date', { ascending: false });
