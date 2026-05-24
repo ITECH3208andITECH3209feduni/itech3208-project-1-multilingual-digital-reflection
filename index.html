@@ -86,14 +86,12 @@
             <!-- Recent Entries -->
             <section class="entries-section">
                 <h3 class="section-heading">RECENT ENTRIES</h3>
-                
                 <div class="empty-entries-list">
                     <div class="empty-entry-item">
                         <div class="empty-entry-content">
                             <p class="empty-entry-title">No entries yet</p>
                             <p class="empty-entry-date">Start tracking your child's activities</p>
                         </div>
-                        <button class="view-btn" onclick="viewEntry('${entry.id}', '${entry.title}', '${entry.content}', '${entry.entry_date}', '${entry.mood}')" style="white-space:nowrap;">View ›</button>
                     </div>
                 </div>
             </section>
@@ -101,13 +99,11 @@
             <!-- Weekly Progress -->
             <section class="weekly-section">
                 <h3 class="section-heading">THIS WEEK'S PROGRESS</h3>
-                
                 <div class="weekly-recap-card">
                     <div class="recap-header">
                         <h4 class="recap-title">Weekly recap ⭐</h4>
                         <p class="recap-subtitle">See your child's progress this week</p>
                     </div>
-                    
                     <div class="recap-stats">
                         <div class="stat-box">
                             <div class="stat-number">0</div>
@@ -122,7 +118,6 @@
                             <div class="stat-label">languages</div>
                         </div>
                     </div>
-                    
                     <button class="recap-view-btn" onclick="window.location.href='weekly.html'">
                         <span class="arrow-down">↓</span>
                         View recap
@@ -132,7 +127,7 @@
         </main>
     </div>
 
-   <script>
+<script>
     const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-654tu2n26.vercel.app';
 
     // Language Switcher
@@ -165,32 +160,32 @@
                 data.data.forEach(child => {
                     const childEl = document.createElement('div');
                     childEl.className = 'child-item';
-                    childEl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:8px; cursor:pointer; border-radius:8px; margin:4px 0;';
+                    childEl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:8px; cursor:pointer; border-radius:8px; margin:4px 0; transition: background 0.2s;';
                     childEl.innerHTML = `
                         <span style="font-size:24px;">${child.avatar}</span>
                         <span style="font-size:14px; font-weight:500;">${child.name}</span>
                     `;
                     
                     childEl.addEventListener('click', () => {
-    localStorage.setItem('selectedChildId', child.id);
-    localStorage.setItem('selectedChildName', child.name);
-    localStorage.setItem('selectedChildAvatar', child.avatar);
-    
-    // Highlight selected child
-    document.querySelectorAll('.child-item').forEach(el => {
-        el.style.background = 'transparent';
-    });
-    childEl.style.background = '#F0E8F5';
-    
-    // Load this child's entries
-    loadChildEntries(child.id, child.name, child.avatar);
-});
+                        localStorage.setItem('selectedChildId', child.id);
+                        localStorage.setItem('selectedChildName', child.name);
+                        localStorage.setItem('selectedChildAvatar', child.avatar);
+                        
+                        document.querySelectorAll('.child-item').forEach(el => {
+                            el.style.background = 'transparent';
+                        });
+                        childEl.style.background = '#F0E8F5';
+                        
+                        loadChildEntries(child.id, child.name, child.avatar);
+                    });
                     
                     childEl.addEventListener('mouseover', () => {
                         childEl.style.background = '#F0E8F5';
                     });
                     childEl.addEventListener('mouseout', () => {
-                        childEl.style.background = 'transparent';
+                        if (localStorage.getItem('selectedChildId') !== child.id) {
+                            childEl.style.background = 'transparent';
+                        }
                     });
                     
                     childrenContainer.appendChild(childEl);
@@ -207,133 +202,140 @@
             console.error('Error loading children:', error);
         }
     }
-async function loadChildEntries(childId, childName, childAvatar) {
-    const userId = localStorage.getItem('userId');
-    if (!userId) return;
-    
-    try {
-        const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
-        const data = await response.json();
+
+    // Load entries for specific child
+    async function loadChildEntries(childId, childName, childAvatar) {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
         
-        // Filter entries for this child
-        const childEntries = data.data.filter(entry => entry.child_id === childId);
-        
-        const entriesList = document.querySelector('.empty-entries-list');
-        
-        // Update section heading
-        document.querySelector('.entries-section .section-heading').textContent = 
-            `${childAvatar} ${childName.toUpperCase()}'S ENTRIES`;
-        
-        if (childEntries.length === 0) {
-            entriesList.innerHTML = `
-                <div class="empty-entry-item">
-                    <div class="empty-entry-content">
-                        <p class="empty-entry-title">No entries yet for ${childName}</p>
-                        <p class="empty-entry-date">Start tracking ${childName}'s activities!</p>
+        try {
+            const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
+            const data = await response.json();
+            
+            const childEntries = data.data.filter(entry => entry.child_id === childId);
+            
+            const entriesList = document.querySelector('.empty-entries-list');
+            
+            document.querySelector('.entries-section .section-heading').textContent = 
+                `${childAvatar} ${childName.toUpperCase()}'S ENTRIES`;
+            
+            if (childEntries.length === 0) {
+                entriesList.innerHTML = `
+                    <div class="empty-entry-item">
+                        <div class="empty-entry-content">
+                            <p class="empty-entry-title">No entries yet for ${childName}</p>
+                            <p class="empty-entry-date">Start tracking ${childName}'s activities!</p>
+                        </div>
+                        <button class="view-btn" onclick="window.location.href='new-entry.html'" style="opacity:1; cursor:pointer;">Add ›</button>
                     </div>
-                    <button class="view-btn" onclick="window.location.href='new-entry.html'" style="opacity:1; cursor:pointer;">Add ›</button>
-                </div>
-            `;
-            return;
+                `;
+                return;
+            }
+            
+            entriesList.innerHTML = '';
+            
+            childEntries.slice(0, 5).forEach(entry => {
+                const entryEl = document.createElement('div');
+                entryEl.className = 'empty-entry-item';
+                entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
+                
+                const safeTitle = entry.title.replace(/'/g, "\\'");
+                const safeContent = entry.content.replace(/'/g, "\\'").replace(/\n/g, ' ');
+                const safeMood = entry.mood.replace(/'/g, "\\'");
+                
+                entryEl.innerHTML = `
+                    <div style="flex:1; margin-right:10px;">
+                        <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
+                        <p style="color:#888; margin:4px 0 0; font-size:12px;">
+                            ${entry.entry_date} • ${getMoodEmoji(entry.mood)} ${entry.mood}
+                            ${entry.is_milestone ? ' ⭐ Milestone' : ''}
+                        </p>
+                        <p style="color:#666; margin:4px 0 0; font-size:13px;">
+                            ${entry.content.substring(0, 60)}...
+                        </p>
+                    </div>
+                    <button class="view-btn" onclick="viewEntry('${entry.id}', '${safeTitle}', '${safeContent}', '${entry.entry_date}', '${safeMood}')" style="white-space:nowrap;">View ›</button>
+                `;
+                entriesList.appendChild(entryEl);
+            });
+            
+        } catch (error) {
+            console.error('Error loading child entries:', error);
         }
+    }
+
+    // Mood emoji helper
+    function getMoodEmoji(mood) {
+        const moods = {
+            'happy': '😊',
+            'excited': '🤩',
+            'sad': '😢',
+            'tired': '😴',
+            'proud': '🌟',
+            'silly': '😜'
+        };
+        return moods[mood] || '😊';
+    }
+
+    // View entry modal
+    function viewEntry(id, title, content, date, mood) {
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        `;
         
-        entriesList.innerHTML = '';
+        modal.innerHTML = `
+            <div style="
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                max-width: 500px;
+                width: 90%;
+                max-height: 80vh;
+                overflow-y: auto;
+                position: relative;
+            ">
+                <button onclick="document.querySelector('.modal-overlay').remove()" style="
+                    position: absolute;
+                    top: 15px;
+                    right: 15px;
+                    background: #F0E8F5;
+                    border: none;
+                    border-radius: 50%;
+                    width: 30px;
+                    height: 30px;
+                    cursor: pointer;
+                    font-size: 16px;
+                ">✕</button>
+                
+                <h2 style="color: #C77CF9; margin-bottom: 8px;">${title}</h2>
+                <p style="color: #888; font-size: 13px; margin-bottom: 16px;">
+                    📅 ${date} • ${getMoodEmoji(mood)} ${mood}
+                </p>
+                <hr style="border: 1px solid #F0E8F5; margin-bottom: 16px;">
+                <p style="line-height: 1.6; color: #333;">${content}</p>
+            </div>
+        `;
         
-        childEntries.slice(0, 5).forEach(entry => {
-            const entryEl = document.createElement('div');
-            entryEl.className = 'empty-entry-item';
-            entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
-            entryEl.innerHTML = `
-                <div>
-                    <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
-                    <p style="color:#888; margin:4px 0 0; font-size:12px;">
-                        ${entry.entry_date} • ${getMoodEmoji(entry.mood)} ${entry.mood}
-                        ${entry.is_milestone ? '⭐ Milestone' : ''}
-                    </p>
-                    <p style="color:#666; margin:4px 0 0; font-size:13px;">
-                        ${entry.content.substring(0, 60)}...
-                    </p>
-                </div>
-                <button class="view-btn" style="white-space:nowrap;">View ›</button>
-            `;
-            entriesList.appendChild(entryEl);
+        modal.classList.add('modal-overlay');
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
         });
         
-    } catch (error) {
-        console.error('Error loading child entries:', error);
+        document.body.appendChild(modal);
     }
-}
 
-function getMoodEmoji(mood) {
-    const moods = {
-        'happy': '😊',
-        'excited': '🤩',
-        'sad': '😢',
-        'tired': '😴',
-        'proud': '🌟',
-        'silly': '😜'
-    };
-    return moods[mood] || '😊';
-} 
-       function viewEntry(id, title, content, date, mood) {
-    // Create a modal to show entry
-    const modal = document.createElement('div');
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-    `;
-    
-    modal.innerHTML = `
-        <div style="
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        ">
-            <button onclick="this.closest('.modal').remove()" style="
-                position: absolute;
-                top: 15px;
-                right: 15px;
-                background: #F0E8F5;
-                border: none;
-                border-radius: 50%;
-                width: 30px;
-                height: 30px;
-                cursor: pointer;
-                font-size: 16px;
-            ">✕</button>
-            
-            <h2 style="color: #C77CF9; margin-bottom: 8px;">${title}</h2>
-            <p style="color: #888; font-size: 13px; margin-bottom: 16px;">
-                📅 ${date} • ${getMoodEmoji(mood)} ${mood}
-            </p>
-            <hr style="border: 1px solid #F0E8F5; margin-bottom: 16px;">
-            <p style="line-height: 1.6; color: #333;">${content}</p>
-        </div>
-    `;
-    
-    modal.classList.add('modal');
-    
-    // Close when clicking outside
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.remove();
-    });
-    
-    document.body.appendChild(modal);
-}
-    // Load recent entries
+    // Load recent entries (default view)
     async function loadRecentEntries() {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -348,13 +350,21 @@ function getMoodEmoji(mood) {
                 
                 data.data.slice(0, 3).forEach(entry => {
                     const entryEl = document.createElement('div');
-                    entryEl.className = 'entry-item';
+                    entryEl.className = 'empty-entry-item';
+                    entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
+                    
+                    const safeTitle = entry.title.replace(/'/g, "\\'");
+                    const safeContent = entry.content.replace(/'/g, "\\'").replace(/\n/g, ' ');
+                    const safeMood = entry.mood.replace(/'/g, "\\'");
+                    
                     entryEl.innerHTML = `
-                        <div class="entry-content">
-                            <p class="entry-title">${entry.title}</p>
-                            <p class="entry-date">${entry.entry_date} • ${entry.children?.name || ''} ${entry.children?.avatar || ''}</p>
+                        <div style="flex:1; margin-right:10px;">
+                            <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
+                            <p style="color:#888; margin:4px 0 0; font-size:12px;">
+                                ${entry.entry_date} • ${entry.children?.name || ''} ${entry.children?.avatar || ''}
+                            </p>
                         </div>
-                        <button class="view-btn">View ›</button>
+                        <button class="view-btn" onclick="viewEntry('${entry.id}', '${safeTitle}', '${safeContent}', '${entry.entry_date}', '${safeMood}')" style="white-space:nowrap;">View ›</button>
                     `;
                     entriesList.appendChild(entryEl);
                 });
