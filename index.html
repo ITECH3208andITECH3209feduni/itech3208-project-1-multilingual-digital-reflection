@@ -10,20 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Rainbow Magic Bar -->
     <div class="rainbow-top"></div>
     
     <div class="app-wrapper">
-        <!-- Left Sidebar -->
         <aside class="sidebar">
-            <!-- Brand -->
             <div class="brand">
                 <div class="logo">🦊</div>
                 <h1 class="brand-name">StoryBond</h1>
                 <p class="brand-tagline">Learning Journey Tracker</p>
             </div>
 
-            <!-- Navigation -->
             <nav class="nav">
                 <p class="nav-heading">NAVIGATION</p>
                 <a href="index.html" class="nav-link active">
@@ -40,7 +36,6 @@
                 </a>
             </nav>
 
-            <!-- Children -->
             <div class="children">
                 <p class="nav-heading">CHILDREN</p>
                 <button class="add-child-btn" onclick="window.location.href='add-child.html'">
@@ -49,7 +44,6 @@
                 </button>
             </div>
 
-            <!-- User Profile -->
             <div class="user-card">
                 <div class="user-avatar">PA</div>
                 <div class="user-details">
@@ -59,9 +53,7 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main">
-            <!-- Header -->
             <header class="header">
                 <div>
                     <h1 class="greeting">Hello, Parent! 👋</h1>
@@ -73,7 +65,6 @@
                 </div>
             </header>
 
-            <!-- Daily Prompt Hero -->
             <section class="hero">
                 <div class="hero-sparkle">✨</div>
                 <h2 class="hero-title">What happened today?</h2>
@@ -83,7 +74,6 @@
                 </button>
             </section>
 
-            <!-- Recent Entries -->
             <section class="entries-section">
                 <h3 class="section-heading">RECENT ENTRIES</h3>
                 <div class="empty-entries-list">
@@ -96,7 +86,6 @@
                 </div>
             </section>
 
-            <!-- Weekly Progress -->
             <section class="weekly-section">
                 <h3 class="section-heading">THIS WEEK'S PROGRESS</h3>
                 <div class="weekly-recap-card">
@@ -138,10 +127,9 @@
         });
     });
 
-    // Load children in sidebar
+    // ============= LOAD CHILDREN =============
     async function loadChildren() {
         const userId = localStorage.getItem('userId');
-        
         if (!userId) {
             window.location.href = 'login.html';
             return;
@@ -154,7 +142,6 @@
             if (data.success && data.data.length > 0) {
                 const childrenContainer = document.querySelector('.children');
                 const addBtn = childrenContainer.querySelector('.add-child-btn');
-                
                 childrenContainer.innerHTML = '<p class="nav-heading">CHILDREN</p>';
                 
                 data.data.forEach(child => {
@@ -170,12 +157,10 @@
                         localStorage.setItem('selectedChildId', child.id);
                         localStorage.setItem('selectedChildName', child.name);
                         localStorage.setItem('selectedChildAvatar', child.avatar);
-                        
                         document.querySelectorAll('.child-item').forEach(el => {
                             el.style.background = 'transparent';
                         });
                         childEl.style.background = '#F0E8F5';
-                        
                         loadChildEntries(child.id, child.name, child.avatar);
                     });
                     
@@ -203,7 +188,7 @@
         }
     }
 
-    // Load entries for specific child
+    // ============= LOAD CHILD ENTRIES =============
     async function loadChildEntries(childId, childName, childAvatar) {
         const userId = localStorage.getItem('userId');
         if (!userId) return;
@@ -211,9 +196,7 @@
         try {
             const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
             const data = await response.json();
-            
             const childEntries = data.data.filter(entry => entry.child_id === childId);
-            
             const entriesList = document.querySelector('.empty-entries-list');
             
             document.querySelector('.entries-section .section-heading').textContent = 
@@ -254,7 +237,7 @@
                             ${entry.content.substring(0, 60)}...
                         </p>
                     </div>
-                    <button class="view-btn" onclick="viewEntry('${entry.id}', '${safeTitle}', '${safeContent}', '${entry.entry_date}', '${safeMood}')" style="white-space:nowrap;">View ›</button>
+                    <button class="view-btn" onclick="viewEntry('${entry.id}', '${safeTitle}', '${safeContent}', '${entry.entry_date}', '${safeMood}', ${entry.is_milestone})" style="white-space:nowrap;">View ›</button>
                 `;
                 entriesList.appendChild(entryEl);
             });
@@ -264,7 +247,7 @@
         }
     }
 
-    // Mood emoji helper
+    // ============= MOOD EMOJI =============
     function getMoodEmoji(mood) {
         const moods = {
             'happy': '😊',
@@ -277,8 +260,8 @@
         return moods[mood] || '😊';
     }
 
-    // View entry modal
-    function viewEntry(id, title, content, date, mood) {
+    // ============= VIEW ENTRY MODAL =============
+    async function viewEntry(id, title, content, date, mood, isMilestone) {
         const modal = document.createElement('div');
         modal.style.cssText = `
             position: fixed;
@@ -298,9 +281,9 @@
                 background: white;
                 border-radius: 20px;
                 padding: 30px;
-                max-width: 500px;
+                max-width: 550px;
                 width: 90%;
-                max-height: 80vh;
+                max-height: 85vh;
                 overflow-y: auto;
                 position: relative;
             ">
@@ -317,125 +300,106 @@
                     font-size: 16px;
                 ">✕</button>
                 
-                <h2 style="color: #C77CF9; margin-bottom: 8px;">${title}</h2>
-                <p style="color: #888; font-size: 13px; margin-bottom: 16px;">
-                    📅 ${date} • ${getMoodEmoji(mood)} ${mood}
-                </p>
+                <h2 style="color: #C77CF9; margin-bottom: 8px; padding-right: 40px;">${title}</h2>
+                
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+                    <span style="background:#F0E8F5; color:#C77CF9; padding:4px 10px; border-radius:20px; font-size:12px;">
+                        📅 ${date}
+                    </span>
+                    <span style="background:#F0E8F5; color:#C77CF9; padding:4px 10px; border-radius:20px; font-size:12px;">
+                        ${getMoodEmoji(mood)} ${mood}
+                    </span>
+                    ${isMilestone ? `<span style="background:#FFF3CD; color:#856404; padding:4px 10px; border-radius:20px; font-size:12px;">⭐ Milestone</span>` : ''}
+                </div>
+                
                 <hr style="border: 1px solid #F0E8F5; margin-bottom: 16px;">
-                <p style="line-height: 1.6; color: #333;">${content}</p>
+                <p style="line-height: 1.6; color: #333; margin-bottom: 20px;">${content}</p>
+                
+                <div id="entryMedia_${id}" style="margin-top: 16px;">
+                    <p style="color: #888; font-size: 13px;">⏳ Loading media...</p>
+                </div>
             </div>
         `;
         
         modal.classList.add('modal-overlay');
-        
         modal.addEventListener('click', (e) => {
             if (e.target === modal) modal.remove();
         });
-        
         document.body.appendChild(modal);
+        
+        // Load media
+        try {
+            const response = await fetch(`${API_URL}/api/media/entry/${id}`);
+            const data = await response.json();
+            const mediaContainer = document.getElementById(`entryMedia_${id}`);
+            
+            if (data.success && data.data.length > 0) {
+                mediaContainer.innerHTML = '<p style="font-weight:600; margin-bottom:10px;">📸 Media</p>';
+                data.data.forEach(media => {
+                    if (media.media_type === 'image') {
+                        mediaContainer.innerHTML += `
+                            <img src="${media.file_url}" style="
+                                width: 100%;
+                                border-radius: 12px;
+                                margin-bottom: 10px;
+                                object-fit: cover;
+                            " alt="Entry photo">
+                        `;
+                    } else if (media.media_type === 'video') {
+                        mediaContainer.innerHTML += `
+                            <video controls style="width:100%; border-radius:12px; margin-bottom:10px;">
+                                <source src="${media.file_url}">
+                            </video>
+                        `;
+                    }
+                });
+            } else {
+                mediaContainer.innerHTML = '';
+            }
+        } catch (error) {
+            document.getElementById(`entryMedia_${id}`).innerHTML = '';
+        }
     }
 
-    // Load recent entries (default view)
-   async function viewEntry(id, title, content, date, mood) {
-    // Create modal
-    const modal = document.createElement('div');
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-    `;
-    
-    modal.innerHTML = `
-        <div style="
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 550px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-            position: relative;
-        ">
-            <button onclick="document.querySelector('.modal-overlay').remove()" style="
-                position: absolute;
-                top: 15px;
-                right: 15px;
-                background: #F0E8F5;
-                border: none;
-                border-radius: 50%;
-                width: 30px;
-                height: 30px;
-                cursor: pointer;
-                font-size: 16px;
-            ">✕</button>
-            
-            <h2 style="color: #C77CF9; margin-bottom: 8px; padding-right: 40px;">${title}</h2>
-            <p style="color: #888; font-size: 13px; margin-bottom: 16px;">
-                📅 ${date} • ${getMoodEmoji(mood)} ${mood}
-            </p>
-            <hr style="border: 1px solid #F0E8F5; margin-bottom: 16px;">
-            <p style="line-height: 1.6; color: #333; margin-bottom: 20px;">${content}</p>
-            
-            <div id="entryMedia" style="margin-top: 16px;">
-                <p style="color: #888; font-size: 13px;">⏳ Loading media...</p>
-            </div>
-        </div>
-    `;
-    
-    modal.classList.add('modal-overlay');
-    
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.remove();
-    });
-    
-    document.body.appendChild(modal);
-    
-    // Load media for this entry
-    try {
-        const response = await fetch(`${API_URL}/api/media/entry/${id}`);
-        const data = await response.json();
+    // ============= LOAD RECENT ENTRIES =============
+    async function loadRecentEntries() {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
         
-        const mediaContainer = document.getElementById('entryMedia');
-        
-        if (data.success && data.data.length > 0) {
-            mediaContainer.innerHTML = '<p style="font-weight:600; margin-bottom:10px;">📸 Media</p>';
+        try {
+            const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
+            const data = await response.json();
             
-            data.data.forEach(media => {
-                if (media.media_type === 'image') {
-                    mediaContainer.innerHTML += `
-                        <img src="${media.file_url}" style="
-                            width: 100%;
-                            border-radius: 12px;
-                            margin-bottom: 10px;
-                            object-fit: cover;
-                        " alt="Entry photo">
+            if (data.success && data.data.length > 0) {
+                const entriesList = document.querySelector('.empty-entries-list');
+                entriesList.innerHTML = '';
+                
+                data.data.slice(0, 3).forEach(entry => {
+                    const entryEl = document.createElement('div');
+                    entryEl.className = 'empty-entry-item';
+                    entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
+                    
+                    const safeTitle = entry.title.replace(/'/g, "\\'");
+                    const safeContent = entry.content.replace(/'/g, "\\'").replace(/\n/g, ' ');
+                    const safeMood = entry.mood.replace(/'/g, "\\'");
+                    
+                    entryEl.innerHTML = `
+                        <div style="flex:1; margin-right:10px;">
+                            <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
+                            <p style="color:#888; margin:4px 0 0; font-size:12px;">
+                                ${entry.entry_date} • ${entry.children?.name || ''} ${entry.children?.avatar || ''}
+                                ${entry.is_milestone ? ' ⭐' : ''}
+                            </p>
+                        </div>
+                        <button class="view-btn" onclick="viewEntry('${entry.id}', '${safeTitle}', '${safeContent}', '${entry.entry_date}', '${safeMood}', ${entry.is_milestone})" style="white-space:nowrap;">View ›</button>
                     `;
-                } else if (media.media_type === 'video') {
-                    mediaContainer.innerHTML += `
-                        <video controls style="
-                            width: 100%;
-                            border-radius: 12px;
-                            margin-bottom: 10px;
-                        ">
-                            <source src="${media.file_url}">
-                        </video>
-                    `;
-                }
-            });
-        } else {
-            mediaContainer.innerHTML = '';
+                    entriesList.appendChild(entryEl);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading entries:', error);
         }
-    } catch (error) {
-        document.getElementById('entryMedia').innerHTML = '';
     }
-}
 
     // Run on page load
     loadChildren();
