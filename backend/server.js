@@ -399,3 +399,26 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:3000`);
 });
+// Get media by entry
+app.get('/api/media/entry/:entryId', async (req, res) => {
+  try {
+    const { entryId } = req.params;
+
+    const { data, error } = await supabase
+      .from('media')
+      .select('*')
+      .eq('entry_id', entryId);
+
+    if (error) throw error;
+
+    res.json({
+      success: true,
+      data: data
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
