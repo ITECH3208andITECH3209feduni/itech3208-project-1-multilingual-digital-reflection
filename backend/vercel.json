@@ -8,6 +8,42 @@
   ],
   "routes": [
     {
+      "src": "/api/media/entry/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/api/auth/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/api/children/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/api/entries-new/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/api/entries-new",
+      "dest": "server.js"
+    },
+    {
+      "src": "/api/children",
+      "dest": "server.js"
+    },
+    {
+      "src": "/api/upload",
+      "dest": "server.js"
+    },
+    {
+      "src": "/api/parents",
+      "dest": "server.js"
+    },
+    {
+      "src": "/api/entries",
+      "dest": "server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "server.js"
     }
