@@ -223,9 +223,26 @@ const JournalEntry = {
         
         return uploadedUrls;
     },
-    
+    convertDate(dateStr) {
+        if (!dateStr) return new Date().toISOString().split('T')[0];
+        
+        // If already in YYYY-MM-DD format
+        if (dateStr.includes('-')) return dateStr;
+        
+        // Convert DD/MM/YYYY to YYYY-MM-DD
+        const parts = dateStr.split('/');
+        if (parts.length === 3) {
+            return `${parts[2]}-${parts[1]}-${parts[0]}`;
+        }
+        
+        return new Date().toISOString().split('T')[0];
+    },
+
     async handleSubmit(e) {
         e.preventDefault();
+    async handleSubmit(e) {
+        e.preventDefault();
+        
         
         const title = document.getElementById('entryTitle').value.trim();
         const date = document.getElementById('entryDate').value;
@@ -275,7 +292,7 @@ if (!childId) {
                     parent_id: userId,
                     child_id: childId,
                     title: title,
-                    entry_date: date || new Date().toISOString().split('T')[0],
+                 entry_date: JournalEntry.convertDate(date) || new Date().toISOString().split('T')[0],
                     content: story,
                     mood: selectedMood ? selectedMood.dataset.mood : 'happy',
                     language: document.querySelector('.lang-btn.active')?.textContent === 'TR' ? 'TR' : 'EN',
