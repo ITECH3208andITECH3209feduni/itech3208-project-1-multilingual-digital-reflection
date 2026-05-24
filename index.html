@@ -172,11 +172,19 @@
                     `;
                     
                     childEl.addEventListener('click', () => {
-                        localStorage.setItem('selectedChildId', child.id);
-                        localStorage.setItem('selectedChildName', child.name);
-                        localStorage.setItem('selectedChildAvatar', child.avatar);
-                        alert(`Selected: ${child.avatar} ${child.name}`);
-                    });
+    localStorage.setItem('selectedChildId', child.id);
+    localStorage.setItem('selectedChildName', child.name);
+    localStorage.setItem('selectedChildAvatar', child.avatar);
+    
+    // Highlight selected child
+    document.querySelectorAll('.child-item').forEach(el => {
+        el.style.background = 'transparent';
+    });
+    childEl.style.background = '#F0E8F5';
+    
+    // Load this child's entries
+    loadChildEntries(child.id, child.name, child.avatar);
+});
                     
                     childEl.addEventListener('mouseover', () => {
                         childEl.style.background = '#F0E8F5';
@@ -199,7 +207,74 @@
             console.error('Error loading children:', error);
         }
     }
+async function loadChildEntries(childId, childName, childAvatar) {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
+        const data = await response.json();
+        
+        // Filter entries for this child
+        const childEntries = data.data.filter(entry => entry.child_id === childId);
+        
+        const entriesList = document.querySelector('.empty-entries-list');
+        
+        // Update section heading
+        document.querySelector('.entries-section .section-heading').textContent = 
+            `${childAvatar} ${childName.toUpperCase()}'S ENTRIES`;
+        
+        if (childEntries.length === 0) {
+            entriesList.innerHTML = `
+                <div class="empty-entry-item">
+                    <div class="empty-entry-content">
+                        <p class="empty-entry-title">No entries yet for ${childName}</p>
+                        <p class="empty-entry-date">Start tracking ${childName}'s activities!</p>
+                    </div>
+                    <button class="view-btn" onclick="window.location.href='new-entry.html'" style="opacity:1; cursor:pointer;">Add ›</button>
+                </div>
+            `;
+            return;
+        }
+        
+        entriesList.innerHTML = '';
+        
+        childEntries.slice(0, 5).forEach(entry => {
+            const entryEl = document.createElement('div');
+            entryEl.className = 'empty-entry-item';
+            entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
+            entryEl.innerHTML = `
+                <div>
+                    <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
+                    <p style="color:#888; margin:4px 0 0; font-size:12px;">
+                        ${entry.entry_date} • ${getMoodEmoji(entry.mood)} ${entry.mood}
+                        ${entry.is_milestone ? '⭐ Milestone' : ''}
+                    </p>
+                    <p style="color:#666; margin:4px 0 0; font-size:13px;">
+                        ${entry.content.substring(0, 60)}...
+                    </p>
+                </div>
+                <button class="view-btn" style="white-space:nowrap;">View ›</button>
+            `;
+            entriesList.appendChild(entryEl);
+        });
+        
+    } catch (error) {
+        console.error('Error loading child entries:', error);
+    }
+}
 
+function getMoodEmoji(mood) {
+    const moods = {
+        'happy': '😊',
+        'excited': '🤩',
+        'sad': '😢',
+        'tired': '😴',
+        'proud': '🌟',
+        'silly': '😜'
+    };
+    return moods[mood] || '😊';
+}
     // Load recent entries
     async function loadRecentEntries() {
         const userId = localStorage.getItem('userId');
