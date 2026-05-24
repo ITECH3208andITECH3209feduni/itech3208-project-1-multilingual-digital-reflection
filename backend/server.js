@@ -17,10 +17,9 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 100 * 1024 * 1024 // 100MB limit - supports 5 min videos
+    fileSize: 100 * 1024 * 1024 // 100MB limit
   },
   fileFilter: (req, file, cb) => {
-    // Accept images and videos
     if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
       cb(null, true);
     } else {
@@ -28,6 +27,7 @@ const upload = multer({
     }
   }
 });
+
 const app = express();
 
 // Handle CORS manually - must be first!
@@ -40,7 +40,6 @@ app.use((req, res, next) => {
   }
   next();
 });
-
 
 // Supabase client
 const supabase = createClient(
@@ -58,8 +57,8 @@ app.use(express.json());
 
 // Increase timeout for large file uploads
 app.use((req, res, next) => {
-  req.setTimeout(300000); // 5 minutes
-  res.setTimeout(300000); // 5 minutes
+  req.setTimeout(300000);
+  res.setTimeout(300000);
   next();
 });
 
@@ -272,6 +271,32 @@ app.post('/api/entries-new', async (req, res) => {
   }
 });
 
+// ============= MEDIA ROUTES =============
+
+// Get media by entry ID
+app.get('/api/media/entry/:entryId', async (req, res) => {
+  try {
+    const { entryId } = req.params;
+
+    const { data, error } = await supabase
+      .from('media')
+      .select('*')
+      .eq('entry_id', entryId);
+
+    if (error) throw error;
+
+    res.json({
+      success: true,
+      data: data || []
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 // ============= UPLOAD ROUTE =============
 
 // Upload photo or video
@@ -282,37 +307,32 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     }
 
     const { parent_id, entry_id } = req.body;
-
-    // Determine resource type (image or video)
     const resourceType = req.file.mimetype.startsWith('video/') ? 'video' : 'image';
 
-  // Upload to Cloudinary
-const result = await new Promise((resolve, reject) => {
-  const uploadStream = cloudinary.uploader.upload_stream(
-    {
-      resource_type: resourceType,
-      folder: 'storybond',
-      chunk_size: 10000000, // 10MB chunks for faster upload
-eager_async: true,     // Process in background
-    transformation: resourceType === 'image' ? [
-  { width: 1200, height: 1200, crop: 'limit' },
-  { quality: 'auto' }
-] : [
-  { quality: 'auto:low' },  // Lower quality = faster upload
-  { width: 1280 },           // Limit resolution for speed
-  { fetch_format: 'auto' }   // Auto-optimize format
-]
-    },
-    (error, result) => {
-      if (error) reject(error);
-      else resolve(result);
-    }
-  );
-  uploadStream.end(req.file.buffer);
-});
-      
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: resourceType,
+          folder: 'storybond',
+          chunk_size: 10000000,
+          eager_async: true,
+          transformation: resourceType === 'image' ? [
+            { width: 1200, height: 1200, crop: 'limit' },
+            { quality: 'auto' }
+          ] : [
+            { quality: 'auto:low' },
+            { width: 1280 },
+            { fetch_format: 'auto' }
+          ]
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(req.file.buffer);
+    });
 
-    // Save to database
     const { data, error } = await supabase
       .from('media')
       .insert([{
@@ -335,14 +355,12 @@ eager_async: true,     // Process in background
       data: data
     });
 
-  }  catch (error) {
-  console.error('❌ Upload Error:', error.message);
-  console.error('Full error:', error);
-  res.status(400).json({
-    success: false,
-    error: error.message
-  });
-
+  } catch (error) {
+    console.error('❌ Upload Error:', error.message);
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
   }
 });
 
@@ -398,27 +416,4 @@ app.get('/api/entries', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:3000`);
-});
-// Get media by entry
-app.get('/api/media/entry/:entryId', async (req, res) => {
-  try {
-    const { entryId } = req.params;
-
-    const { data, error } = await supabase
-      .from('media')
-      .select('*')
-      .eq('entry_id', entryId);
-
-    if (error) throw error;
-
-    res.json({
-      success: true,
-      data: data
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
-  }
 });
