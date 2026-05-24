@@ -336,43 +336,106 @@
     }
 
     // Load recent entries (default view)
-    async function loadRecentEntries() {
-        const userId = localStorage.getItem('userId');
-        if (!userId) return;
-        
-        try {
-            const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
-            const data = await response.json();
+   async function viewEntry(id, title, content, date, mood) {
+    // Create modal
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    `;
+    
+    modal.innerHTML = `
+        <div style="
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 550px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        ">
+            <button onclick="document.querySelector('.modal-overlay').remove()" style="
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                background: #F0E8F5;
+                border: none;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                font-size: 16px;
+            ">✕</button>
             
-            if (data.success && data.data.length > 0) {
-                const entriesList = document.querySelector('.empty-entries-list');
-                entriesList.innerHTML = '';
-                
-                data.data.slice(0, 3).forEach(entry => {
-                    const entryEl = document.createElement('div');
-                    entryEl.className = 'empty-entry-item';
-                    entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
-                    
-                    const safeTitle = entry.title.replace(/'/g, "\\'");
-                    const safeContent = entry.content.replace(/'/g, "\\'").replace(/\n/g, ' ');
-                    const safeMood = entry.mood.replace(/'/g, "\\'");
-                    
-                    entryEl.innerHTML = `
-                        <div style="flex:1; margin-right:10px;">
-                            <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
-                            <p style="color:#888; margin:4px 0 0; font-size:12px;">
-                                ${entry.entry_date} • ${entry.children?.name || ''} ${entry.children?.avatar || ''}
-                            </p>
-                        </div>
-                        <button class="view-btn" onclick="viewEntry('${entry.id}', '${safeTitle}', '${safeContent}', '${entry.entry_date}', '${safeMood}')" style="white-space:nowrap;">View ›</button>
+            <h2 style="color: #C77CF9; margin-bottom: 8px; padding-right: 40px;">${title}</h2>
+            <p style="color: #888; font-size: 13px; margin-bottom: 16px;">
+                📅 ${date} • ${getMoodEmoji(mood)} ${mood}
+            </p>
+            <hr style="border: 1px solid #F0E8F5; margin-bottom: 16px;">
+            <p style="line-height: 1.6; color: #333; margin-bottom: 20px;">${content}</p>
+            
+            <div id="entryMedia" style="margin-top: 16px;">
+                <p style="color: #888; font-size: 13px;">⏳ Loading media...</p>
+            </div>
+        </div>
+    `;
+    
+    modal.classList.add('modal-overlay');
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+    
+    document.body.appendChild(modal);
+    
+    // Load media for this entry
+    try {
+        const response = await fetch(`${API_URL}/api/media/entry/${id}`);
+        const data = await response.json();
+        
+        const mediaContainer = document.getElementById('entryMedia');
+        
+        if (data.success && data.data.length > 0) {
+            mediaContainer.innerHTML = '<p style="font-weight:600; margin-bottom:10px;">📸 Media</p>';
+            
+            data.data.forEach(media => {
+                if (media.media_type === 'image') {
+                    mediaContainer.innerHTML += `
+                        <img src="${media.file_url}" style="
+                            width: 100%;
+                            border-radius: 12px;
+                            margin-bottom: 10px;
+                            object-fit: cover;
+                        " alt="Entry photo">
                     `;
-                    entriesList.appendChild(entryEl);
-                });
-            }
-        } catch (error) {
-            console.error('Error loading entries:', error);
+                } else if (media.media_type === 'video') {
+                    mediaContainer.innerHTML += `
+                        <video controls style="
+                            width: 100%;
+                            border-radius: 12px;
+                            margin-bottom: 10px;
+                        ">
+                            <source src="${media.file_url}">
+                        </video>
+                    `;
+                }
+            });
+        } else {
+            mediaContainer.innerHTML = '';
         }
+    } catch (error) {
+        document.getElementById('entryMedia').innerHTML = '';
     }
+}
 
     // Run on page load
     loadChildren();
