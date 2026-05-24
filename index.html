@@ -117,7 +117,8 @@
     </div>
 
 <script>
-   const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-fmlrod095.vercel.app';
+    const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-fmlrod095.vercel.app';
+
     // Language Switcher
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -146,12 +147,63 @@
                 data.data.forEach(child => {
                     const childEl = document.createElement('div');
                     childEl.className = 'child-item';
-                    childEl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:8px; cursor:pointer; border-radius:8px; margin:4px 0; transition: background 0.2s;';
+                    childEl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:8px; cursor:pointer; border-radius:8px; margin:4px 0; transition: background 0.2s; position:relative;';
                     childEl.innerHTML = `
                         <span style="font-size:24px;">${child.avatar}</span>
-                        <span style="font-size:14px; font-weight:500;">${child.name}</span>
+                        <span style="font-size:14px; font-weight:500; flex:1;">${child.name}</span>
+                        <button class="delete-child-btn" style="
+                            background: none;
+                            border: none;
+                            color: #ff6b6b;
+                            cursor: pointer;
+                            font-size: 14px;
+                            padding: 2px 6px;
+                            border-radius: 50%;
+                            display: none;
+                            flex-shrink: 0;
+                        ">🗑️</button>
                     `;
                     
+                    // Show/hide delete button on hover
+                    childEl.addEventListener('mouseover', () => {
+                        childEl.style.background = '#F0E8F5';
+                        childEl.querySelector('.delete-child-btn').style.display = 'block';
+                    });
+                    childEl.addEventListener('mouseout', () => {
+                        if (localStorage.getItem('selectedChildId') !== child.id) {
+                            childEl.style.background = 'transparent';
+                        }
+                        childEl.querySelector('.delete-child-btn').style.display = 'none';
+                    });
+
+                    // Delete child
+                    childEl.querySelector('.delete-child-btn').addEventListener('click', async (e) => {
+                        e.stopPropagation();
+                        if (confirm(`Delete ${child.name} and all their entries?`)) {
+                            try {
+                                const res = await fetch(`${API_URL}/api/children/${child.id}`, {
+                                    method: 'DELETE'
+                                });
+                                const result = await res.json();
+                                if (result.success) {
+                                    childEl.remove();
+                                    document.querySelector('.entries-section .section-heading').textContent = 'RECENT ENTRIES';
+                                    document.querySelector('.empty-entries-list').innerHTML = `
+                                        <div class="empty-entry-item">
+                                            <div class="empty-entry-content">
+                                                <p class="empty-entry-title">No entries yet</p>
+                                                <p class="empty-entry-date">Start tracking your child's activities</p>
+                                            </div>
+                                        </div>
+                                    `;
+                                }
+                            } catch (error) {
+                                alert('Error deleting child!');
+                            }
+                        }
+                    });
+                    
+                    // Select child on click
                     childEl.addEventListener('click', () => {
                         localStorage.setItem('selectedChildId', child.id);
                         localStorage.setItem('selectedChildName', child.name);
@@ -161,15 +213,6 @@
                         });
                         childEl.style.background = '#F0E8F5';
                         loadChildEntries(child.id, child.name, child.avatar);
-                    });
-                    
-                    childEl.addEventListener('mouseover', () => {
-                        childEl.style.background = '#F0E8F5';
-                    });
-                    childEl.addEventListener('mouseout', () => {
-                        if (localStorage.getItem('selectedChildId') !== child.id) {
-                            childEl.style.background = 'transparent';
-                        }
                     });
                     
                     childrenContainer.appendChild(childEl);
@@ -221,11 +264,6 @@
                 entryEl.className = 'empty-entry-item';
                 entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
                 
-                const safeTitle = entry.title.replace(/'/g, "\\'");
-                const safeContent = entry.content.replace(/'/g, "\\'").replace(/\n/g, ' ');
-                const safeMood = entry.mood.replace(/'/g, "\\'");
-                const entryMedia = JSON.stringify(entry.media || []).replace(/'/g, "\\'");
-                
                 entryEl.innerHTML = `
                     <div style="flex:1; margin-right:10px;">
                         <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
@@ -237,15 +275,22 @@
                             ${entry.content.substring(0, 60)}...
                         </p>
                     </div>
-                    <button class="view-btn" onclick="viewEntry('${entry.id}', '${safeTitle}', '${safeContent}', '${entry.entry_date}', '${safeMood}', ${entry.is_milestone})" style="white-space:nowrap;">View ›</button>
+                    <div style="display:flex; gap:6px; flex-shrink:0;">
+                        <button class="view-btn" style="white-space:nowrap;">View ›</button>
+                        <button class="delete-entry-btn" style="
+                            background: #fff0f0;
+                            border: 1px solid #ffcccc;
+                            color: #ff6b6b;
+                            cursor: pointer;
+                            padding: 6px 10px;
+                            border-radius: 8px;
+                            font-size: 12px;
+                        ">🗑️</button>
+                    </div>
                 `;
 
-                // Store media data on the element
-                entryEl.dataset.media = JSON.stringify(entry.media || []);
-                
-                // Add click handler for view button
-                const viewBtn = entryEl.querySelector('.view-btn');
-                viewBtn.addEventListener('click', () => {
+                // View button
+                entryEl.querySelector('.view-btn').addEventListener('click', () => {
                     viewEntry(
                         entry.id,
                         entry.title,
@@ -255,6 +300,23 @@
                         entry.is_milestone,
                         entry.media || []
                     );
+                });
+
+                // Delete entry button
+                entryEl.querySelector('.delete-entry-btn').addEventListener('click', async () => {
+                    if (confirm(`Delete "${entry.title}"?`)) {
+                        try {
+                            const res = await fetch(`${API_URL}/api/entries-new/${entry.id}`, {
+                                method: 'DELETE'
+                            });
+                            const result = await res.json();
+                            if (result.success) {
+                                entryEl.remove();
+                            }
+                        } catch (error) {
+                            alert('Error deleting entry!');
+                        }
+                    }
                 });
 
                 entriesList.appendChild(entryEl);
@@ -273,14 +335,14 @@
             'sad': '😢',
             'tired': '😴',
             'proud': '🌟',
-            'silly': '😜'
+            'silly': '😜',
+            'loved': '🥰'
         };
         return moods[mood] || '😊';
     }
 
     // ============= VIEW ENTRY MODAL =============
     function viewEntry(id, title, content, date, mood, isMilestone, media) {
-        // Remove existing modal
         const existing = document.querySelector('.modal-overlay');
         if (existing) existing.remove();
 
@@ -298,7 +360,6 @@
             z-index: 1000;
         `;
         
-        // Build media HTML
         let mediaHTML = '';
         if (media && media.length > 0) {
             mediaHTML = '<p style="font-weight:600; margin-bottom:10px;">📸 Media</p>';
@@ -400,12 +461,21 @@
                                 ${entry.is_milestone ? ' ⭐' : ''}
                             </p>
                         </div>
-                        <button class="view-btn" style="white-space:nowrap;">View ›</button>
+                        <div style="display:flex; gap:6px;">
+                            <button class="view-btn" style="white-space:nowrap;">View ›</button>
+                            <button class="delete-entry-btn" style="
+                                background: #fff0f0;
+                                border: 1px solid #ffcccc;
+                                color: #ff6b6b;
+                                cursor: pointer;
+                                padding: 6px 10px;
+                                border-radius: 8px;
+                                font-size: 12px;
+                            ">🗑️</button>
+                        </div>
                     `;
 
-                    // Add click handler
-                    const viewBtn = entryEl.querySelector('.view-btn');
-                    viewBtn.addEventListener('click', () => {
+                    entryEl.querySelector('.view-btn').addEventListener('click', () => {
                         viewEntry(
                             entry.id,
                             entry.title,
@@ -415,6 +485,22 @@
                             entry.is_milestone,
                             entry.media || []
                         );
+                    });
+
+                    entryEl.querySelector('.delete-entry-btn').addEventListener('click', async () => {
+                        if (confirm(`Delete "${entry.title}"?`)) {
+                            try {
+                                const res = await fetch(`${API_URL}/api/entries-new/${entry.id}`, {
+                                    method: 'DELETE'
+                                });
+                                const result = await res.json();
+                                if (result.success) {
+                                    entryEl.remove();
+                                }
+                            } catch (error) {
+                                alert('Error deleting entry!');
+                            }
+                        }
                     });
 
                     entriesList.appendChild(entryEl);
