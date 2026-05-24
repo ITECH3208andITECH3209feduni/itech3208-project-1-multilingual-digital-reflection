@@ -132,115 +132,108 @@
         </main>
     </div>
 
-    <script>
-        // Language Switcher
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-            });
-            const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-654tu2n26.vercel.app';
+   <script>
+    const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-654tu2n26.vercel.app';
 
-// Load children in sidebar
-async function loadChildren() {
-    const userId = localStorage.getItem('userId');
-    
-    if (!userId) {
-        window.location.href = 'login.html';
-        return;
-    }
-    
-    try {
-        const response = await fetch(`${API_URL}/api/children/parent/${userId}`);
-        const data = await response.json();
-        
-        if (data.success && data.data.length > 0) {
-            const childrenContainer = document.querySelector('.children');
-            
-            // Keep the add button
-            const addBtn = childrenContainer.querySelector('.add-child-btn');
-            
-            // Clear and rebuild
-            childrenContainer.innerHTML = '<p class="nav-heading">CHILDREN</p>';
-            
-            // Add each child
-            data.data.forEach(child => {
-    const childEl = document.createElement('div');
-    childEl.className = 'child-item';
-    childEl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:8px; cursor:pointer; border-radius:8px; margin:4px 0;';
-    childEl.innerHTML = `
-        <span style="font-size:24px;">${child.avatar}</span>
-        <span style="font-size:14px; font-weight:500;">${child.name}</span>
-    `;
-    
-    // Make it clickable
-    childEl.addEventListener('click', () => {
-        localStorage.setItem('selectedChildId', child.id);
-        localStorage.setItem('selectedChildName', child.name);
-        localStorage.setItem('selectedChildAvatar', child.avatar);
-        alert(`Selected: ${child.avatar} ${child.name}`);
-    });
-    
-    // Hover effect
-    childEl.addEventListener('mouseover', () => {
-        childEl.style.background = '#F0E8F5';
-    });
-    childEl.addEventListener('mouseout', () => {
-        childEl.style.background = 'transparent';
-    });
-    
-    childrenContainer.appendChild(childEl);
-});
-            // Add the button back
-            childrenContainer.appendChild(addBtn);
-            
-            // Update greeting with user name
-            const userName = localStorage.getItem('userName');
-            if (userName) {
-                document.querySelector('.greeting').textContent = `Hello, ${userName}! 👋`;
-            }
-        }
-    } catch (error) {
-        console.error('Error loading children:', error);
-    }
-}
-
-// Load recent entries
-async function loadRecentEntries() {
-    const userId = localStorage.getItem('userId');
-    if (!userId) return;
-    
-    try {
-        const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
-        const data = await response.json();
-        
-        if (data.success && data.data.length > 0) {
-            const entriesList = document.querySelector('.empty-entries-list');
-            entriesList.innerHTML = '';
-            
-            // Show last 3 entries
-            data.data.slice(0, 3).forEach(entry => {
-                const entryEl = document.createElement('div');
-                entryEl.className = 'entry-item';
-                entryEl.innerHTML = `
-                    <div class="entry-content">
-                        <p class="entry-title">${entry.title}</p>
-                        <p class="entry-date">${entry.entry_date} • ${entry.children?.name || ''} ${entry.children?.avatar || ''}</p>
-                    </div>
-                    <button class="view-btn">View ›</button>
-                `;
-                entriesList.appendChild(entryEl);
-            });
-        }
-    } catch (error) {
-        console.error('Error loading entries:', error);
-    }
-}
-
-// Run on page load
-loadChildren();
-loadRecentEntries();
+    // Language Switcher
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
         });
-    </script>
+    });
+
+    // Load children in sidebar
+    async function loadChildren() {
+        const userId = localStorage.getItem('userId');
+        
+        if (!userId) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        try {
+            const response = await fetch(`${API_URL}/api/children/parent/${userId}`);
+            const data = await response.json();
+            
+            if (data.success && data.data.length > 0) {
+                const childrenContainer = document.querySelector('.children');
+                const addBtn = childrenContainer.querySelector('.add-child-btn');
+                
+                childrenContainer.innerHTML = '<p class="nav-heading">CHILDREN</p>';
+                
+                data.data.forEach(child => {
+                    const childEl = document.createElement('div');
+                    childEl.className = 'child-item';
+                    childEl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:8px; cursor:pointer; border-radius:8px; margin:4px 0;';
+                    childEl.innerHTML = `
+                        <span style="font-size:24px;">${child.avatar}</span>
+                        <span style="font-size:14px; font-weight:500;">${child.name}</span>
+                    `;
+                    
+                    childEl.addEventListener('click', () => {
+                        localStorage.setItem('selectedChildId', child.id);
+                        localStorage.setItem('selectedChildName', child.name);
+                        localStorage.setItem('selectedChildAvatar', child.avatar);
+                        alert(`Selected: ${child.avatar} ${child.name}`);
+                    });
+                    
+                    childEl.addEventListener('mouseover', () => {
+                        childEl.style.background = '#F0E8F5';
+                    });
+                    childEl.addEventListener('mouseout', () => {
+                        childEl.style.background = 'transparent';
+                    });
+                    
+                    childrenContainer.appendChild(childEl);
+                });
+
+                childrenContainer.appendChild(addBtn);
+                
+                const userName = localStorage.getItem('userName');
+                if (userName) {
+                    document.querySelector('.greeting').textContent = `Hello, ${userName}! 👋`;
+                }
+            }
+        } catch (error) {
+            console.error('Error loading children:', error);
+        }
+    }
+
+    // Load recent entries
+    async function loadRecentEntries() {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+        
+        try {
+            const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
+            const data = await response.json();
+            
+            if (data.success && data.data.length > 0) {
+                const entriesList = document.querySelector('.empty-entries-list');
+                entriesList.innerHTML = '';
+                
+                data.data.slice(0, 3).forEach(entry => {
+                    const entryEl = document.createElement('div');
+                    entryEl.className = 'entry-item';
+                    entryEl.innerHTML = `
+                        <div class="entry-content">
+                            <p class="entry-title">${entry.title}</p>
+                            <p class="entry-date">${entry.entry_date} • ${entry.children?.name || ''} ${entry.children?.avatar || ''}</p>
+                        </div>
+                        <button class="view-btn">View ›</button>
+                    `;
+                    entriesList.appendChild(entryEl);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading entries:', error);
+        }
+    }
+
+    // Run on page load
+    loadChildren();
+    loadRecentEntries();
+</script>
 </body>
 </html>
