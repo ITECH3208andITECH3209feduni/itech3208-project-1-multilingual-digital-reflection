@@ -7,7 +7,7 @@ const CONFIG = {
   DELAY_MS:      1400,
 };
 
-const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-654tu2n26.vercel.app';
+const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-fmlrod095.vercel.app';
 
 const DOM = {
   
