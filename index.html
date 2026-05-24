@@ -93,7 +93,7 @@
                             <p class="empty-entry-title">No entries yet</p>
                             <p class="empty-entry-date">Start tracking your child's activities</p>
                         </div>
-                        <button class="view-btn" disabled style="opacity: 0.5; cursor: not-allowed;">View ›</button>
+                        <button class="view-btn" onclick="viewEntry('${entry.id}', '${entry.title}', '${entry.content}', '${entry.entry_date}', '${entry.mood}')" style="white-space:nowrap;">View ›</button>
                     </div>
                 </div>
             </section>
@@ -274,6 +274,64 @@ function getMoodEmoji(mood) {
         'silly': '😜'
     };
     return moods[mood] || '😊';
+} 
+       function viewEntry(id, title, content, date, mood) {
+    // Create a modal to show entry
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    `;
+    
+    modal.innerHTML = `
+        <div style="
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        ">
+            <button onclick="this.closest('.modal').remove()" style="
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                background: #F0E8F5;
+                border: none;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                font-size: 16px;
+            ">✕</button>
+            
+            <h2 style="color: #C77CF9; margin-bottom: 8px;">${title}</h2>
+            <p style="color: #888; font-size: 13px; margin-bottom: 16px;">
+                📅 ${date} • ${getMoodEmoji(mood)} ${mood}
+            </p>
+            <hr style="border: 1px solid #F0E8F5; margin-bottom: 16px;">
+            <p style="line-height: 1.6; color: #333;">${content}</p>
+        </div>
+    `;
+    
+    modal.classList.add('modal');
+    
+    // Close when clicking outside
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+    
+    document.body.appendChild(modal);
 }
     // Load recent entries
     async function loadRecentEntries() {
