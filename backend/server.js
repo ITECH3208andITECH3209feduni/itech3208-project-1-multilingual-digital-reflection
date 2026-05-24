@@ -17,7 +17,7 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 100 * 1024 * 1024 // 100MB limit
+    fileSize: 100 * 1024 * 1024
   },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
@@ -69,11 +69,9 @@ app.get('/', (req, res) => {
 
 // ============= AUTH ROUTES =============
 
-// Login
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { username, password } = req.body;
-
     const { data: user, error } = await supabase
       .from('parents')
       .select('*')
@@ -81,9 +79,7 @@ app.post('/api/auth/login', async (req, res) => {
       .eq('password', password)
       .single();
 
-    if (error || !user) {
-      throw new Error('Invalid username or password');
-    }
+    if (error || !user) throw new Error('Invalid username or password');
 
     res.json({
       success: true,
@@ -99,27 +95,16 @@ app.post('/api/auth/login', async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(401).json({
-      success: false,
-      error: error.message
-    });
+    res.status(401).json({ success: false, error: error.message });
   }
 });
 
-// Signup
 app.post('/api/auth/signup', async (req, res) => {
   try {
     const { email, username, password, full_name } = req.body;
-
     const { data, error } = await supabase
       .from('parents')
-      .insert([{
-        username,
-        email,
-        password,
-        full_name,
-        preferred_language: 'EN'
-      }])
+      .insert([{ username, email, password, full_name, preferred_language: 'EN' }])
       .select()
       .single();
 
@@ -131,20 +116,15 @@ app.post('/api/auth/signup', async (req, res) => {
       data: { user: data }
     });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
+    res.status(400).json({ success: false, error: error.message });
   }
 });
 
 // ============= CHILDREN ROUTES =============
 
-// Get children by parent
 app.get('/api/children/parent/:parentId', async (req, res) => {
   try {
     const { parentId } = req.params;
-
     const { data, error } = await supabase
       .from('children')
       .select('*')
@@ -152,24 +132,15 @@ app.get('/api/children/parent/:parentId', async (req, res) => {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-
-    res.json({
-      success: true,
-      data: data
-    });
+    res.json({ success: true, data: data });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
+    res.status(400).json({ success: false, error: error.message });
   }
 });
 
-// Add child
 app.post('/api/children', async (req, res) => {
   try {
     const { parent_id, name, date_of_birth, avatar, color } = req.body;
-
     const { data, error } = await supabase
       .from('children')
       .insert([{
@@ -183,80 +154,68 @@ app.post('/api/children', async (req, res) => {
       .single();
 
     if (error) throw error;
-
-    res.json({
-      success: true,
-      message: 'Child added successfully!',
-      data: data
-    });
+    res.json({ success: true, message: 'Child added successfully!', data: data });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// Delete child
+app.delete('/api/children/:childId', async (req, res) => {
+  try {
+    const { childId } = req.params;
+
+    // First delete all entries for this child
+    await supabase
+      .from('journal_entries')
+      .delete()
+      .eq('child_id', childId);
+
+    // Then delete the child
+    const { error } = await supabase
+      .from('children')
+      .delete()
+      .eq('id', childId);
+
+    if (error) throw error;
+    res.json({ success: true, message: 'Child deleted!' });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
   }
 });
 
 // ============= JOURNAL ENTRIES ROUTES =============
 
-// Get entries by parent
 app.get('/api/entries-new/parent/:parentId', async (req, res) => {
   try {
     const { parentId } = req.params;
-
-    // Get entries
     const { data: entries, error } = await supabase
       .from('journal_entries')
-      .select(`
-        *,
-        children(name, avatar, color)
-      `)
+      .select(`*, children(name, avatar, color)`)
       .eq('parent_id', parentId)
       .order('entry_date', { ascending: false });
 
     if (error) throw error;
 
-    // Get media for each entry
     const entriesWithMedia = await Promise.all(
       entries.map(async (entry) => {
         const { data: media } = await supabase
           .from('media')
           .select('file_url, media_type, thumbnail_url')
           .eq('entry_id', entry.id);
-        
-        return {
-          ...entry,
-          media: media || []
-        };
+        return { ...entry, media: media || [] };
       })
     );
 
-    res.json({
-      success: true,
-      data: entriesWithMedia
-    });
+    res.json({ success: true, data: entriesWithMedia });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
+    res.status(400).json({ success: false, error: error.message });
   }
 });
 
-// Create journal entry
 app.post('/api/entries-new', async (req, res) => {
   try {
-    const {
-      parent_id,
-      child_id,
-      title,
-      entry_date,
-      content,
-      mood,
-      language,
-      is_milestone
-    } = req.body;
-
+    const { parent_id, child_id, title, entry_date, content, mood, language, is_milestone } = req.body;
     const { data, error } = await supabase
       .from('journal_entries')
       .insert([{
@@ -273,54 +232,58 @@ app.post('/api/entries-new', async (req, res) => {
       .single();
 
     if (error) throw error;
-
-    res.json({
-      success: true,
-      message: 'Journal entry created successfully!',
-      data: data
-    });
+    res.json({ success: true, message: 'Journal entry created successfully!', data: data });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// Delete entry
+app.delete('/api/entries-new/:entryId', async (req, res) => {
+  try {
+    const { entryId } = req.params;
+
+    // First delete media for this entry
+    await supabase
+      .from('media')
+      .delete()
+      .eq('entry_id', entryId);
+
+    // Then delete the entry
+    const { error } = await supabase
+      .from('journal_entries')
+      .delete()
+      .eq('id', entryId);
+
+    if (error) throw error;
+    res.json({ success: true, message: 'Entry deleted!' });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
   }
 });
 
 // ============= MEDIA ROUTES =============
 
-// Get media by entry ID
 app.get('/api/media/entry/:entryId', async (req, res) => {
   try {
     const { entryId } = req.params;
-
     const { data, error } = await supabase
       .from('media')
       .select('*')
       .eq('entry_id', entryId);
 
     if (error) throw error;
-
-    res.json({
-      success: true,
-      data: data || []
-    });
+    res.json({ success: true, data: data || [] });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
+    res.status(400).json({ success: false, error: error.message });
   }
 });
 
 // ============= UPLOAD ROUTE =============
 
-// Upload photo or video
 app.post('/api/upload', upload.single('file'), async (req, res) => {
   try {
-    if (!req.file) {
-      throw new Error('No file uploaded');
-    }
+    if (!req.file) throw new Error('No file uploaded');
 
     const { parent_id, entry_id } = req.body;
     const resourceType = req.file.mimetype.startsWith('video/') ? 'video' : 'image';
@@ -370,62 +333,35 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
       message: `${resourceType === 'video' ? 'Video' : 'Photo'} uploaded successfully!`,
       data: data
     });
-
   } catch (error) {
     console.error('❌ Upload Error:', error.message);
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
+    res.status(400).json({ success: false, error: error.message });
   }
 });
 
 // ============= TEST ROUTES =============
 
-// Get all parents
 app.get('/api/parents', async (req, res) => {
   try {
-    const { data, error } = await supabase
-      .from('parents')
-      .select('*');
-
+    const { data, error } = await supabase.from('parents').select('*');
     if (error) throw error;
-
-    res.json({
-      success: true,
-      data: data
-    });
+    res.json({ success: true, data: data });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
+    res.status(400).json({ success: false, error: error.message });
   }
 });
 
-// Get all entries
 app.get('/api/entries', async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('journal_entries')
-      .select(`
-        *,
-        parents(username, full_name),
-        children(name, avatar, color)
-      `)
+      .select(`*, parents(username, full_name), children(name, avatar, color)`)
       .order('entry_date', { ascending: false });
 
     if (error) throw error;
-
-    res.json({
-      success: true,
-      data: data
-    });
+    res.json({ success: true, data: data });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
+    res.status(400).json({ success: false, error: error.message });
   }
 });
 
