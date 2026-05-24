@@ -204,21 +204,36 @@ app.get('/api/entries-new/parent/:parentId', async (req, res) => {
   try {
     const { parentId } = req.params;
 
-    const { data, error } = await supabase
+    // Get entries
+    const { data: entries, error } = await supabase
       .from('journal_entries')
       .select(`
         *,
-        children(name, avatar, color),
-        media(file_url, media_type, thumbnail_url)
+        children(name, avatar, color)
       `)
       .eq('parent_id', parentId)
       .order('entry_date', { ascending: false });
 
     if (error) throw error;
 
+    // Get media for each entry
+    const entriesWithMedia = await Promise.all(
+      entries.map(async (entry) => {
+        const { data: media } = await supabase
+          .from('media')
+          .select('file_url, media_type, thumbnail_url')
+          .eq('entry_id', entry.id);
+        
+        return {
+          ...entry,
+          media: media || []
+        };
+      })
+    );
+
     res.json({
       success: true,
-      data: data
+      data: entriesWithMedia
     });
   } catch (error) {
     res.status(400).json({
