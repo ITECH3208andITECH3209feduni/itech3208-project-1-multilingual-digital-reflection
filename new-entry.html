@@ -194,6 +194,58 @@
         </main>
     </div>
 
-    <script src="journal-script.js"></script>
+    <script src="journal-script.js">
+	const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-29vwrayye.vercel.app';
+
+// Load children in sidebar
+async function loadChildren() {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_URL}/api/children/parent/${userId}`);
+        const data = await response.json();
+        
+        if (data.success && data.data.length > 0) {
+            const childrenContainer = document.querySelector('.children');
+            const addBtn = childrenContainer.querySelector('.add-child-btn');
+            childrenContainer.innerHTML = '<p class="nav-heading">CHILDREN</p>';
+            
+            data.data.forEach(child => {
+                const childEl = document.createElement('div');
+                childEl.className = 'child-item';
+                childEl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:8px; cursor:pointer; border-radius:8px; margin:4px 0;';
+                childEl.innerHTML = `
+                    <span style="font-size:24px;">${child.avatar}</span>
+                    <span style="font-size:14px; font-weight:500;">${child.name}</span>
+                `;
+                childEl.addEventListener('click', () => {
+                    localStorage.setItem('selectedChildId', child.id);
+                    localStorage.setItem('selectedChildName', child.name);
+                    localStorage.setItem('selectedChildAvatar', child.avatar);
+                    window.location.href = 'index.html';
+                });
+                childrenContainer.appendChild(childEl);
+            });
+
+            if (addBtn) childrenContainer.appendChild(addBtn);
+            
+            const userName = localStorage.getItem('userName');
+            if (userName) {
+                const greeting = document.querySelector('.greeting');
+                if (greeting) greeting.textContent = `Hello, ${userName}! 👋`;
+            }
+        }
+    } catch (error) {
+        console.error('Error loading children:', error);
+    }
+}
+
+// Run on page load
+loadChildren();
+</script>
 </body>
 </html>
