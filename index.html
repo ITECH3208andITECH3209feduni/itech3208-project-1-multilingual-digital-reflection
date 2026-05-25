@@ -117,7 +117,7 @@
     </div>
 
 <script>
-  const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-29vwrayye.vercel.app';
+    const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-29vwrayye.vercel.app';
 
     // Language Switcher
     document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -164,7 +164,6 @@
                         ">🗑️</button>
                     `;
                     
-                    // Show/hide delete button on hover
                     childEl.addEventListener('mouseover', () => {
                         childEl.style.background = '#F0E8F5';
                         childEl.querySelector('.delete-child-btn').style.display = 'block';
@@ -176,7 +175,6 @@
                         childEl.querySelector('.delete-child-btn').style.display = 'none';
                     });
 
-                    // Delete child
                     childEl.querySelector('.delete-child-btn').addEventListener('click', async (e) => {
                         e.stopPropagation();
                         if (confirm(`Delete ${child.name} and all their entries?`)) {
@@ -203,7 +201,6 @@
                         }
                     });
                     
-                    // Select child on click
                     childEl.addEventListener('click', () => {
                         localStorage.setItem('selectedChildId', child.id);
                         localStorage.setItem('selectedChildName', child.name);
@@ -264,12 +261,15 @@
                 entryEl.className = 'empty-entry-item';
                 entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
                 
+                // Check milestone properly
+                const isMilestone = entry.is_milestone === true || entry.is_milestone === 'true';
+
                 entryEl.innerHTML = `
                     <div style="flex:1; margin-right:10px;">
                         <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
                         <p style="color:#888; margin:4px 0 0; font-size:12px;">
                             ${entry.entry_date} • ${getMoodEmoji(entry.mood)} ${entry.mood}
-                            ${entry.is_milestone ? ' ⭐ Milestone' : ''}
+                            ${isMilestone ? ' ⭐ Milestone' : ''}
                         </p>
                         <p style="color:#666; margin:4px 0 0; font-size:13px;">
                             ${entry.content.substring(0, 60)}...
@@ -297,7 +297,7 @@
                         entry.content,
                         entry.entry_date,
                         entry.mood,
-                        entry.is_milestone,
+                        isMilestone,
                         entry.media || []
                     );
                 });
@@ -383,6 +383,9 @@
             });
         }
 
+        // Make sure isMilestone is boolean
+        const showMilestone = isMilestone === true || isMilestone === 'true';
+
         modal.innerHTML = `
             <div style="
                 background: white;
@@ -416,7 +419,7 @@
                     <span style="background:#F0E8F5; color:#C77CF9; padding:4px 10px; border-radius:20px; font-size:12px;">
                         ${getMoodEmoji(mood)} ${mood}
                     </span>
-                    ${isMilestone ? `<span style="background:#FFF3CD; color:#856404; padding:4px 10px; border-radius:20px; font-size:12px;">⭐ Milestone</span>` : ''}
+                    ${showMilestone ? `<span style="background:#FFF3CD; color:#856404; padding:4px 10px; border-radius:20px; font-size:12px;">⭐ Milestone</span>` : ''}
                 </div>
                 
                 <hr style="border: 1px solid #F0E8F5; margin-bottom: 16px;">
@@ -453,12 +456,14 @@
                     entryEl.className = 'empty-entry-item';
                     entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
                     
+                    const isMilestone = entry.is_milestone === true || entry.is_milestone === 'true';
+
                     entryEl.innerHTML = `
                         <div style="flex:1; margin-right:10px;">
                             <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
                             <p style="color:#888; margin:4px 0 0; font-size:12px;">
                                 ${entry.entry_date} • ${entry.children?.name || ''} ${entry.children?.avatar || ''}
-                                ${entry.is_milestone ? ' ⭐' : ''}
+                                ${isMilestone ? ' ⭐' : ''}
                             </p>
                         </div>
                         <div style="display:flex; gap:6px;">
@@ -482,7 +487,7 @@
                             entry.content,
                             entry.entry_date,
                             entry.mood,
-                            entry.is_milestone,
+                            isMilestone,
                             entry.media || []
                         );
                     });
