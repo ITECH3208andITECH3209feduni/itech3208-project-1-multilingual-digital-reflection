@@ -193,11 +193,11 @@
             </div>
         </main>
     </div>
+<script src="journal-script.js"></script>
 
-    <script src="journal-script.js">
-	const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-29vwrayye.vercel.app';
+<script>
+const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-29vwrayye.vercel.app';
 
-// Load children in sidebar
 async function loadChildren() {
     const userId = localStorage.getItem('userId');
     if (!userId) {
@@ -244,7 +244,6 @@ async function loadChildren() {
     }
 }
 
-// Run on page load
 loadChildren();
 </script>
 </body>
