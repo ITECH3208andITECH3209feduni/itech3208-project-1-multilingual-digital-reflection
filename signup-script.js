@@ -1,6 +1,6 @@
 // Signup Script for StoryBond
 
-const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-29vwrayye.vercel.app';
+const API_URL = 'http://localhost:3000';
 
 
 const CONFIG = {
