@@ -1,7 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+
 require('dotenv').config();
+
 const { createClient } = require('@supabase/supabase-js');
+const authRoutes = require('./auth');
+
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 
@@ -69,56 +73,7 @@ app.get('/', (req, res) => {
 
 // ============= AUTH ROUTES =============
 
-app.post('/api/auth/login', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const { data: user, error } = await supabase
-      .from('parents')
-      .select('*')
-      .eq('username', username)
-      .eq('password', password)
-      .single();
-
-    if (error || !user) throw new Error('Invalid username or password');
-
-    res.json({
-      success: true,
-      message: 'Login successful!',
-      data: {
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          full_name: user.full_name,
-          preferred_language: user.preferred_language
-        }
-      }
-    });
-  } catch (error) {
-    res.status(401).json({ success: false, error: error.message });
-  }
-});
-
-app.post('/api/auth/signup', async (req, res) => {
-  try {
-    const { email, username, password, full_name } = req.body;
-    const { data, error } = await supabase
-      .from('parents')
-      .insert([{ username, email, password, full_name, preferred_language: 'EN' }])
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    res.json({
-      success: true,
-      message: 'Account created successfully!',
-      data: { user: data }
-    });
-  } catch (error) {
-    res.status(400).json({ success: false, error: error.message });
-  }
-});
+app.use('/api/auth', authRoutes);
 
 // ============= CHILDREN ROUTES =============
 
@@ -341,16 +296,6 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
 
 // ============= TEST ROUTES =============
 
-app.get('/api/parents', async (req, res) => {
-  try {
-    const { data, error } = await supabase.from('parents').select('*');
-    if (error) throw error;
-    res.json({ success: true, data: data });
-  } catch (error) {
-    res.status(400).json({ success: false, error: error.message });
-  }
-});
-
 app.get('/api/entries', async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -366,6 +311,7 @@ app.get('/api/entries', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:3000`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
