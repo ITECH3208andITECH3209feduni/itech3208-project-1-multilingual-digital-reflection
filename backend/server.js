@@ -1,11 +1,14 @@
+//
+// require dependencies that are needed for the server to run express, cors, dotenv, supabase-js, multer, cloudinary
+//
 const express = require('express');
 const cors = require('cors');
-
+// Load environment variables from .env file
 require('dotenv').config();
-
+// Import the Supabase client library
 const { createClient } = require('@supabase/supabase-js');
 const authRoutes = require('./auth');
-
+// Import multer and cloudinary for file uploads
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 
@@ -17,6 +20,7 @@ cloudinary.config({
 });
 
 // Configure multer for file upload
+// multler helper is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files.
 const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
@@ -31,7 +35,7 @@ const upload = multer({
     }
   }
 });
-
+// Create an Express application
 const app = express();
 
 // Handle CORS manually - must be first!
@@ -51,7 +55,7 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY
 );
 
-// Middleware
+// Middleware 
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -77,6 +81,7 @@ app.use('/api/auth', authRoutes);
 
 // ============= CHILDREN ROUTES =============
 
+// Get all children for a specific parent
 app.get('/api/children/parent/:parentId', async (req, res) => {
   try {
     const { parentId } = req.params;
@@ -92,7 +97,7 @@ app.get('/api/children/parent/:parentId', async (req, res) => {
     res.status(400).json({ success: false, error: error.message });
   }
 });
-
+// Add a new child for a specific parent
 app.post('/api/children', async (req, res) => {
   try {
     const { parent_id, name, date_of_birth, avatar, color } = req.body;
@@ -110,7 +115,7 @@ app.post('/api/children', async (req, res) => {
 
     if (error) throw error;
     res.json({ success: true, message: 'Child added successfully!', data: data });
-  } catch (error) {
+  } catch (error) { // Handle errors and send a response with status 400 and the error message
     res.status(400).json({ success: false, error: error.message });
   }
 });
@@ -140,7 +145,7 @@ app.delete('/api/children/:childId', async (req, res) => {
 });
 
 // ============= JOURNAL ENTRIES ROUTES =============
-
+// Get all journal entries for a specific parent, including associated children and media
 app.get('/api/entries-new/parent/:parentId', async (req, res) => {
   try {
     const { parentId } = req.params;
@@ -167,7 +172,7 @@ app.get('/api/entries-new/parent/:parentId', async (req, res) => {
     res.status(400).json({ success: false, error: error.message });
   }
 });
-
+// Add a new journal entry for a specific parent and child
 app.post('/api/entries-new', async (req, res) => {
   try {
     const { parent_id, child_id, title, entry_date, content, mood, language, is_milestone } = req.body;
@@ -295,7 +300,11 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
 });
 
 // ============= TEST ROUTES =============
-
+// Test route to check if the server is running
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Test route is working!' });
+});
+// Get all journal entries with associated parents and children
 app.get('/api/entries', async (req, res) => {
   try {
     const { data, error } = await supabase

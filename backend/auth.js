@@ -378,4 +378,50 @@ router.get('/me', async (req, res) => {
   }
 });
 
+// POST /api/auth/forgot-password
+// This route will initiate the password reset process for a user by sending a password reset email. It uses Supabase Auth's resetPasswordForEmail method to send the email with a redirect link to the password reset page.
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const email = String(req.body.email || '')
+      .trim()
+      .toLowerCase();
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        error: 'Email is required.'
+      });
+    }
+
+    const { error } = await supabaseAuth.auth.resetPasswordForEmail(
+      email,
+      {
+        redirectTo: 'http://127.0.0.1:5500/reset_password.html'
+      }
+    );
+
+    if (error) {
+      console.error('Password reset error:', error);
+
+      return res.status(400).json({
+        success: false,
+        error: error.message
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'If an account exists for that email, a password reset link has been sent.'
+    });
+
+  } catch (error) {
+    console.error('Forgot password error:', error);
+
+    return res.status(500).json({
+      success: false,
+      error: 'Unable to process password reset.'
+    });
+  }
+});
+
 module.exports = router;
