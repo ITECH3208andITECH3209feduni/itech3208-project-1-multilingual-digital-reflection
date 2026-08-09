@@ -1,6 +1,11 @@
 // Journal Entry Script for StoryBond
 
-const API_URL = 'https://itech3208-project-1-multilingual-digital-reflection-29vwrayye.vercel.app';
+const API_URL =
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000'
+    : 'YOUR_PRODUCTION_API_URL';
+    
 let selectedMedia = [];
 let selectedFiles = [];
 
