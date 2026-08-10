@@ -352,6 +352,85 @@ body {
   text-decoration: underline;
 }
 
+/* ── Terms & Conditions Modal ── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(58, 45, 94, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 20px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(58, 45, 94, 0.3);
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal__title {
+  font-size: 1.9rem;
+  color: var(--text);
+}
+
+.modal__close {
+  background: none;
+  border: none;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+}
+
+.modal__close:hover {
+  color: var(--text);
+}
+
+.modal__body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.modal__body p {
+  margin-bottom: 12px;
+}
+
+.modal__body ul {
+  margin: 0 0 12px 20px;
+}
+
+.modal__body li {
+  margin-bottom: 6px;
+}
+
+.modal__footer {
+  padding: 16px 24px 24px;
+}
+
 
 /* ── Login Button ── */
 

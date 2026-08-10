@@ -203,7 +203,31 @@ async function loadChildren() {
     }
 }
 
+function updateHeaderDate() {
+    const dateEl = document.querySelector('.date');
+    if (dateEl) {
+        const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+        dateEl.textContent = new Date().toLocaleDateString('en-US', options);
+    }
+}
+
+function updateWeekRange() {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+    const options = { month: 'short', day: 'numeric', year: 'numeric' };
+    const weekRangeEl = document.querySelector('.week-range');
+    if (weekRangeEl) {
+        weekRangeEl.textContent = `${startOfWeek.toLocaleDateString('en-US', options)} – ${endOfWeek.toLocaleDateString('en-US', options)}`;
+    }
+}
+
 loadChildren();
+updateHeaderDate();
+updateWeekRange();
 </script>
 </body>
 </html>

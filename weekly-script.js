@@ -13,19 +13,30 @@ const WeeklyRecap = {
         // Week navigation buttons
         const prevBtn = document.querySelectorAll('.week-nav-btn')[0];
         const nextBtn = document.querySelectorAll('.week-nav-btn')[1];
-        
+
         if (prevBtn) {
             prevBtn.addEventListener('click', () => WeeklyRecap.navigateWeek(-1));
         }
-        
+
         if (nextBtn) {
             nextBtn.addEventListener('click', () => WeeklyRecap.navigateWeek(1));
         }
-        
+
+        // Show today's date in the header
+        WeeklyRecap.updateHeaderDate();
+
         // Load initial week data
         WeeklyRecap.loadWeeklyData();
     },
-    
+
+    updateHeaderDate() {
+        const dateEl = document.querySelector('.date');
+        if (dateEl) {
+            const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+            dateEl.textContent = new Date().toLocaleDateString('en-US', options);
+        }
+    },
+
     async loadWeeklyData() {
         const userId = localStorage.getItem('userId');
         

@@ -121,7 +121,7 @@
   window.location.hostname === 'localhost' ||
   window.location.hostname === '127.0.0.1'
     ? 'http://localhost:3000'
-    : 'YOUR_PRODUCTION_API_URL';
+    : 'https://storybond-backend.vercel.app';
 
     // Language Switcher
     document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -520,9 +520,18 @@
         }
     }
 
+    function updateHeaderDate() {
+        const dateEl = document.querySelector('.date');
+        if (dateEl) {
+            const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+            dateEl.textContent = new Date().toLocaleDateString('en-US', options);
+        }
+    }
+
     // Run on page load
     loadChildren();
     loadRecentEntries();
+    updateHeaderDate();
 </script>
 </body>
 </html>

@@ -21,6 +21,13 @@ const ChildForm = {
         
         // Initialize avatar selector
         ChildForm.initAvatarSelector();
+
+        // Show today's date in the header
+        const dateEl = document.querySelector('.date');
+        if (dateEl) {
+            const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+            dateEl.textContent = new Date().toLocaleDateString('en-US', options);
+        }
     },
 
     initAvatarSelector() {

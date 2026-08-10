@@ -255,6 +255,11 @@ const App = {
       successBanner: DOM.get(
         'successBanner'
       ),
+
+      termsLink: document.querySelector('.terms-link'),
+      termsModal: DOM.get('termsModal'),
+      termsModalClose: DOM.get('termsModalClose'),
+      termsModalAccept: DOM.get('termsModalAccept'),
     };
 
     // Submit the signup form when the button is clicked.
@@ -276,6 +281,32 @@ const App = {
         }
       }
     );
+
+    // Open the Terms & Conditions modal instead of following the "#" link.
+    App.el.termsLink?.addEventListener('click', (event) => {
+      event.preventDefault();
+      App.el.termsModal?.removeAttribute('hidden');
+    });
+
+    const closeTermsModal = () => {
+      App.el.termsModal?.setAttribute('hidden', '');
+    };
+
+    App.el.termsModalClose?.addEventListener('click', closeTermsModal);
+    App.el.termsModalAccept?.addEventListener('click', () => {
+      if (App.el.terms) App.el.terms.checked = true;
+      closeTermsModal();
+    });
+
+    // Close when clicking outside the modal card.
+    App.el.termsModal?.addEventListener('click', (event) => {
+      if (event.target === App.el.termsModal) closeTermsModal();
+    });
+
+    // Close on Escape.
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeTermsModal();
+    });
   },
 
   // Clears previous errors and success messages.
