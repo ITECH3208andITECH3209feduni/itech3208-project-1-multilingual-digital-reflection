@@ -99,7 +99,36 @@ const JournalEntry = {
                 this.classList.toggle('selected');
             });
         });
-        
+
+        // "+ Add tag" button: prompt for a custom tag and add it as a selectable chip
+        const addTagBtn = document.querySelector('.add-tag-btn');
+        if (addTagBtn) {
+            addTagBtn.addEventListener('click', () => {
+                const label = prompt('Enter a new tag:');
+                if (!label || !label.trim()) return;
+
+                const tagValue = label.trim().toLowerCase().replace(/\s+/g, '-');
+
+                // Avoid adding a duplicate tag
+                const existing = document.querySelector(`.tag-btn[data-tag="${tagValue}"]`);
+                if (existing) {
+                    existing.classList.add('selected');
+                    return;
+                }
+
+                const newTagBtn = document.createElement('button');
+                newTagBtn.type = 'button';
+                newTagBtn.className = 'tag-btn selected';
+                newTagBtn.dataset.tag = tagValue;
+                newTagBtn.textContent = `# ${label.trim()}`;
+                newTagBtn.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+
+                addTagBtn.parentNode.insertBefore(newTagBtn, addTagBtn);
+            });
+        }
+
         // Mood buttons
         const moodBtns = document.querySelectorAll('.mood-btn');
         moodBtns.forEach(btn => {
