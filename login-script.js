@@ -7,7 +7,11 @@ const CONFIG = {
   DELAY_MS:      1400,
 };
 
-const API_URL = 'http://localhost:3000';
+const API_URL =
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000'
+    : 'https://storybond-backend.vercel.app';
 
 const DOM = {
   

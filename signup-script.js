@@ -10,8 +10,11 @@
 
 
 // Local backend API address.
-// When the project is deployed, this can later be replaced with the deployed backend address.
-const API_URL = 'http://localhost:3000';
+const API_URL =
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000'
+    : 'https://storybond-backend.vercel.app';
 
 // General signup settings.
 const CONFIG = {
