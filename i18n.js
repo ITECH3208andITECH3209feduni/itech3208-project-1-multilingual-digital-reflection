@@ -52,6 +52,9 @@ const TRANSLATIONS = {
     add_label: 'Add',
     cancel_btn: 'Cancel',
     save_entry: 'Save Entry',
+    edit_journal_heading: 'Edit journal entry',
+    edit_journal_subheading: 'Update the details below',
+    update_entry_btn: 'Update Entry',
 
     // weekly.html
     weekly_heading: 'This week in review',
@@ -174,6 +177,9 @@ const TRANSLATIONS = {
     add_label: 'Ekle',
     cancel_btn: 'İptal',
     save_entry: 'Kaydı Kaydet',
+    edit_journal_heading: 'Günlük kaydını düzenle',
+    edit_journal_subheading: 'Aşağıdaki bilgileri güncelleyin',
+    update_entry_btn: 'Kaydı Güncelle',
 
     // weekly.html
     weekly_heading: 'Bu haftaya bakış',

@@ -282,6 +282,15 @@
                     </div>
                     <div style="display:flex; gap:6px; flex-shrink:0;">
                         <button class="view-btn" style="white-space:nowrap;">View ›</button>
+                        <button class="edit-entry-btn" style="
+                            background: #f0f4ff;
+                            border: 1px solid #ccd9ff;
+                            color: #4a6cf7;
+                            cursor: pointer;
+                            padding: 6px 10px;
+                            border-radius: 8px;
+                            font-size: 12px;
+                        ">✏️</button>
                         <button class="delete-entry-btn" style="
                             background: #fff0f0;
                             border: 1px solid #ffcccc;
@@ -305,6 +314,11 @@
                         isMilestone,
                         entry.media || []
                     );
+                });
+
+                // Edit entry button
+                entryEl.querySelector('.edit-entry-btn').addEventListener('click', () => {
+                    window.location.href = `new-entry.html?edit=${entry.id}`;
                 });
 
                 // Delete entry button
@@ -473,6 +487,15 @@
                         </div>
                         <div style="display:flex; gap:6px;">
                             <button class="view-btn" style="white-space:nowrap;">View ›</button>
+                            <button class="edit-entry-btn" style="
+                                background: #f0f4ff;
+                                border: 1px solid #ccd9ff;
+                                color: #4a6cf7;
+                                cursor: pointer;
+                                padding: 6px 10px;
+                                border-radius: 8px;
+                                font-size: 12px;
+                            ">✏️</button>
                             <button class="delete-entry-btn" style="
                                 background: #fff0f0;
                                 border: 1px solid #ffcccc;
@@ -495,6 +518,10 @@
                             isMilestone,
                             entry.media || []
                         );
+                    });
+
+                    entryEl.querySelector('.edit-entry-btn').addEventListener('click', () => {
+                        window.location.href = `new-entry.html?edit=${entry.id}`;
                     });
 
                     entryEl.querySelector('.delete-entry-btn').addEventListener('click', async () => {

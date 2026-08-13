@@ -8,6 +8,7 @@ const API_URL =
     
 let selectedMedia = [];
 let selectedFiles = [];
+const editEntryId = new URLSearchParams(window.location.search).get('edit');
 
 // Load children for selector
 async function loadChildrenSelector() {
@@ -80,10 +81,10 @@ async function loadChildrenSelector() {
 }
 
 const JournalEntry = {
-    init() {
-        // Load children selector
-        loadChildrenSelector();
-        
+    async init() {
+        // Load children selector (auto-selects the first child)
+        await loadChildrenSelector();
+
         // Form submission
         const form = document.getElementById('journalForm');
         form.addEventListener('submit', JournalEntry.handleSubmit);
@@ -149,8 +150,74 @@ const JournalEntry = {
         videoInput.addEventListener('change', function(e) {
             JournalEntry.handleFileSelect(e.target.files, 'video');
         });
+
+        // If we're editing an existing entry, load its data into the form
+        if (editEntryId) {
+            await JournalEntry.loadEntryForEdit(editEntryId);
+        }
     },
-    
+
+    async loadEntryForEdit(entryId) {
+        try {
+            const response = await fetch(`${API_URL}/api/entries-new/${entryId}`);
+            const data = await response.json();
+            if (!data.success) throw new Error(data.error || 'Entry not found');
+
+            const entry = data.data;
+
+            document.getElementById('entryTitle').value = entry.title || '';
+            document.getElementById('storyText').value = entry.content || '';
+
+            if (entry.entry_date) {
+                const [y, m, d] = entry.entry_date.split('-');
+                document.getElementById('entryDate').value = `${d}/${m}/${y}`;
+            }
+
+            // Re-select the correct child
+            const childBtn = document.querySelector(`.child-select-btn[data-child-id="${entry.child_id}"]`);
+            if (childBtn) childBtn.click();
+
+            // Re-select the correct mood
+            document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+            const moodBtn = document.querySelector(`.mood-btn[data-mood="${entry.mood}"]`);
+            if (moodBtn) moodBtn.classList.add('selected');
+
+            // Re-select the milestone tag (the only tag actually persisted server-side)
+            if (entry.is_milestone) {
+                const milestoneBtn = document.querySelector('.tag-btn[data-tag="milestone"]');
+                if (milestoneBtn) milestoneBtn.classList.add('selected');
+            }
+
+            // Show existing photos/videos as a preview (kept as-is; new uploads are added alongside them)
+            if (entry.media && entry.media.length > 0) {
+                const previewArea = document.getElementById('mediaPreview');
+                entry.media.forEach(m => {
+                    const item = document.createElement('div');
+                    item.className = 'preview-item-journal';
+                    item.innerHTML = m.media_type === 'image'
+                        ? `<img src="${m.file_url}" alt="Existing photo">`
+                        : `<div style="background:#F0E8F5; width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:32px;">🎥</div>`;
+                    previewArea.appendChild(item);
+                });
+            }
+
+            // Switch the form's labels into "edit" mode (and re-translate them)
+            const heading = document.querySelector('.journal-heading');
+            if (heading) heading.setAttribute('data-i18n', 'edit_journal_heading');
+            const subheading = document.querySelector('.journal-subheading');
+            if (subheading) subheading.setAttribute('data-i18n', 'edit_journal_subheading');
+            const submitLabel = document.querySelector('.save-btn-journal span[data-i18n="save_entry"]');
+            if (submitLabel) submitLabel.setAttribute('data-i18n', 'update_entry_btn');
+
+            if (typeof applyLanguage === 'function') {
+                applyLanguage(localStorage.getItem('storybondLang') || 'en');
+            }
+        } catch (error) {
+            console.error('Error loading entry for edit:', error);
+            alert('❌ Could not load this entry for editing.');
+        }
+    },
+
     formatDate(e) {
         let value = e.target.value.replace(/\D/g, '');
         if (value.length >= 2) value = value.slice(0, 2) + '/' + value.slice(2);
@@ -274,11 +341,14 @@ const JournalEntry = {
         
         const submitBtn = document.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
-        submitBtn.textContent = '⏳ Saving...';
-        
+        submitBtn.textContent = editEntryId ? '⏳ Updating...' : '⏳ Saving...';
+
         try {
-            const entryResponse = await fetch(`${API_URL}/api/entries-new`, {
-                method: 'POST',
+            const isEdit = !!editEntryId;
+            const url = isEdit ? `${API_URL}/api/entries-new/${editEntryId}` : `${API_URL}/api/entries-new`;
+
+            const entryResponse = await fetch(url, {
+                method: isEdit ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     parent_id: userId,
@@ -291,17 +361,18 @@ const JournalEntry = {
                     is_milestone: selectedTags.includes('milestone')
                 })
             });
-            
+
             const entryData = await entryResponse.json();
-            
+
             if (!entryData.success) throw new Error(entryData.error);
-            
+
+            const savedEntryId = isEdit ? editEntryId : entryData.data.id;
             if (selectedFiles.length > 0) {
-                await JournalEntry.uploadMedia(entryData.data.id);
+                await JournalEntry.uploadMedia(savedEntryId);
             }
-            
-            alert('✅ Journal entry saved successfully!');
-            
+
+            alert(isEdit ? '✅ Journal entry updated successfully!' : '✅ Journal entry saved successfully!');
+
             document.getElementById('journalForm').reset();
             selectedMedia = [];
             selectedFiles = [];
@@ -315,7 +386,7 @@ const JournalEntry = {
             console.error('Error saving entry:', error);
             alert(`❌ Error: ${error.message}`);
             submitBtn.disabled = false;
-            submitBtn.textContent = '✏️ Save Entry';
+            submitBtn.textContent = editEntryId ? '🔄 Update Entry' : '✏️ Save Entry';
         }
     }
 };

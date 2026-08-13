@@ -198,6 +198,58 @@ app.post('/api/entries-new', async (req, res) => {
   }
 });
 
+// Get a single entry (with media) for editing
+app.get('/api/entries-new/:entryId', async (req, res) => {
+  try {
+    const { entryId } = req.params;
+
+    const { data: entry, error } = await supabase
+      .from('journal_entries')
+      .select(`*, children(name, avatar, color)`)
+      .eq('id', entryId)
+      .single();
+
+    if (error) throw error;
+
+    const { data: media } = await supabase
+      .from('media')
+      .select('file_url, media_type, thumbnail_url')
+      .eq('entry_id', entryId);
+
+    res.json({ success: true, data: { ...entry, media: media || [] } });
+  } catch (error) {
+    res.status(404).json({ success: false, error: 'Entry not found' });
+  }
+});
+
+// Update an existing entry
+app.put('/api/entries-new/:entryId', async (req, res) => {
+  try {
+    const { entryId } = req.params;
+    const { child_id, title, entry_date, content, mood, language, is_milestone } = req.body;
+
+    const { data, error } = await supabase
+      .from('journal_entries')
+      .update({
+        child_id,
+        title,
+        entry_date,
+        content,
+        mood: mood || 'happy',
+        language: language || 'EN',
+        is_milestone: is_milestone || false
+      })
+      .eq('id', entryId)
+      .select()
+      .single();
+
+    if (error) throw error;
+    res.json({ success: true, message: 'Journal entry updated successfully!', data: data });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
 // Delete entry
 app.delete('/api/entries-new/:entryId', async (req, res) => {
   try {
