@@ -25,28 +25,28 @@
 
             <!-- Navigation -->
             <nav class="nav">
-                <p class="nav-heading">NAVIGATION</p>
+                <p class="nav-heading" data-i18n="nav_navigation">NAVIGATION</p>
                 <a href="index.html" class="nav-link">
                     <span class="nav-emoji">🏠</span>
-                    <span>Home</span>
+                    <span data-i18n="nav_home">Home</span>
                 </a>
                 <a href="new-entry.html" class="nav-link">
                     <span class="nav-emoji">📖</span>
-                    <span>Journal</span>
+                    <span data-i18n="nav_journal">Journal</span>
                 </a>
                 <a href="weekly.html" class="nav-link">
                     <span class="nav-emoji">📊</span>
-                    <span>Weekly recap</span>
+                    <span data-i18n="nav_weekly">Weekly recap</span>
                 </a>
             </nav>
 
             <!-- Children -->
             <div class="children">
-                <p class="nav-heading">CHILDREN</p>
-                <div class="no-children">No children yet</div>
+                <p class="nav-heading" data-i18n="nav_children">CHILDREN</p>
+                <div class="no-children" data-i18n="no_children">No children yet</div>
                 <button class="add-child-btn active" onclick="window.location.href='add-child.html'">
                     <span class="plus">+</span>
-                    <span>Add child</span>
+                    <span data-i18n="add_child">Add child</span>
                 </button>
             </div>
 
@@ -54,8 +54,8 @@
             <div class="user-card">
                 <div class="user-avatar">PA</div>
                 <div class="user-details">
-                    <p class="user-name">Parent Account</p>
-                    <p class="user-role">Parent 💝</p>
+                    <p class="user-name" data-i18n="user_name">Parent Account</p>
+                    <p class="user-role" data-i18n="user_role">Parent 💝</p>
                 </div>
             </div>
         </aside>
@@ -65,11 +65,15 @@
             <!-- Header -->
             <header class="header">
                 <div>
-                    <h1 class="greeting">Add child</h1>
+                    <h1 class="greeting" data-i18n="add_child_heading">Add child</h1>
                     <p class="date">Saturday, May 9, 2026</p>
                 </div>
+                <div class="lang-switcher">
+                    <button class="lang-btn active">EN</button>
+                    <button class="lang-btn">TR</button>
+                </div>
                 <a href="index.html" class="back-link">
-                    <span>←</span> Back
+                    <span>←</span> <span data-i18n="back_link">Back</span>
                 </a>
             </header>
 
@@ -79,19 +83,20 @@
                     <div class="card-header">
                         <div class="card-icon">👶</div>
                         <div>
-                            <h2 class="card-title">New child</h2>
-                            <p class="card-subtitle">Add your first child to get started</p>
+                            <h2 class="card-title" data-i18n="add_child_card_title">New child</h2>
+                            <p class="card-subtitle" data-i18n="add_child_card_subtitle">Add your first child to get started</p>
                         </div>
                     </div>
 
                     <form class="child-form" id="childForm">
                         <!-- Child's Name -->
                         <div class="form-group">
-                            <label for="childName">Child's name</label>
-                            <input 
-                                type="text" 
-                                id="childName" 
+                            <label for="childName" data-i18n="child_name_label">Child's name</label>
+                            <input
+                                type="text"
+                                id="childName"
                                 placeholder="e.g. Emma"
+                                data-i18n-placeholder="child_name_placeholder"
                                 class="form-input"
                             />
                             <span class="error-message" id="nameError"></span>
@@ -99,11 +104,11 @@
 
                         <!-- Birthday -->
                         <div class="form-group">
-                            <label for="birthday">Birthday</label>
+                            <label for="birthday" data-i18n="birthday_label">Birthday</label>
                             <div class="date-input-wrapper">
-                                <input 
-                                    type="text" 
-                                    id="birthday" 
+                                <input
+                                    type="text"
+                                    id="birthday"
                                     placeholder="dd/mm/yyyy"
                                     class="form-input"
                                     maxlength="10"
@@ -115,7 +120,7 @@
 
                         <!-- Color Selection -->
                         <div class="form-group">
-                            <label>Color</label>
+                            <label data-i18n="color_label">Color</label>
                             <div class="color-picker">
                                 <input type="radio" name="color" value="yellow" id="color-yellow" class="color-radio">
                                 <label for="color-yellow" class="color-option yellow-color">
@@ -146,11 +151,11 @@
 
                         <!-- Action Buttons -->
                         <div class="form-actions">
-                            <button type="button" class="cancel-btn" onclick="window.location.href='index.html'">
+                            <button type="button" class="cancel-btn" onclick="window.location.href='index.html'" data-i18n="cancel_btn">
                                 Cancel
                             </button>
                             <button type="submit" class="submit-btn">
-                                <span>Add child</span>
+                                <span data-i18n="add_child">Add child</span>
                                 <span class="btn-icon">+</span>
                             </button>
                         </div>
@@ -160,12 +165,13 @@
                 <!-- Empty State Message -->
                 <div class="empty-state-message">
                     <span class="sparkle-icon">✨</span>
-                    <span>Add a child to start capturing memories</span>
+                    <span data-i18n="add_child_empty_state">Add a child to start capturing memories</span>
                 </div>
             </div>
         </main>
     </div>
 
     <script src="add-child-script.js"></script>
+    <script src="i18n.js"></script>
 </body>
 </html>

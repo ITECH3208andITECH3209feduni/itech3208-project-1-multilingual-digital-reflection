@@ -33,11 +33,17 @@
   <!-- Sign Up card -->
   <div class="card" role="main">
 
+    <!-- Language Switcher -->
+    <div class="lang-switcher-auth">
+      <button class="lang-btn active">EN</button>
+      <button class="lang-btn">TR</button>
+    </div>
+
     <!-- Header -->
     <div class="header">
       <span class="mascot" aria-hidden="true">🦊</span>
       <h1><span class="brand-name">StoryBond</span></h1>
-      <p class="header__subtitle">Create your parent account 🎨</p>
+      <p class="header__subtitle" data-i18n="signup_subtitle">Create your parent account 🎨</p>
     </div>
 
     <!-- Success message (shown by script on successful signup) -->
@@ -51,7 +57,7 @@
       <!-- Email field -->
       <div class="field">
         <label class="field__label" for="email">
-          <span>📧</span> Email Address
+          <span>📧</span> <span data-i18n="signup_email_label">Email Address</span>
         </label>
         <div class="field__input-wrap">
           <svg class="field__svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -70,7 +76,7 @@
       <!-- Username field -->
       <div class="field">
         <label class="field__label" for="username">
-          <span>👤</span> Username
+          <span>👤</span> <span data-i18n="signup_username_label">Username</span>
         </label>
         <div class="field__input-wrap">
           <svg class="field__svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -89,7 +95,7 @@
       <!-- Password field -->
       <div class="field">
         <label class="field__label" for="password">
-          <span>🔐</span> Password
+          <span>🔐</span> <span data-i18n="password_label">Password</span>
         </label>
         <div class="field__input-wrap">
           <svg class="field__svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -108,7 +114,7 @@
       <!-- Confirm Password field -->
       <div class="field">
         <label class="field__label" for="confirmPassword">
-          <span>🔑</span> Retype Password
+          <span>🔑</span> <span data-i18n="signup_confirm_label">Retype Password</span>
         </label>
         <div class="field__input-wrap">
           <svg class="field__svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -127,14 +133,14 @@
       <!-- Terms & Conditions -->
       <div class="terms-row">
         <label class="remember">
-          <input type="checkbox" id="terms" /> 
-          I agree to the <a href="#" class="terms-link">Terms & Conditions</a>
+          <input type="checkbox" id="terms" />
+          <span data-i18n="signup_terms_prefix">I agree to the</span> <a href="#" class="terms-link" data-i18n="signup_terms_link">Terms & Conditions</a>
         </label>
       </div>
 
       <!-- Submit button -->
       <button class="btn-login" type="button" id="signupBtn">
-        <span class="btn-login__text">🎉 Create Account</span>
+        <span class="btn-login__text" data-i18n="signup_btn">🎉 Create Account</span>
         <span class="btn-login__spinner" aria-hidden="true"></span>
       </button>
 
@@ -143,7 +149,7 @@
     <!-- Footer -->
     <div class="stars-row" aria-hidden="true">⭐ ⭐ ⭐</div>
     <div class="footer">
-      Already have an account? <a href="login.html">Back to Login</a>
+      <span data-i18n="signup_footer_text">Already have an account?</span> <a href="login.html" data-i18n="signup_footer_link">Back to Login</a>
     </div>
 
   </div>
@@ -152,22 +158,22 @@
   <div class="modal-overlay" id="termsModal" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle">
       <div class="modal__header">
-        <h2 class="modal__title" id="termsModalTitle">📜 Terms &amp; Conditions</h2>
+        <h2 class="modal__title" id="termsModalTitle" data-i18n="terms_modal_title">📜 Terms &amp; Conditions</h2>
         <button type="button" class="modal__close" id="termsModalClose" aria-label="Close">&times;</button>
       </div>
       <div class="modal__body">
-        <p>Welcome to StoryBond! By creating an account, you agree to:</p>
+        <p data-i18n="terms_intro">Welcome to StoryBond! By creating an account, you agree to:</p>
         <ul>
-          <li>Use StoryBond only to record and share your own family's memories.</li>
-          <li>Keep your login details private and secure.</li>
-          <li>Respect the privacy of any children whose entries you create.</li>
-          <li>Not upload content that is unlawful, harmful, or belongs to someone else.</li>
+          <li data-i18n="terms_item1">Use StoryBond only to record and share your own family's memories.</li>
+          <li data-i18n="terms_item2">Keep your login details private and secure.</li>
+          <li data-i18n="terms_item3">Respect the privacy of any children whose entries you create.</li>
+          <li data-i18n="terms_item4">Not upload content that is unlawful, harmful, or belongs to someone else.</li>
         </ul>
-        <p>We store your journal entries and media so you can access them later. You can request deletion of your account and data at any time.</p>
+        <p data-i18n="terms_outro">We store your journal entries and media so you can access them later. You can request deletion of your account and data at any time.</p>
       </div>
       <div class="modal__footer">
         <button type="button" class="btn-login" id="termsModalAccept">
-          <span class="btn-login__text">Got it 🎉</span>
+          <span class="btn-login__text" data-i18n="terms_modal_accept">Got it 🎉</span>
         </button>
       </div>
     </div>
@@ -175,6 +181,7 @@
 
   <!-- JavaScript -->
   <script src="signup-script.js"></script>
+  <script src="i18n.js"></script>
 
 </body>
 </html>

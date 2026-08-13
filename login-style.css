@@ -26,6 +26,32 @@
   --border: #ecdff8;
 }
 
+/* Language Switcher */
+.lang-switcher-auth {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.lang-switcher-auth .lang-btn {
+  padding: 6px 20px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  font-weight: 700;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--muted);
+  font-family: 'Nunito', sans-serif;
+  transition: all 0.2s ease;
+}
+
+.lang-switcher-auth .lang-btn.active {
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  color: white;
+}
+
 html {
   font-size: 62.5%; /* 1rem = 10px */
 }

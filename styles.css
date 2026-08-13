@@ -345,6 +345,34 @@ body {
     box-shadow: 0 4px 12px rgba(255, 107, 157, 0.25);
 }
 
+/* Language Switcher (auth pages: forgot/reset password) */
+.lang-switcher-auth {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.lang-switcher-auth .lang-btn {
+    padding: 8px 22px;
+    border: none;
+    background: white;
+    font-weight: 600;
+    font-size: 14px;
+    color: #7B7B93;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.lang-switcher-auth .lang-btn.active {
+    background: linear-gradient(135deg, var(--pink), var(--orange));
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 107, 157, 0.25);
+}
+
 /* Hero Section */
 .hero {
     background: linear-gradient(135deg, #FFFFFF, #FFF5F9);
