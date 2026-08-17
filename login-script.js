@@ -63,20 +63,19 @@ const Auth = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: email, password: password })
       });
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         // Save user ID to localStorage
         localStorage.setItem('userId', data.data.user.id);
         localStorage.setItem('userName', data.data.user.full_name);
         localStorage.setItem('userEmail', data.data.user.email);
-        return true;
       }
-      return false;
+      return data;
     } catch (error) {
       console.error('Login error:', error);
-      return false;
+      return { success: false, error: 'network' };
     }
   },
 };
@@ -86,12 +85,14 @@ const App = {
   el: {},
   init() {
     App.el = {
-      email:         DOM.get('email'),         
-      password:      DOM.get('password'),      
-      emailErr:      DOM.get('emailError'),    
-      passwordErr:   DOM.get('passwordError'), 
-      btn:           DOM.get('loginBtn'),      
-      successBanner: DOM.get('successBanner'), 
+      email:         DOM.get('email'),
+      password:      DOM.get('password'),
+      emailErr:      DOM.get('emailError'),
+      passwordErr:   DOM.get('passwordError'),
+      btn:           DOM.get('loginBtn'),
+      successBanner: DOM.get('successBanner'),
+      signupPrompt:  DOM.get('signupPrompt'),
+      signupLink:    DOM.get('signupPromptLink'),
     };
    
     App.el.btn.addEventListener('click', App.submit);
@@ -102,33 +103,38 @@ const App = {
   },
   
   reset() {
-    const { email, password, emailErr, passwordErr, successBanner } = App.el;
+    const { email, password, emailErr, passwordErr, successBanner, signupPrompt } = App.el;
     DOM.clearError(email, emailErr);
     DOM.clearError(password, passwordErr);
     DOM.hide(successBanner, 'is-visible');
+    DOM.hide(signupPrompt, 'is-visible');
   },
- 
+
   async submit() {
-    const { email, password, btn, emailErr, passwordErr, successBanner } = App.el;
+    const { email, password, btn, emailErr, passwordErr, successBanner, signupPrompt, signupLink } = App.el;
     const emailVal    = email.value.trim();
     const passwordVal = password.value;
-    
+
     App.reset();
-   
+
     const errors = Validator.run(emailVal, passwordVal);
     if (errors.email)    DOM.showError(email,    errors.email,    emailErr);
     if (errors.password) DOM.showError(password, errors.password, passwordErr);
     if (Object.keys(errors).length > 0) return;
-    
+
     DOM.setLoading(btn, true);
-    const success = await Auth.login(emailVal, passwordVal);
+    const result = await Auth.login(emailVal, passwordVal);
     DOM.setLoading(btn, false);
-    
-    if (success) {
+
+    if (result.success) {
       DOM.show(successBanner, 'is-visible');
       setTimeout(() => {
         window.location.href = 'index.html';
       }, 1500);
+    } else if (result.code === 'USER_NOT_FOUND') {
+      DOM.showError(email, "❌ This user doesn't exist!", emailErr);
+      signupLink.href = `signup.html?email=${encodeURIComponent(emailVal)}`;
+      DOM.show(signupPrompt, 'is-visible');
     } else {
       DOM.showError(email, '❌ Wrong username or password. Try again!', emailErr);
     }

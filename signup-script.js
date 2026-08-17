@@ -262,6 +262,13 @@ const App = {
       termsModalAccept: DOM.get('termsModalAccept'),
     };
 
+    // Pre-fill the email if we arrived here from the login page's
+    // "Create an account" prompt (e.g. signup.html?email=someone@example.com).
+    const prefillEmail = new URLSearchParams(window.location.search).get('email');
+    if (prefillEmail && App.el.email) {
+      App.el.email.value = prefillEmail;
+    }
+
     // Submit the signup form when the button is clicked.
     App.el.btn?.addEventListener(
       'click',
