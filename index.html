@@ -45,11 +45,24 @@
                 </button>
             </div>
 
-            <div class="user-card">
-                <div class="user-avatar">PA</div>
-                <div class="user-details">
-                    <p class="user-name" data-i18n="user_name">Parent Account</p>
-                    <p class="user-role">Parent 💝</p>
+            <div class="user-card-wrapper">
+                <div class="user-card" id="userCardTrigger" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
+                    <div class="user-avatar">PA</div>
+                    <div class="user-details">
+                        <p class="user-name" data-i18n="user_name">Parent Account</p>
+                        <p class="user-role">Parent 💝</p>
+                    </div>
+                    <span class="user-card__chevron" aria-hidden="true">▾</span>
+                </div>
+                <div class="account-menu" id="accountMenu">
+                    <button type="button" class="account-menu__item" id="switchAccountBtn">
+                        <span class="account-menu__icon">🔄</span>
+                        <span data-i18n="switch_account">Switch account</span>
+                    </button>
+                    <button type="button" class="account-menu__item account-menu__item--danger" id="logoutBtn">
+                        <span class="account-menu__icon">🚪</span>
+                        <span data-i18n="log_out">Log out</span>
+                    </button>
                 </div>
             </div>
         </aside>
@@ -561,6 +574,7 @@
     loadRecentEntries();
     updateHeaderDate();
 </script>
+<script src="session.js"></script>
 <script src="i18n.js"></script>
 </body>
 </html>

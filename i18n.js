@@ -10,6 +10,8 @@ const TRANSLATIONS = {
     no_children: 'No children yet',
     user_name: 'Parent Account',
     user_role: 'Parent',
+    switch_account: 'Switch account',
+    log_out: 'Log out',
 
     // index.html
     hero_title: 'What happened today?',
@@ -135,6 +137,8 @@ const TRANSLATIONS = {
     no_children: 'Henüz çocuk yok',
     user_name: 'Ebeveyn Hesabı',
     user_role: 'Ebeveyn',
+    switch_account: 'Hesap değiştir',
+    log_out: 'Çıkış yap',
 
     // index.html
     hero_title: 'Bugün neler oldu?',

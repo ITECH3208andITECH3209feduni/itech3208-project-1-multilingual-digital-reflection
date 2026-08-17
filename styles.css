@@ -288,6 +288,92 @@ body {
     color: #7B7B93;
 }
 
+/* User card dropdown (Log out / Switch account) */
+.user-card-wrapper {
+    position: relative;
+}
+
+.user-card {
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    transition: box-shadow 0.2s ease;
+}
+
+.user-card:hover,
+.user-card:focus-visible {
+    box-shadow: 0 6px 18px rgba(255, 107, 157, 0.18);
+}
+
+.user-card__chevron {
+    margin-left: auto;
+    color: #9B8FA9;
+    font-size: 12px;
+    transition: transform 0.2s ease;
+}
+
+.user-card[aria-expanded="true"] .user-card__chevron {
+    transform: rotate(180deg);
+}
+
+.account-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(100% + 8px);
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(26, 26, 46, 0.16);
+    border: 1px solid #F0E8F5;
+    padding: 8px;
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    z-index: 20;
+}
+
+.account-menu.is-open {
+    display: flex;
+    animation: accountMenuPop 0.18s ease-out;
+}
+
+@keyframes accountMenuPop {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.account-menu__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 11px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4A4A68;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.account-menu__item:hover {
+    background: rgba(199, 124, 249, 0.1);
+    color: var(--purple);
+}
+
+.account-menu__item--danger:hover {
+    background: rgba(255, 107, 157, 0.1);
+    color: var(--pink);
+}
+
+.account-menu__icon {
+    font-size: 16px;
+}
+
 /* ===== MAIN CONTENT ===== */
 .main {
     flex: 1;
