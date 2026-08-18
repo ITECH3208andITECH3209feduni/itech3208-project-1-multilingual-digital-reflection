@@ -9,6 +9,7 @@ const CONFIG = {
 
 const API_URL = 'http://localhost:3000';
 
+const rememberMe = document.getElementById('rememberMe');
 const DOM = {
   
   get: (id) => document.getElementById(id),
@@ -57,7 +58,7 @@ const Auth = {
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: email, password: password })
+        body: JSON.stringify({ username: email, password: password, rememberMe: rememberMe.checked })
       });
       
       const data = await response.json();
