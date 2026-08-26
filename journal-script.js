@@ -11,7 +11,8 @@ let selectedFiles = [];
 
 // Load children for selector
 async function loadChildrenSelector() {
-    const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId') ||
+sessionStorage.getItem('userId');
     if (!userId) return;
     
     try {
@@ -189,7 +190,8 @@ const JournalEntry = {
     
     async uploadMedia(entryId) {
         if (selectedFiles.length === 0) return [];
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem('userId') ||
+sessionStorage.getItem('userId');
         const uploadedUrls = [];
         
         for (const file of selectedFiles) {
@@ -218,7 +220,7 @@ const JournalEntry = {
         const title = document.getElementById('entryTitle').value.trim();
         const date = document.getElementById('entryDate').value;
         const story = document.getElementById('storyText').value.trim();
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem('userId') || sessionStorage.getItem('userId');
         const childId = localStorage.getItem('journalChildId');
         
         const selectedMood = document.querySelector('.mood-btn.selected');

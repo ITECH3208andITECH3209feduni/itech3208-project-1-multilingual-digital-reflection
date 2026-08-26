@@ -133,7 +133,8 @@
 
     // ============= LOAD CHILDREN =============
     async function loadChildren() {
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem('userId') ||
+sessionStorage.getItem('userId');
         if (!userId) {
             window.location.href = 'login.html';
             return;
@@ -221,7 +222,8 @@
 
                 childrenContainer.appendChild(addBtn);
                 
-                const userName = localStorage.getItem('userName');
+                const userName = localStorage.getItem('userName') ||
+sessionStorage.getItem('userName');
                 if (userName) {
                     document.querySelector('.greeting').textContent = `Hello, ${userName}! 👋`;
                 }
@@ -233,7 +235,8 @@
 
     // ============= LOAD CHILD ENTRIES =============
     async function loadChildEntries(childId, childName, childAvatar) {
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem('userId') ||
+sessionStorage.getItem('userId');
         if (!userId) return;
         
         try {
@@ -444,7 +447,8 @@
 
     // ============= LOAD RECENT ENTRIES =============
     async function loadRecentEntries() {
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem('userId') ||
+sessionStorage.getItem('userId');
         if (!userId) return;
         
         try {

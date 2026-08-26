@@ -27,7 +27,8 @@ const WeeklyRecap = {
     },
     
     async loadWeeklyData() {
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem('userId') ||
+sessionStorage.getItem('userId');
         
         if (!userId) {
             console.log('User not logged in');
@@ -104,7 +105,7 @@ const WeeklyRecap = {
     },
     
     async loadWeeklyDataForRange(startDate, endDate) {
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem('userId') || sessionStorage.getItem('userId');
         
         if (!userId) {
             console.log('User not logged in');

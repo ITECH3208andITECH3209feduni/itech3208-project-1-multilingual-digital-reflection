@@ -9,7 +9,7 @@ const CONFIG = {
 
 const API_URL = 'http://localhost:3000';
 
-const rememberMe = document.getElementById('rememberMe');
+
 const DOM = {
   
   get: (id) => document.getElementById(id),
@@ -55,22 +55,63 @@ const Validator = {
 const Auth = {
   login: async (email, password) => {
     try {
+      // Get the checkbox after the page has loaded.
+      // If it does not exist, default to false.
+      const rememberMe =
+        document.getElementById('rememberMe')?.checked ?? false;
+        console.log('Remember Me value:', rememberMe);
+
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: email, password: password, rememberMe: rememberMe.checked })
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+          username: email,
+          password: password,
+          rememberMe: rememberMe
+        })
       });
-      
+
       const data = await response.json();
-      
-      if (data.success) {
-        // Save user ID to localStorage
-        localStorage.setItem('userId', data.data.user.id);
-        localStorage.setItem('userName', data.data.user.full_name);
-        localStorage.setItem('userEmail', data.data.user.email);
+
+      console.log('Login response:', response.status, data);
+
+      if (response.ok && data.success) {
+
+        const storage = rememberMe
+        ? localStorage
+        : sessionStorage;
+
+        // Clear previous login
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+
+        sessionStorage.removeItem('userId');
+        sessionStorage.removeItem('userName');
+        sessionStorage.removeItem('userEmail');
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('refreshToken');
+
+        // Store current user
+        storage.setItem('userId', data.data.user.id);
+        storage.setItem('userName', data.data.user.full_name);
+        storage.setItem('userEmail', data.data.user.email);
+
+        // Store Supabase session
+        storage.setItem('accessToken', data.data.session.access_token);
+        storage.setItem('refreshToken', data.data.session.refresh_token);
+
         return true;
       }
+
+      console.error('Login rejected:', data);
       return false;
+
     } catch (error) {
       console.error('Login error:', error);
       return false;
@@ -94,7 +135,10 @@ const App = {
     App.el.btn.addEventListener('click', App.submit);
     
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') App.submit();
+  if (e.key === 'Enter' && !App.el.btn.disabled) {
+    e.preventDefault();
+    App.submit();
+      }
     });
   },
   
