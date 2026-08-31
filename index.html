@@ -1,585 +1,464 @@
 <!DOCTYPE html>
-<!-- auto-deploy test -->
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>StoryBond - Home</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="styles.css"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 </head>
+
 <body>
+
     <div class="rainbow-top"></div>
-    
+
     <div class="app-wrapper">
+
+        <!-- ================= SIDEBAR ================= -->
+
         <aside class="sidebar">
+
             <div class="brand">
-                <div class="logo">🦊</div>
-                <h1 class="brand-name">StoryBond</h1>
-                <p class="brand-tagline">Learning Journey Tracker</p>
+
+                <div class="logo">
+                    🦊
+                </div>
+
+                <h1 class="brand-name">
+                    StoryBond
+                </h1>
+
+                <p class="brand-tagline">
+                    Learning Journey Tracker
+                </p>
+
             </div>
+
+
+            <!-- Navigation -->
 
             <nav class="nav">
-                <p class="nav-heading" data-i18n="nav_navigation">NAVIGATION</p>
-                <a href="index.html" class="nav-link active">
-                    <span class="nav-emoji">🏠</span>
-                    <span data-i18n="nav_home">Home</span>
+
+                <p
+                    class="nav-heading"
+                    data-i18n="nav_navigation"
+                >
+                    NAVIGATION
+                </p>
+
+                <a
+                    href="index.html"
+                    class="nav-link active"
+                >
+
+                    <span class="nav-emoji">
+                        🏠
+                    </span>
+
+                    <span data-i18n="nav_home">
+                        Home
+                    </span>
+
                 </a>
-                <a href="new-entry.html" class="nav-link">
-                    <span class="nav-emoji">📖</span>
-                    <span data-i18n="nav_journal">Journal</span>
+
+
+                <a
+                    href="new-entry.html"
+                    class="nav-link"
+                >
+
+                    <span class="nav-emoji">
+                        📖
+                    </span>
+
+                    <span data-i18n="nav_journal">
+                        Journal
+                    </span>
+
                 </a>
-                <a href="weekly.html" class="nav-link">
-                    <span class="nav-emoji">📊</span>
-                    <span data-i18n="nav_weekly">Weekly recap</span>
+
+
+                <a
+                    href="weekly.html"
+                    class="nav-link"
+                >
+
+                    <span class="nav-emoji">
+                        📊
+                    </span>
+
+                    <span data-i18n="nav_weekly">
+                        Weekly recap
+                    </span>
+
                 </a>
+
             </nav>
 
+
+            <!-- Children -->
+
             <div class="children">
-                <p class="nav-heading" data-i18n="nav_children">CHILDREN</p>
-                <button class="add-child-btn" onclick="window.location.href='add-child.html'">
-                    <span class="plus">+</span>
-                    <span data-i18n="add_child">Add child</span>
+
+                <p
+                    class="nav-heading"
+                    data-i18n="nav_children"
+                >
+                    CHILDREN
+                </p>
+
+                <button
+                    class="add-child-btn"
+                    onclick="window.location.href='add-child.html'"
+                >
+
+                    <span class="plus">
+                        +
+                    </span>
+
+                    <span data-i18n="add_child">
+                        Add child
+                    </span>
+
                 </button>
+
             </div>
+
+
+            <!-- User account -->
 
             <div class="user-card-wrapper">
-                <div class="user-card" id="userCardTrigger" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
-                    <div class="user-avatar">PA</div>
-                    <div class="user-details">
-                        <p class="user-name" data-i18n="user_name">Parent Account</p>
-                        <p class="user-role">Parent 💝</p>
+
+                <div
+                    class="user-card"
+                    id="userCardTrigger"
+                    tabindex="0"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                >
+
+                    <div class="user-avatar">
+                        PA
                     </div>
-                    <span class="user-card__chevron" aria-hidden="true">▾</span>
+
+                    <div class="user-details">
+
+                        <p
+                            class="user-name"
+                            data-i18n="user_name"
+                        >
+                            Parent Account
+                        </p>
+
+                        <p class="user-role">
+                            Parent 💝
+                        </p>
+
+                    </div>
+
+                    <span
+                        class="user-card__chevron"
+                        aria-hidden="true"
+                    >
+                        ▾
+                    </span>
+
                 </div>
-                <div class="account-menu" id="accountMenu">
-                    <button type="button" class="account-menu__item" id="switchAccountBtn">
-                        <span class="account-menu__icon">🔄</span>
-                        <span data-i18n="switch_account">Switch account</span>
+
+
+                <div
+                    class="account-menu"
+                    id="accountMenu"
+                >
+
+                    <button
+                        type="button"
+                        class="account-menu__item"
+                        id="switchAccountBtn"
+                    >
+
+                        <span class="account-menu__icon">
+                            🔄
+                        </span>
+
+                        <span data-i18n="switch_account">
+                            Switch account
+                        </span>
+
                     </button>
-                    <button type="button" class="account-menu__item account-menu__item--danger" id="logoutBtn">
-                        <span class="account-menu__icon">🚪</span>
-                        <span data-i18n="log_out">Log out</span>
+
+
+                    <button
+                        type="button"
+                        class="account-menu__item account-menu__item--danger"
+                        id="logoutBtn"
+                    >
+
+                        <span class="account-menu__icon">
+                            🚪
+                        </span>
+
+                        <span data-i18n="log_out">
+                            Log out
+                        </span>
+
                     </button>
+
                 </div>
+
             </div>
+
         </aside>
 
+
+        <!-- ================= MAIN CONTENT ================= -->
+
         <main class="main">
+
+            <!-- Header -->
+
             <header class="header">
+
                 <div>
-                    <h1 class="greeting">Hello, Parent! 👋</h1>
-                    <p class="date">Friday, April 17 2026</p>
+
+                    <h1 class="greeting">
+                        Hello, Parent! 👋
+                    </h1>
+
+                    <p class="date"></p>
+
                 </div>
+
+
                 <div class="lang-switcher">
-                    <button class="lang-btn active">EN</button>
-                    <button class="lang-btn">TR</button>
+
+                    <button class="lang-btn active">
+                        EN
+                    </button>
+
+                    <button class="lang-btn">
+                        TR
+                    </button>
+
                 </div>
+
             </header>
 
+
+            <!-- Hero -->
+
             <section class="hero">
-                <div class="hero-sparkle">✨</div>
-                <h2 class="hero-title" data-i18n="hero_title">What happened today?</h2>
-                <button class="cta-button" onclick="window.location.href='new-entry.html'">
-                    <span>✏️</span>
-                    <span data-i18n="new_entry_btn">New entry</span>
+
+                <div class="hero-sparkle">
+                    ✨
+                </div>
+
+                <h2
+                    class="hero-title"
+                    data-i18n="hero_title"
+                >
+                    What happened today?
+                </h2>
+
+                <button
+                    class="cta-button"
+                    onclick="window.location.href='new-entry.html'"
+                >
+
+                    <span>
+                        ✏️
+                    </span>
+
+                    <span data-i18n="new_entry_btn">
+                        New entry
+                    </span>
+
                 </button>
+
             </section>
+
+
+            <!-- Recent Entries -->
 
             <section class="entries-section">
-                <h3 class="section-heading" data-i18n="recent_entries">RECENT ENTRIES</h3>
+
+                <h3
+                    class="section-heading"
+                    data-i18n="recent_entries"
+                >
+                    RECENT ENTRIES
+                </h3>
+
                 <div class="empty-entries-list">
+
                     <div class="empty-entry-item">
+
                         <div class="empty-entry-content">
-                            <p class="empty-entry-title" data-i18n="no_entries_title">No entries yet</p>
-                            <p class="empty-entry-date" data-i18n="no_entries_sub">Start tracking your child's activities</p>
+
+                            <p
+                                class="empty-entry-title"
+                                data-i18n="no_entries_title"
+                            >
+                                No entries yet
+                            </p>
+
+                            <p
+                                class="empty-entry-date"
+                                data-i18n="no_entries_sub"
+                            >
+                                Start tracking your child's activities
+                            </p>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </section>
+
+
+            <!-- Weekly Progress -->
 
             <section class="weekly-section">
-                <h3 class="section-heading" data-i18n="weekly_progress">THIS WEEK'S PROGRESS</h3>
+
+                <h3
+                    class="section-heading"
+                    data-i18n="weekly_progress"
+                >
+                    THIS WEEK'S PROGRESS
+                </h3>
+
                 <div class="weekly-recap-card">
+
                     <div class="recap-header">
-                        <h4 class="recap-title" data-i18n="weekly_recap_title">Weekly recap ⭐</h4>
-                        <p class="recap-subtitle" data-i18n="weekly_recap_sub">See your child's progress this week</p>
+
+                        <h4
+                            class="recap-title"
+                            data-i18n="weekly_recap_title"
+                        >
+                            Weekly recap ⭐
+                        </h4>
+
+                        <p
+                            class="recap-subtitle"
+                            data-i18n="weekly_recap_sub"
+                        >
+                            See your child's progress this week
+                        </p>
+
                     </div>
+
+
                     <div class="recap-stats">
+
                         <div class="stat-box">
-                            <div class="stat-number">0</div>
-                            <div class="stat-label" data-i18n="stat_entries">entries</div>
+
+                            <div class="stat-number">
+                                0
+                            </div>
+
+                            <div
+                                class="stat-label"
+                                data-i18n="stat_entries"
+                            >
+                                entries
+                            </div>
+
                         </div>
+
+
                         <div class="stat-box">
-                            <div class="stat-number">0</div>
-                            <div class="stat-label" data-i18n="stat_uploads">uploads</div>
+
+                            <div class="stat-number">
+                                0
+                            </div>
+
+                            <div
+                                class="stat-label"
+                                data-i18n="stat_uploads"
+                            >
+                                uploads
+                            </div>
+
                         </div>
+
+
                         <div class="stat-box">
-                            <div class="stat-number">0</div>
-                            <div class="stat-label" data-i18n="stat_languages">languages</div>
+
+                            <div class="stat-number">
+                                0
+                            </div>
+
+                            <div
+                                class="stat-label"
+                                data-i18n="stat_languages"
+                            >
+                                languages
+                            </div>
+
                         </div>
+
                     </div>
-                    <button class="recap-view-btn" onclick="window.location.href='weekly.html'">
-                        <span class="arrow-down">↓</span>
-                        <span data-i18n="view_recap">View recap</span>
+
+
+                    <button
+                        class="recap-view-btn"
+                        onclick="window.location.href='weekly.html'"
+                    >
+
+                        <span class="arrow-down">
+                            ↓
+                        </span>
+
+                        <span data-i18n="view_recap">
+                            View recap
+                        </span>
+
                     </button>
+
                 </div>
+
             </section>
+
         </main>
+
     </div>
 
-<script>
-    const API_URL =
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3000'
-    : 'https://storybond-backend.vercel.app';
 
-    // Language Switcher
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
+    <!-- ================= JAVASCRIPT ================= -->
 
-    // ============= LOAD CHILDREN =============
-    async function loadChildren() {
-        const userId = localStorage.getItem('userId') ||
-sessionStorage.getItem('userId');
-        if (!userId) {
-            window.location.href = 'login.html';
-            return;
-        }
-        
-        try {
-            const response = await fetch(`${API_URL}/api/children/parent/${userId}`);
-            const data = await response.json();
-            
-            if (data.success && data.data.length > 0) {
-                const childrenContainer = document.querySelector('.children');
-                const addBtn = childrenContainer.querySelector('.add-child-btn');
-                childrenContainer.innerHTML = '<p class="nav-heading">CHILDREN</p>';
-                
-                data.data.forEach(child => {
-                    const childEl = document.createElement('div');
-                    childEl.className = 'child-item';
-                    childEl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:8px; cursor:pointer; border-radius:8px; margin:4px 0; transition: background 0.2s; position:relative;';
-                    childEl.innerHTML = `
-                        <span style="font-size:24px;">${child.avatar}</span>
-                        <span style="font-size:14px; font-weight:500; flex:1;">${child.name}</span>
-                        <button class="delete-child-btn" style="
-                            background: none;
-                            border: none;
-                            color: #ff6b6b;
-                            cursor: pointer;
-                            font-size: 14px;
-                            padding: 2px 6px;
-                            border-radius: 50%;
-                            display: none;
-                            flex-shrink: 0;
-                        ">🗑️</button>
-                    `;
-                    
-                    childEl.addEventListener('mouseover', () => {
-                        childEl.style.background = '#F0E8F5';
-                        childEl.querySelector('.delete-child-btn').style.display = 'block';
-                    });
-                    childEl.addEventListener('mouseout', () => {
-                        if (localStorage.getItem('selectedChildId') !== child.id) {
-                            childEl.style.background = 'transparent';
-                        }
-                        childEl.querySelector('.delete-child-btn').style.display = 'none';
-                    });
+    <script src="index-script.js"></script>
+    <script src="logout.js"></script>
+    <script src="session.js"></script>
+    <script src="i18n.js"></script>
 
-                    childEl.querySelector('.delete-child-btn').addEventListener('click', async (e) => {
-                        e.stopPropagation();
-                        if (confirm(`Delete ${child.name} and all their entries?`)) {
-                            try {
-                                const res = await fetch(`${API_URL}/api/children/${child.id}`, {
-                                    method: 'DELETE'
-                                });
-                                const result = await res.json();
-                                if (result.success) {
-                                    childEl.remove();
-                                    document.querySelector('.entries-section .section-heading').textContent = 'RECENT ENTRIES';
-                                    document.querySelector('.empty-entries-list').innerHTML = `
-                                        <div class="empty-entry-item">
-                                            <div class="empty-entry-content">
-                                                <p class="empty-entry-title">No entries yet</p>
-                                                <p class="empty-entry-date">Start tracking your child's activities</p>
-                                            </div>
-                                        </div>
-                                    `;
-                                }
-                            } catch (error) {
-                                alert('Error deleting child!');
-                            }
-                        }
-                    });
-                    
-                    childEl.addEventListener('click', () => {
-                        localStorage.setItem('selectedChildId', child.id);
-                        localStorage.setItem('selectedChildName', child.name);
-                        localStorage.setItem('selectedChildAvatar', child.avatar);
-                        document.querySelectorAll('.child-item').forEach(el => {
-                            el.style.background = 'transparent';
-                        });
-                        childEl.style.background = '#F0E8F5';
-                        loadChildEntries(child.id, child.name, child.avatar);
-                    });
-                    
-                    childrenContainer.appendChild(childEl);
-                });
-
-                childrenContainer.appendChild(addBtn);
-                
-                const userName = localStorage.getItem('userName') ||
-sessionStorage.getItem('userName');
-                if (userName) {
-                    document.querySelector('.greeting').textContent = `Hello, ${userName}! 👋`;
-                }
-            }
-        } catch (error) {
-            console.error('Error loading children:', error);
-        }
-    }
-
-    // ============= LOAD CHILD ENTRIES =============
-    async function loadChildEntries(childId, childName, childAvatar) {
-        const userId = localStorage.getItem('userId') ||
-sessionStorage.getItem('userId');
-        if (!userId) return;
-        
-        try {
-            const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
-            const data = await response.json();
-            const childEntries = data.data.filter(entry => entry.child_id === childId);
-            const entriesList = document.querySelector('.empty-entries-list');
-            
-            document.querySelector('.entries-section .section-heading').textContent = 
-                `${childAvatar} ${childName.toUpperCase()}'S ENTRIES`;
-            
-            if (childEntries.length === 0) {
-                entriesList.innerHTML = `
-                    <div class="empty-entry-item">
-                        <div class="empty-entry-content">
-                            <p class="empty-entry-title">No entries yet for ${childName}</p>
-                            <p class="empty-entry-date">Start tracking ${childName}'s activities!</p>
-                        </div>
-                        <button class="view-btn" onclick="window.location.href='new-entry.html'" style="opacity:1; cursor:pointer;">Add ›</button>
-                    </div>
-                `;
-                return;
-            }
-            
-            entriesList.innerHTML = '';
-            
-            childEntries.slice(0, 5).forEach(entry => {
-                const entryEl = document.createElement('div');
-                entryEl.className = 'empty-entry-item';
-                entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
-                
-                // Check milestone properly
-                const isMilestone = entry.is_milestone === true || entry.is_milestone === 'true';
-
-                entryEl.innerHTML = `
-                    <div style="flex:1; margin-right:10px;">
-                        <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
-                        <p style="color:#888; margin:4px 0 0; font-size:12px;">
-                            ${entry.entry_date} • ${getMoodEmoji(entry.mood)} ${entry.mood}
-                            ${isMilestone ? ' ⭐ Milestone' : ''}
-                        </p>
-                        <p style="color:#666; margin:4px 0 0; font-size:13px;">
-                            ${entry.content.substring(0, 60)}...
-                        </p>
-                    </div>
-                    <div style="display:flex; gap:6px; flex-shrink:0;">
-                        <button class="view-btn" style="white-space:nowrap;">View ›</button>
-                        <button class="edit-entry-btn" style="
-                            background: #f0f4ff;
-                            border: 1px solid #ccd9ff;
-                            color: #4a6cf7;
-                            cursor: pointer;
-                            padding: 6px 10px;
-                            border-radius: 8px;
-                            font-size: 12px;
-                        ">✏️</button>
-                        <button class="delete-entry-btn" style="
-                            background: #fff0f0;
-                            border: 1px solid #ffcccc;
-                            color: #ff6b6b;
-                            cursor: pointer;
-                            padding: 6px 10px;
-                            border-radius: 8px;
-                            font-size: 12px;
-                        ">🗑️</button>
-                    </div>
-                `;
-
-                // View button
-                entryEl.querySelector('.view-btn').addEventListener('click', () => {
-                    viewEntry(
-                        entry.id,
-                        entry.title,
-                        entry.content,
-                        entry.entry_date,
-                        entry.mood,
-                        isMilestone,
-                        entry.media || []
-                    );
-                });
-
-                // Edit entry button
-                entryEl.querySelector('.edit-entry-btn').addEventListener('click', () => {
-                    window.location.href = `new-entry.html?edit=${entry.id}`;
-                });
-
-                // Delete entry button
-                entryEl.querySelector('.delete-entry-btn').addEventListener('click', async () => {
-                    if (confirm(`Delete "${entry.title}"?`)) {
-                        try {
-                            const res = await fetch(`${API_URL}/api/entries-new/${entry.id}`, {
-                                method: 'DELETE'
-                            });
-                            const result = await res.json();
-                            if (result.success) {
-                                entryEl.remove();
-                            }
-                        } catch (error) {
-                            alert('Error deleting entry!');
-                        }
-                    }
-                });
-
-                entriesList.appendChild(entryEl);
-            });
-            
-        } catch (error) {
-            console.error('Error loading child entries:', error);
-        }
-    }
-
-    // ============= MOOD EMOJI =============
-    function getMoodEmoji(mood) {
-        const moods = {
-            'happy': '😊',
-            'excited': '🤩',
-            'sad': '😢',
-            'tired': '😴',
-            'proud': '🌟',
-            'silly': '😜',
-            'loved': '🥰'
-        };
-        return moods[mood] || '😊';
-    }
-
-    // ============= VIEW ENTRY MODAL =============
-    function viewEntry(id, title, content, date, mood, isMilestone, media) {
-        const existing = document.querySelector('.modal-overlay');
-        if (existing) existing.remove();
-
-        const modal = document.createElement('div');
-        modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        `;
-        
-        let mediaHTML = '';
-        if (media && media.length > 0) {
-            mediaHTML = '<p style="font-weight:600; margin-bottom:10px;">📸 Media</p>';
-            media.forEach(m => {
-                if (m.media_type === 'image') {
-                    mediaHTML += `
-                        <img src="${m.file_url}" style="
-                            width: 100%;
-                            border-radius: 12px;
-                            margin-bottom: 10px;
-                            object-fit: cover;
-                        " alt="Entry photo">
-                    `;
-                } else if (m.media_type === 'video') {
-                    mediaHTML += `
-                        <video controls style="width:100%; border-radius:12px; margin-bottom:10px;">
-                            <source src="${m.file_url}">
-                        </video>
-                    `;
-                }
-            });
-        }
-
-        // Make sure isMilestone is boolean
-        const showMilestone = isMilestone === true || isMilestone === 'true';
-
-        modal.innerHTML = `
-            <div style="
-                background: white;
-                border-radius: 20px;
-                padding: 30px;
-                max-width: 550px;
-                width: 90%;
-                max-height: 85vh;
-                overflow-y: auto;
-                position: relative;
-            ">
-                <button onclick="document.querySelector('.modal-overlay').remove()" style="
-                    position: absolute;
-                    top: 15px;
-                    right: 15px;
-                    background: #F0E8F5;
-                    border: none;
-                    border-radius: 50%;
-                    width: 30px;
-                    height: 30px;
-                    cursor: pointer;
-                    font-size: 16px;
-                ">✕</button>
-                
-                <h2 style="color: #C77CF9; margin-bottom: 8px; padding-right: 40px;">${title}</h2>
-                
-                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
-                    <span style="background:#F0E8F5; color:#C77CF9; padding:4px 10px; border-radius:20px; font-size:12px;">
-                        📅 ${date}
-                    </span>
-                    <span style="background:#F0E8F5; color:#C77CF9; padding:4px 10px; border-radius:20px; font-size:12px;">
-                        ${getMoodEmoji(mood)} ${mood}
-                    </span>
-                    ${showMilestone ? `<span style="background:#FFF3CD; color:#856404; padding:4px 10px; border-radius:20px; font-size:12px;">⭐ Milestone</span>` : ''}
-                </div>
-                
-                <hr style="border: 1px solid #F0E8F5; margin-bottom: 16px;">
-                <p style="line-height: 1.6; color: #333; margin-bottom: 20px;">${content}</p>
-                
-                <div style="margin-top: 16px;">
-                    ${mediaHTML}
-                </div>
-            </div>
-        `;
-        
-        modal.classList.add('modal-overlay');
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.remove();
-        });
-        document.body.appendChild(modal);
-    }
-
-    // ============= LOAD RECENT ENTRIES =============
-    async function loadRecentEntries() {
-        const userId = localStorage.getItem('userId') ||
-sessionStorage.getItem('userId');
-        if (!userId) return;
-        
-        try {
-            const response = await fetch(`${API_URL}/api/entries-new/parent/${userId}`);
-            const data = await response.json();
-            
-            if (data.success && data.data.length > 0) {
-                const entriesList = document.querySelector('.empty-entries-list');
-                entriesList.innerHTML = '';
-                
-                data.data.slice(0, 3).forEach(entry => {
-                    const entryEl = document.createElement('div');
-                    entryEl.className = 'empty-entry-item';
-                    entryEl.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px; margin:8px 0; background:white; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);';
-                    
-                    const isMilestone = entry.is_milestone === true || entry.is_milestone === 'true';
-
-                    entryEl.innerHTML = `
-                        <div style="flex:1; margin-right:10px;">
-                            <p style="font-weight:600; margin:0; font-size:14px;">${entry.title}</p>
-                            <p style="color:#888; margin:4px 0 0; font-size:12px;">
-                                ${entry.entry_date} • ${entry.children?.name || ''} ${entry.children?.avatar || ''}
-                                ${isMilestone ? ' ⭐' : ''}
-                            </p>
-                        </div>
-                        <div style="display:flex; gap:6px;">
-                            <button class="view-btn" style="white-space:nowrap;">View ›</button>
-                            <button class="edit-entry-btn" style="
-                                background: #f0f4ff;
-                                border: 1px solid #ccd9ff;
-                                color: #4a6cf7;
-                                cursor: pointer;
-                                padding: 6px 10px;
-                                border-radius: 8px;
-                                font-size: 12px;
-                            ">✏️</button>
-                            <button class="delete-entry-btn" style="
-                                background: #fff0f0;
-                                border: 1px solid #ffcccc;
-                                color: #ff6b6b;
-                                cursor: pointer;
-                                padding: 6px 10px;
-                                border-radius: 8px;
-                                font-size: 12px;
-                            ">🗑️</button>
-                        </div>
-                    `;
-
-                    entryEl.querySelector('.view-btn').addEventListener('click', () => {
-                        viewEntry(
-                            entry.id,
-                            entry.title,
-                            entry.content,
-                            entry.entry_date,
-                            entry.mood,
-                            isMilestone,
-                            entry.media || []
-                        );
-                    });
-
-                    entryEl.querySelector('.edit-entry-btn').addEventListener('click', () => {
-                        window.location.href = `new-entry.html?edit=${entry.id}`;
-                    });
-
-                    entryEl.querySelector('.delete-entry-btn').addEventListener('click', async () => {
-                        if (confirm(`Delete "${entry.title}"?`)) {
-                            try {
-                                const res = await fetch(`${API_URL}/api/entries-new/${entry.id}`, {
-                                    method: 'DELETE'
-                                });
-                                const result = await res.json();
-                                if (result.success) {
-                                    entryEl.remove();
-                                }
-                            } catch (error) {
-                                alert('Error deleting entry!');
-                            }
-                        }
-                    });
-
-                    entriesList.appendChild(entryEl);
-                });
-            }
-        } catch (error) {
-            console.error('Error loading entries:', error);
-        }
-    }
-
-    function updateHeaderDate() {
-        const dateEl = document.querySelector('.date');
-        if (dateEl) {
-            const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
-            dateEl.textContent = new Date().toLocaleDateString('en-US', options);
-        }
-    }
-
-    // Run on page load
-    loadChildren();
-    loadRecentEntries();
-    updateHeaderDate();
-</script>
-<script src="logout.js"></script>
-<script src="session.js"></script>
-<script src="i18n.js"></script>
 </body>
+
 </html>
