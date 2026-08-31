@@ -25,38 +25,51 @@
 
             <!-- Navigation -->
             <nav class="nav">
-                <p class="nav-heading">NAVIGATION</p>
+                <p class="nav-heading" data-i18n="nav_navigation">NAVIGATION</p>
                 <a href="index.html" class="nav-link">
                     <span class="nav-emoji">🏠</span>
-                    <span>Home</span>
+                    <span data-i18n="nav_home">Home</span>
                 </a>
 				<a href="new-entry.html" class="nav-link">
                     <span class="nav-emoji">📖</span>
-                    <span>Journal</span>
+                    <span data-i18n="nav_journal">Journal</span>
                 </a>
                 <a href="weekly.html" class="nav-link active">
                     <span class="nav-emoji">📊</span>
-                    <span>Weekly Recap</span>
+                    <span data-i18n="nav_weekly">Weekly Recap</span>
                 </a>
-                
+
             </nav>
 
             <!-- Children -->
             <div class="children">
-                <p class="nav-heading">CHILDREN</p>
-                <div class="no-children">No children yet</div>
+                <p class="nav-heading" data-i18n="nav_children">CHILDREN</p>
+                <div class="no-children" data-i18n="no_children">No children yet</div>
                 <button class="add-child-btn" onclick="window.location.href='add-child.html'">
                     <span class="plus">+</span>
-                    <span>Add Child</span>
+                    <span data-i18n="add_child">Add Child</span>
                 </button>
             </div>
 
             <!-- User Profile -->
-            <div class="user-card">
-                <div class="user-avatar">PA</div>
-                <div class="user-details">
-                    <p class="user-name">Parent Account</p>
-                    <p class="user-role">Parent</p>
+            <div class="user-card-wrapper">
+                <div class="user-card" id="userCardTrigger" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
+                    <div class="user-avatar">PA</div>
+                    <div class="user-details">
+                        <p class="user-name" data-i18n="user_name">Parent Account</p>
+                        <p class="user-role" data-i18n="user_role">Parent</p>
+                    </div>
+                    <span class="user-card__chevron" aria-hidden="true">▾</span>
+                </div>
+                <div class="account-menu" id="accountMenu">
+                    <button type="button" class="account-menu__item" id="switchAccountBtn">
+                        <span class="account-menu__icon">🔄</span>
+                        <span data-i18n="switch_account">Switch account</span>
+                    </button>
+                    <button type="button" class="account-menu__item account-menu__item--danger" id="logoutBtn">
+                        <span class="account-menu__icon">🚪</span>
+                        <span data-i18n="log_out">Log out</span>
+                    </button>
                 </div>
             </div>
         </aside>
@@ -77,8 +90,8 @@
 
             <!-- Weekly Recap Content -->
             <div class="weekly-recap-container">
-                <h2 class="weekly-heading">This week in review</h2>
-                <p class="weekly-subheading">A snapshot of your family's moments</p>
+                <h2 class="weekly-heading" data-i18n="weekly_heading">This week in review</h2>
+                <p class="weekly-subheading" data-i18n="weekly_subheading">A snapshot of your family's moments</p>
 
                 <!-- Week Selector -->
                 <div class="week-selector">
@@ -91,15 +104,15 @@
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-number">0</div>
-                        <div class="stat-label">JOURNAL ENTRIES</div>
+                        <div class="stat-label" data-i18n="journal_entries_stat">JOURNAL ENTRIES</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">0</div>
-                        <div class="stat-label">MILESTONES</div>
+                        <div class="stat-label" data-i18n="milestones_stat">MILESTONES</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">0</div>
-                        <div class="stat-label">PHOTOS & VIDEOS ADDED</div>
+                        <div class="stat-label" data-i18n="photos_videos_stat">PHOTOS & VIDEOS ADDED</div>
                     </div>
                 </div>
 
@@ -109,11 +122,11 @@
                     <div class="weekly-left">
                         <!-- Recent Entries -->
                         <div class="weekly-section">
-                            <h3 class="section-title">RECENT ENTRIES</h3>
+                            <h3 class="section-title" data-i18n="recent_entries">RECENT ENTRIES</h3>
                             <div class="empty-state-box">
                                 <span class="empty-icon">📖</span>
-                                <p class="empty-text">No journal entries yet</p>
-                                <button class="empty-cta-btn" onclick="window.location.href='new-entry.html'">
+                                <p class="empty-text" data-i18n="no_journal_entries">No journal entries yet</p>
+                                <button class="empty-cta-btn" onclick="window.location.href='new-entry.html'" data-i18n="create_first_entry">
                                     Create your first entry
                                 </button>
                             </div>
@@ -121,10 +134,10 @@
 
                         <!-- Milestones Reached -->
                         <div class="weekly-section">
-                            <h3 class="section-title">MILESTONES REACHED</h3>
+                            <h3 class="section-title" data-i18n="milestones_reached">MILESTONES REACHED</h3>
                             <div class="empty-state-box">
                                 <span class="empty-icon">⭐</span>
-                                <p class="empty-text">No milestones recorded yet</p>
+                                <p class="empty-text" data-i18n="no_milestones">No milestones recorded yet</p>
                             </div>
                         </div>
                     </div>
@@ -133,19 +146,19 @@
                     <div class="weekly-right">
                         <!-- Moods This Week -->
                         <div class="weekly-section">
-                            <h3 class="section-title">MOODS THIS WEEK</h3>
+                            <h3 class="section-title" data-i18n="moods_this_week">MOODS THIS WEEK</h3>
                             <div class="empty-state-box">
                                 <span class="empty-icon">😊</span>
-                                <p class="empty-text">No moods tracked yet</p>
+                                <p class="empty-text" data-i18n="no_moods">No moods tracked yet</p>
                             </div>
                         </div>
 
                         <!-- Memory Highlight -->
                         <div class="weekly-section">
-                            <h3 class="section-title">MEMORY HIGHLIGHT</h3>
+                            <h3 class="section-title" data-i18n="memory_highlight">MEMORY HIGHLIGHT</h3>
                             <div class="empty-state-box">
                                 <span class="empty-icon">📸</span>
-                                <p class="empty-text">No photos or videos yet</p>
+                                <p class="empty-text" data-i18n="no_photos_videos">No photos or videos yet</p>
                             </div>
                         </div>
                     </div>
@@ -204,7 +217,34 @@ sessionStorage.getItem('userId');
     }
 }
 
+function updateHeaderDate() {
+    const dateEl = document.querySelector('.date');
+    if (dateEl) {
+        const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+        dateEl.textContent = new Date().toLocaleDateString('en-US', options);
+    }
+}
+
+function updateWeekRange() {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+    const options = { month: 'short', day: 'numeric', year: 'numeric' };
+    const weekRangeEl = document.querySelector('.week-range');
+    if (weekRangeEl) {
+        weekRangeEl.textContent = `${startOfWeek.toLocaleDateString('en-US', options)} – ${endOfWeek.toLocaleDateString('en-US', options)}`;
+    }
+}
+
 loadChildren();
+updateHeaderDate();
+updateWeekRange();
 </script>
+    <script src="logout.js"></script>
+    <script src="session.js"></script>
+<script src="i18n.js"></script>
 </body>
 </html>

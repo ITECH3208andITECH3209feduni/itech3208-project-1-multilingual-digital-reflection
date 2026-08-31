@@ -33,11 +33,17 @@
   <!-- Login card -->
   <div class="card" role="main">
 
+    <!-- Language Switcher -->
+    <div class="lang-switcher-auth">
+      <button class="lang-btn active">EN</button>
+      <button class="lang-btn">TR</button>
+    </div>
+
     <!-- Header -->
     <div class="header">
       <span class="mascot" aria-hidden="true">🦊</span>
       <h1><span class="brand-name">StoryBond</span></h1>
-      <p class="header__subtitle">Log in to start your adventure 🚀</p>
+      <p class="header__subtitle" data-i18n="login_subtitle">Log in to start your adventure 🚀</p>
     </div>
 
     <!-- Success message (shown by script.js on correct login) -->
@@ -51,7 +57,7 @@
       <!-- Email / Username field -->
       <div class="field">
         <label class="field__label" for="email">
-          <span></span> Your Email or Username
+          <span></span> <span data-i18n="login_email_label">Your Email or Username</span>
         </label>
         <div class="field__input-wrap">
           <svg class="field__svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -65,12 +71,16 @@
                  aria-describedby="emailError" />
         </div>
         <span class="field__error" id="emailError" role="alert"></span>
+        <div class="signup-prompt" id="signupPrompt" role="alert">
+          <span data-i18n="signup_prompt_text">No account with that email yet.</span>
+          <a class="signup-prompt__link" id="signupPromptLink" href="signup.html" data-i18n="signup_prompt_link">Create an account →</a>
+        </div>
       </div>
 
       <!-- Password field -->
       <div class="field">
         <label class="field__label" for="password">
-          <span></span> Password
+          <span></span> <span data-i18n="password_label">Password</span>
         </label>
         <div class="field__input-wrap">
           <svg class="field__svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -89,14 +99,15 @@
       <!-- Remember me + forgot password -->
       <div class="extras">
         <label class="remember">
-          <input type="checkbox" id="rememberMe" /> Remember me
+          <input type="checkbox" id="rememberMe" />
+          <span data-i18n="remember_me">Remember me</span>
         </label>
-        <a class="forgot-link" href="forgot_password.html">Forgot password?</a>
+        <a class="forgot-link" href="forgot_password.html" data-i18n="forgot_password_link">Forgot password?</a>
       </div>
 
       <!-- Submit button (click handled by script.js) -->
       <button class="btn-login" type="button" id="loginBtn">
-        <span class="btn-login__text">🚀 Let's Go!</span>
+        <span class="btn-login__text" data-i18n="login_btn">🚀 Let's Go!</span>
         <span class="btn-login__spinner" aria-hidden="true"></span>
       </button>
 
@@ -104,12 +115,13 @@
 
     <!-- Footer -->
     <div class="stars-row" aria-hidden="true">⭐ ⭐ ⭐</div>
-    <div class="footer">New here? <a href="signup.html">Create an account!</a></div>
+    <div class="footer"><span data-i18n="login_footer_text">New here?</span> <a href="signup.html" data-i18n="login_footer_link">Create an account!</a></div>
 
   </div>
 
   <!-- Linking JS file (at bottom so HTML loads first) -->
   <script src="login-script.js"></script>
+  <script src="i18n.js"></script>
 
 </body>
 </html>

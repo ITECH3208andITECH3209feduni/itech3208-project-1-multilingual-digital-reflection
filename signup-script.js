@@ -10,8 +10,11 @@
 
 
 // Local backend API address.
-// When the project is deployed, this can later be replaced with the deployed backend address.
-const API_URL = 'http://localhost:3000';
+const API_URL =
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000'
+    : 'https://storybond-backend.vercel.app';
 
 // General signup settings.
 const CONFIG = {
@@ -252,7 +255,19 @@ const App = {
       successBanner: DOM.get(
         'successBanner'
       ),
+
+      termsLink: document.querySelector('.terms-link'),
+      termsModal: DOM.get('termsModal'),
+      termsModalClose: DOM.get('termsModalClose'),
+      termsModalAccept: DOM.get('termsModalAccept'),
     };
+
+    // Pre-fill the email if we arrived here from the login page's
+    // "Create an account" prompt (e.g. signup.html?email=someone@example.com).
+    const prefillEmail = new URLSearchParams(window.location.search).get('email');
+    if (prefillEmail && App.el.email) {
+      App.el.email.value = prefillEmail;
+    }
 
     // Submit the signup form when the button is clicked.
     App.el.btn?.addEventListener(
@@ -273,6 +288,32 @@ const App = {
         }
       }
     );
+
+    // Open the Terms & Conditions modal instead of following the "#" link.
+    App.el.termsLink?.addEventListener('click', (event) => {
+      event.preventDefault();
+      App.el.termsModal?.removeAttribute('hidden');
+    });
+
+    const closeTermsModal = () => {
+      App.el.termsModal?.setAttribute('hidden', '');
+    };
+
+    App.el.termsModalClose?.addEventListener('click', closeTermsModal);
+    App.el.termsModalAccept?.addEventListener('click', () => {
+      if (App.el.terms) App.el.terms.checked = true;
+      closeTermsModal();
+    });
+
+    // Close when clicking outside the modal card.
+    App.el.termsModal?.addEventListener('click', (event) => {
+      if (event.target === App.el.termsModal) closeTermsModal();
+    });
+
+    // Close on Escape.
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeTermsModal();
+    });
   },
 
   // Clears previous errors and success messages.

@@ -231,36 +231,37 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    let email = identifier.toLowerCase();
+    // Look up the account by email or username first, so we can tell the
+    // user "this account doesn't exist" separately from "wrong password".
+    const isEmail = identifier.includes('@');
+    const lookupColumn = isEmail ? 'email' : 'username';
+    const lookupValue = isEmail ? identifier.toLowerCase() : identifier;
 
-    // Supabase Auth signs in using email and password.
-    // If a username was entered, retrieve its linked email.
-    if (!identifier.includes('@')) {
-      const { data: parentLookup, error: lookupError } =
-        await supabaseAdmin
-          .from('parents')
-          .select('email')
-          .eq('username', identifier)
-          .maybeSingle();
+    const { data: parentLookup, error: lookupError } =
+      await supabaseAdmin
+        .from('parents')
+        .select('email')
+        .eq(lookupColumn, lookupValue)
+        .maybeSingle();
 
-      if (lookupError) {
-        console.error('Login lookup error:', lookupError);
+    if (lookupError) {
+      console.error('Login lookup error:', lookupError);
 
-        return res.status(500).json({
-          success: false,
-          error: 'Login is temporarily unavailable.'
-        });
-      }
-
-      if (!parentLookup) {
-        return res.status(401).json({
-          success: false,
-          error: 'Invalid username or password.'
-        });
-      }
-
-      email = parentLookup.email;
+      return res.status(500).json({
+        success: false,
+        error: 'Login is temporarily unavailable.'
+      });
     }
+
+    if (!parentLookup) {
+      return res.status(404).json({
+        success: false,
+        error: "This user doesn't exist.",
+        code: 'USER_NOT_FOUND'
+      });
+    }
+
+    const email = parentLookup.email;
     //secure login call to supabase Auth using the email and password provided by the user. If successful, it retrieves the user's profile from the 'parents' table.
     const { data: authData, error: authError } =
       await supabaseAuth.auth.signInWithPassword({
@@ -396,7 +397,7 @@ router.post('/forgot-password', async (req, res) => {
     const { error } = await supabaseAuth.auth.resetPasswordForEmail(
       email,
       {
-        redirectTo: 'http://127.0.0.1:5500/reset_password.html'
+        redirectTo: `${process.env.FRONTEND_URL || 'http://127.0.0.1:5500'}/reset_password.html`
       }
     );
 

@@ -1,11 +1,11 @@
 // Add Child Script for StoryBond
 
 const API_URL =
-    window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:3000'
-        : 'YOUR_PRODUCTION_API_URL';
-
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000'
+    : 'https://storybond-backend.vercel.app';
+    
 const AVATARS = ['🌙', '🚀', '🌸', '🐻', '⚡', '🌺', '🦁', '🦋', '🐆', '⭐'];
 
 const ChildForm = {
@@ -21,6 +21,13 @@ const ChildForm = {
         form.addEventListener('submit', ChildForm.handleSubmit);
 
         ChildForm.initAvatarSelector();
+
+        // Show today's date in the header
+        const dateEl = document.querySelector('.date');
+        if (dateEl) {
+            const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+            dateEl.textContent = new Date().toLocaleDateString('en-US', options);
+        }
     },
 
     initAvatarSelector() {
