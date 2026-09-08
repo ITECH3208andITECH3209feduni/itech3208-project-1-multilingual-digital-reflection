@@ -213,7 +213,8 @@
 
 <script>
 async function loadChildren() {
-    const userId = localStorage.getItem('userId');
+    const userId = ;localStorage.getItem('userId') ||
+sessionStorage.getItem('userId')
     if (!userId) {
         window.location.href = 'login.html';
         return;

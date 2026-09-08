@@ -8,6 +8,9 @@ require('dotenv').config();
 // Import the Supabase client library
 const { createClient } = require('@supabase/supabase-js');
 const authRoutes = require('./auth');
+// Import the authentication middleware
+const authenticateUser = require('./authMiddleware');
+
 // Import multer and cloudinary for file uploads
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
@@ -82,9 +85,12 @@ app.use('/api/auth', authRoutes);
 // ============= CHILDREN ROUTES =============
 
 // Get all children for a specific parent
-app.get('/api/children/parent/:parentId', async (req, res) => {
+app.get(
+  '/api/children/parent/:parentId', authenticateUser, 
+  async (req, res) => {
+
   try {
-    const { parentId } = req.params;
+    const parentId = req.user.parentId;
     const { data, error } = await supabase
       .from('children')
       .select('*')
@@ -98,9 +104,10 @@ app.get('/api/children/parent/:parentId', async (req, res) => {
   }
 });
 // Add a new child for a specific parent
-app.post('/api/children', async (req, res) => {
+app.post('/api/children', authenticateUser, async (req, res) => {
   try {
-    const { parent_id, name, date_of_birth, avatar, color } = req.body;
+    const { name, date_of_birth, avatar, color } = req.body;
+    const parent_id = req.user.parentId;
     const { data, error } = await supabase
       .from('children')
       .insert([{
@@ -121,7 +128,7 @@ app.post('/api/children', async (req, res) => {
 });
 
 // Delete child
-app.delete('/api/children/:childId', async (req, res) => {
+app.delete('/api/children/:childId', authenticateUser, async (req, res) => {
   try {
     const { childId } = req.params;
 
