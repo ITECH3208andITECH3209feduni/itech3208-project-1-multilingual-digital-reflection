@@ -79,7 +79,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
-  res.json({ success: true, service: 'storybond-backend' });
+  res.json({ success: true, service: 'storybond-backend', version: 2 });
 });
 
 // ============= AUTH ROUTES =============
