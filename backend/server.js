@@ -78,6 +78,10 @@ app.get('/', (req, res) => {
   res.json({ message: 'StoryBond API v2 is running!' });
 });
 
+app.get('/health', (req, res) => {
+  res.json({ success: true, service: 'storybond-backend' });
+});
+
 // ============= AUTH ROUTES =============
 
 app.use('/api/auth', authRoutes);
