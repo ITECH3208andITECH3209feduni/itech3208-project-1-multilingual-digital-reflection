@@ -83,7 +83,36 @@ const Auth = {
 
       const data = await response.json();
 
+      console.log('Login response:', response.status, data);
+
       if (response.ok && data.access_token) {
+        const storage = rememberMe
+          ? localStorage
+          : sessionStorage;
+
+        // Clear any previous login/session data from BOTH storages,
+        // so a stale token from a prior session never lingers.
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+
+        sessionStorage.removeItem('userId');
+        sessionStorage.removeItem('userName');
+        sessionStorage.removeItem('userEmail');
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('refreshToken');
+
+        // Store current user
+        storage.setItem('userId', data.user.id);
+        storage.setItem('userName', data.user.user_metadata?.full_name || email);
+        storage.setItem('userEmail', data.user.email);
+
+        // Store Supabase session tokens
+        storage.setItem('accessToken', data.access_token);
+        storage.setItem('refreshToken', data.refresh_token);
+
         return {
           success: true,
           data: {
@@ -100,48 +129,15 @@ const Auth = {
         };
       }
 
-      console.log('Login response:', response.status, data);
-
-      if (response.ok && data.success) {
-        const storage = rememberMe
-          ? localStorage
-          : sessionStorage;
-
-        // Clear any previous login/session data
-        localStorage.removeItem('userId');
-        localStorage.removeItem('userName');
-        localStorage.removeItem('userEmail');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-
-        sessionStorage.removeItem('userId');
-        sessionStorage.removeItem('userName');
-        sessionStorage.removeItem('userEmail');
-        sessionStorage.removeItem('accessToken');
-        sessionStorage.removeItem('refreshToken');
-
-        // Store current user
-        storage.setItem('userId', data.data.user.id);
-        storage.setItem('userName', data.data.user.full_name);
-        storage.setItem('userEmail', data.data.user.email);
-
-        // Store Supabase session
-        if (data.data.session) {
-          storage.setItem(
-            'accessToken',
-            data.data.session.access_token
-          );
-
-          storage.setItem(
-            'refreshToken',
-            data.data.session.refresh_token
-          );
-        }
-      } else {
-        console.error('Login rejected:', data);
+      // Supabase returns an error_code / msg on failure, not a `success` flag.
+      // Map its "invalid credentials" case to the UI's expected shape.
+      if (data.error_code === 'invalid_credentials' || response.status === 400) {
+        return { success: false, code: 'USER_NOT_FOUND' };
       }
 
-      return data;
+      console.error('Login rejected:', data);
+      return { success: false, error: data.msg || 'unknown' };
+
     } catch (error) {
       console.error('Login error:', error);
       return { success: false, error: 'network' };
