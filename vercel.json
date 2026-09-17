@@ -1,8 +1,26 @@
 {
-  "redirects": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/",
-      "destination": "/login.html"
+      "src": "backend/server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/backend/server.js"
+    },
+    {
+      "src": "/",
+      "dest": "/login.html"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
     }
   ],
   "cleanUrls": false,
