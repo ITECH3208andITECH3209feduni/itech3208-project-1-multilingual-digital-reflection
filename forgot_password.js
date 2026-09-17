@@ -5,6 +5,9 @@ const API_URL =
     ? 'http://localhost:3000'
     : window.location.origin;
 
+  const SUPABASE_URL = 'https://axhirebelwkzsncellxh.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_wvas5PH4QFod9WraSdtNmQ_3zXTqmqP';
+
 // retrieve the form and input elements from the DOM
 
 const form = document.getElementById('forgotPasswordForm');
@@ -20,16 +23,18 @@ form.addEventListener('submit', async (event) => {
   // get the email value from the input field
   try {
     const response = await fetch(
-      `${API_URL}/api/auth/forgot-password`,
+      `${SUPABASE_URL}/auth/v1/recover`,
       {
         method: 'POST',
 
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          apikey: SUPABASE_ANON_KEY
         },
 
         body: JSON.stringify({
-          email: email
+          email,
+          redirect_to: `${window.location.origin}/reset_password.html`
         })
       }
     );

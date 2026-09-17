@@ -13,6 +13,9 @@ const API_URL =
     ? 'http://localhost:3000'
     : window.location.origin;
 
+  const SUPABASE_URL = 'https://axhirebelwkzsncellxh.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_wvas5PH4QFod9WraSdtNmQ_3zXTqmqP';
+
 
 const DOM = {
   
@@ -65,20 +68,37 @@ const Auth = {
         document.getElementById('rememberMe')?.checked ?? false;
         console.log('Remember Me value:', rememberMe);
 
-      const response = await fetch(`${API_URL}/api/auth/login`, {
+      const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          apikey: SUPABASE_ANON_KEY
         },
 
         body: JSON.stringify({
-          username: email,
-          password: password,
-          rememberMe: rememberMe
+          email,
+          password
         })
       });
 
       const data = await response.json();
+
+      if (response.ok && data.access_token) {
+        return {
+          success: true,
+          data: {
+            user: {
+              id: data.user.id,
+              full_name: data.user.user_metadata?.full_name || email,
+              email: data.user.email
+            },
+            session: {
+              access_token: data.access_token,
+              refresh_token: data.refresh_token
+            }
+          }
+        };
+      }
 
       console.log('Login response:', response.status, data);
 
