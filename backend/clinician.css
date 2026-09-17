@@ -1,0 +1,984 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: #2f3142;
+  background: #f8f7fb;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.rainbow-top {
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    #ff7a7a,
+    #ffb86b,
+    #ffd76a,
+    #7ed9a7,
+    #6fb8ff,
+    #a58cff,
+    #ee8bd1
+  );
+}
+
+
+/* =========================================
+   CLINICIAN LOGIN
+========================================= */
+
+.clinician-auth-shell {
+  min-height: calc(100vh - 6px);
+  display: grid;
+  place-items: center;
+  padding: 32px 18px;
+}
+
+.clinician-auth-card {
+  width: min(100%, 500px);
+  background: #fff;
+  border: 1px solid #ece9f3;
+  border-radius: 24px;
+  padding: 34px;
+  box-shadow:
+    0 18px 50px
+    rgba(60, 52, 85, 0.09);
+}
+
+.clinician-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.clinician-logo {
+  width: 48px;
+  height: 48px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background: #fff3df;
+
+  font-size: 26px;
+}
+
+.clinician-brand h1 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.clinician-brand p {
+  margin: 4px 0 0;
+  color: #8b8798;
+  font-size: 13px;
+}
+
+.clinician-auth-heading {
+  margin: 34px 0 26px;
+}
+
+.eyebrow {
+  display: inline-block;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+
+  color: #8b6ccf;
+}
+
+.clinician-auth-heading h2 {
+  margin: 7px 0 8px;
+  font-size: 29px;
+}
+
+.clinician-auth-heading p {
+  margin: 0;
+
+  color: #777384;
+
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+.clinician-form {
+  display: grid;
+  gap: 10px;
+}
+
+.clinician-form
+label:not(.remember-row) {
+  margin-top: 6px;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.clinician-form input[type="email"],
+.clinician-form input[type="password"] {
+  width: 100%;
+  min-height: 48px;
+
+  padding: 0 14px;
+
+  border: 1px solid #ded9e8;
+  border-radius: 12px;
+
+  background: #fbfafc;
+
+  outline: none;
+}
+
+.clinician-form input:focus {
+  border-color: #9674d9;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(150, 116, 217, 0.12);
+}
+
+.remember-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  margin: 7px 0 4px;
+
+  color: #686474;
+  font-size: 13px;
+}
+
+.primary-clinician-btn,
+.secondary-clinician-btn {
+  min-height: 46px;
+
+  border: 0;
+  border-radius: 12px;
+
+  font-weight: 700;
+}
+
+.primary-clinician-btn {
+  margin-top: 8px;
+
+  background: #8664ce;
+  color: #fff;
+}
+
+.secondary-clinician-btn {
+  border: 1px solid #ddd7e8;
+
+  background: #fff;
+  color: #504a5d;
+}
+
+.form-message {
+  min-height: 20px;
+
+  margin: 2px 0 0;
+
+  font-size: 13px;
+}
+
+.form-message.success {
+  color: #27845c;
+}
+
+.form-message.error {
+  color: #c44d55;
+}
+
+.clinician-security-note {
+  margin-top: 24px;
+
+  padding: 13px 14px;
+
+  border-radius: 12px;
+
+  background: #f7f4fc;
+  color: #6f677d;
+
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.back-to-parent-login {
+  display: inline-block;
+
+  margin-top: 18px;
+
+  color: #765abd;
+
+  text-decoration: none;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   DASHBOARD LAYOUT
+========================================= */
+
+.clinician-layout {
+  min-height: calc(100vh - 6px);
+
+  display: grid;
+
+  grid-template-columns:
+    285px
+    minmax(0, 1fr);
+}
+
+.clinician-sidebar {
+  position: sticky;
+  top: 0;
+
+  align-self: start;
+
+  min-height: calc(100vh - 6px);
+
+  padding: 24px 18px;
+
+  border-right:
+    1px solid #ece9f2;
+
+  background: #fff;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-brand {
+  padding: 2px 6px 23px;
+
+  border-bottom:
+    1px solid #eeeaf3;
+}
+
+.sidebar-section {
+  margin-top: 24px;
+}
+
+.sidebar-label {
+  margin: 0 7px 10px;
+
+  color: #9a95a5;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+}
+
+.shared-children-list {
+  display: grid;
+  gap: 7px;
+}
+
+.shared-child-button {
+  width: 100%;
+
+  border:
+    1px solid transparent;
+
+  border-radius: 12px;
+
+  padding: 10px;
+
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  text-align: left;
+}
+
+.shared-child-button:hover {
+  background: #f8f6fb;
+}
+
+.shared-child-button.active {
+  border-color: #e5daf8;
+  background: #f4effd;
+}
+
+.shared-child-avatar {
+  width: 39px;
+  height: 39px;
+
+  border-radius: 11px;
+
+  display: grid;
+  place-items: center;
+
+  background: #fff;
+
+  font-size: 21px;
+}
+
+.shared-child-text {
+  min-width: 0;
+
+  display: grid;
+}
+
+.shared-child-text strong {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #383442;
+
+  font-size: 13px;
+}
+
+.shared-child-text small {
+  margin-top: 2px;
+
+  color: #928c9c;
+}
+
+.sidebar-empty {
+  padding: 12px;
+
+  color: #8e8998;
+
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.error-text {
+  color: #b94b55;
+}
+
+
+/* =========================================
+   CLINICIAN ACCOUNT
+========================================= */
+
+.clinician-account-card {
+  margin-top: auto;
+
+  padding: 14px 7px 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border-top:
+    1px solid #eeeaf3;
+}
+
+.clinician-account-avatar {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  background: #8664ce;
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.clinician-account-info {
+  min-width: 0;
+
+  display: grid;
+}
+
+.clinician-account-info strong,
+.clinician-account-info span {
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.clinician-account-info strong {
+  font-size: 12px;
+}
+
+.clinician-account-info span {
+  margin-top: 2px;
+
+  color: #938d9c;
+
+  font-size: 10px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+
+/* =========================================
+   MAIN DASHBOARD CONTENT
+========================================= */
+
+.clinician-main {
+  width: 100%;
+  max-width: 1500px;
+
+  padding:
+    34px
+    38px
+    54px;
+}
+
+.clinician-page-header {
+  display: flex;
+
+  justify-content:
+    space-between;
+
+  gap: 24px;
+
+  align-items:
+    flex-start;
+
+  margin-bottom: 25px;
+}
+
+.clinician-page-header h2 {
+  margin: 5px 0 6px;
+
+  font-size: 30px;
+}
+
+.clinician-page-header p {
+  margin: 0;
+
+  color: #7b7685;
+
+  font-size: 14px;
+}
+
+.readonly-badge {
+  flex: 0 0 auto;
+
+  border-radius: 999px;
+
+  padding: 9px 13px;
+
+  background: #f0f8f4;
+  color: #397759;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-state-card {
+  min-height: 320px;
+
+  border:
+    1px dashed #dcd6e5;
+
+  border-radius: 20px;
+
+  background: #fff;
+
+  display: grid;
+
+  place-items: center;
+  align-content: center;
+
+  text-align: center;
+
+  padding: 32px;
+}
+
+.empty-state-icon {
+  margin-bottom: 10px;
+
+  font-size: 42px;
+}
+
+.empty-state-card h3 {
+  margin: 0 0 8px;
+}
+
+.empty-state-card p {
+  max-width: 460px;
+
+  margin: 0;
+
+  color: #827c8c;
+
+  line-height: 1.6;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   CHILD SUMMARY
+========================================= */
+
+.child-summary-card {
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 16px;
+
+  margin-bottom: 20px;
+
+  padding: 19px 20px;
+
+  border:
+    1px solid #ece8f2;
+
+  border-radius: 18px;
+
+  background: #fff;
+}
+
+.child-summary-avatar {
+  width: 58px;
+  height: 58px;
+
+  border-radius: 16px;
+
+  display: grid;
+  place-items: center;
+
+  background: #fff4e6;
+
+  font-size: 31px;
+}
+
+.child-summary-card h3 {
+  margin: 4px 0 2px;
+
+  font-size: 21px;
+}
+
+.child-summary-card p {
+  margin: 0;
+
+  color: #8b8594;
+
+  font-size: 12px;
+}
+
+.permission-pills {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content:
+    flex-end;
+
+  gap: 7px;
+}
+
+.permission-pill {
+  padding: 7px 10px;
+
+  border-radius: 999px;
+
+  background: #f4effd;
+  color: #6f54b4;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   DASHBOARD PANELS
+========================================= */
+
+.clinician-content-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  align-items: start;
+
+  gap: 20px;
+}
+
+.clinician-panel {
+  min-width: 0;
+
+  border:
+    1px solid #ece8f2;
+
+  border-radius: 18px;
+
+  background: #fff;
+
+  overflow: hidden;
+}
+
+.panel-heading {
+  min-height: 84px;
+
+  padding: 17px 19px;
+
+  border-bottom:
+    1px solid #eeeaf3;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 14px;
+}
+
+.panel-heading > div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.panel-icon {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 11px;
+
+  display: grid;
+  place-items: center;
+
+  background: #f8f4ff;
+}
+
+.panel-heading h3 {
+  margin: 0;
+
+  font-size: 16px;
+}
+
+.panel-heading p {
+  margin: 3px 0 0;
+
+  color: #928c9c;
+
+  font-size: 11px;
+}
+
+.count-badge {
+  min-width: 30px;
+  height: 30px;
+
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+
+  background: #f4f2f7;
+  color: #625d6d;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.panel-content {
+  display: grid;
+
+  gap: 12px;
+
+  padding: 15px;
+}
+
+
+/* =========================================
+   PANEL STATUS CARDS
+========================================= */
+
+.content-loading,
+.content-empty,
+.content-error,
+.permission-denied-card {
+  padding: 20px 16px;
+
+  border-radius: 12px;
+
+  text-align: center;
+
+  color: #8a8492;
+  background: #faf9fb;
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.content-error {
+  color: #af4650;
+
+  background: #fff7f7;
+}
+
+
+/* =========================================
+   JOURNAL + WEEKLY CARDS
+========================================= */
+
+.journal-entry-card,
+.weekly-progress-card {
+  border:
+    1px solid #eeeaf3;
+
+  border-radius: 14px;
+
+  padding: 15px;
+
+  background: #fff;
+}
+
+.entry-meta,
+.entry-footer {
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 12px;
+
+  color: #918b99;
+
+  font-size: 10px;
+}
+
+.milestone-tag {
+  padding: 4px 7px;
+
+  border-radius: 999px;
+
+  background: #fff6dc;
+  color: #8a6a15;
+
+  font-weight: 700;
+}
+
+.journal-entry-card h4,
+.weekly-progress-header h4 {
+  margin: 9px 0 7px;
+
+  font-size: 14px;
+}
+
+.entry-content {
+  margin: 0 0 12px;
+
+  color: #65606d;
+
+  line-height: 1.65;
+
+  font-size: 12px;
+
+  white-space: pre-wrap;
+}
+
+
+/* =========================================
+   WEEKLY PROGRESS
+========================================= */
+
+.progress-stat-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 8px;
+}
+
+.progress-stat {
+  padding: 10px;
+
+  border-radius: 10px;
+
+  background: #faf8fc;
+
+  display: grid;
+
+  gap: 3px;
+}
+
+.progress-stat span {
+  color: #9891a2;
+
+  font-size: 9px;
+
+  text-transform: uppercase;
+}
+
+.progress-stat strong {
+  color: #4d4854;
+
+  font-size: 11px;
+}
+
+.progress-notes {
+  margin-top: 12px;
+
+  padding-top: 12px;
+
+  border-top:
+    1px solid #eeeaf3;
+
+  display: grid;
+
+  gap: 10px;
+}
+
+.progress-notes strong {
+  display: block;
+
+  margin-bottom: 3px;
+
+  font-size: 10px;
+}
+
+.progress-notes p {
+  margin: 0;
+
+  color: #6c6674;
+
+  line-height: 1.55;
+
+  font-size: 11px;
+}
+
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 1050px) {
+
+  .clinician-layout {
+    grid-template-columns:
+      235px
+      minmax(0, 1fr);
+  }
+
+  .clinician-main {
+    padding:
+      28px
+      24px
+      44px;
+  }
+
+  .clinician-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 760px) {
+
+  .clinician-layout {
+    display: block;
+  }
+
+  .clinician-sidebar {
+    position: static;
+
+    min-height: auto;
+
+    border-right: 0;
+
+    border-bottom:
+      1px solid #ece9f2;
+  }
+
+  .clinician-account-card {
+    margin-top: 20px;
+  }
+
+  .clinician-main {
+    padding:
+      24px
+      16px
+      38px;
+  }
+
+  .clinician-page-header {
+    display: grid;
+  }
+
+  .child-summary-card {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+  .permission-pills {
+    grid-column: 1 / -1;
+
+    justify-content:
+      flex-start;
+  }
+
+  .progress-stat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 520px) {
+
+  .clinician-auth-card {
+    padding: 25px 20px;
+  }
+
+  .clinician-auth-heading h2 {
+    font-size: 25px;
+  }
+}

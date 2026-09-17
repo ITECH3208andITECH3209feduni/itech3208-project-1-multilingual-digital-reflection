@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,12 +8,14 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <!-- Rainbow Magic Bar -->
     <div class="rainbow-top"></div>
-    
+
     <div class="app-wrapper">
         <!-- Left Sidebar -->
         <aside class="sidebar">
@@ -30,9 +33,29 @@
                     <span class="nav-emoji">🏠</span>
                     <span data-i18n="nav_home">Home</span>
                 </a>
-				<a href="new-entry.html" class="nav-link active">
+                <a href="new-entry.html" class="nav-link active">
                     <span class="nav-emoji">📖</span>
                     <span data-i18n="nav_journal">Journal</span>
+                </a>
+                <a href="weekly.html" class="nav-link">
+                    <span class="nav-emoji">
+                        📊
+                    </span>
+
+                    <span data-i18n="nav_weekly">
+                        Weekly Recap
+                    </span>
+                </a>
+
+
+                <a href="clinician-access.html" class="nav-link">
+                    <span class="nav-emoji">
+                        🩺
+                    </span>
+
+                    <span>
+                        Clinician Access
+                    </span>
                 </a>
                 <a href="weekly.html" class="nav-link">
                     <span class="nav-emoji">📊</span>
@@ -53,7 +76,8 @@
 
             <!-- User Profile -->
             <div class="user-card-wrapper">
-                <div class="user-card" id="userCardTrigger" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
+                <div class="user-card" id="userCardTrigger" tabindex="0" role="button" aria-haspopup="true"
+                    aria-expanded="false">
                     <div class="user-avatar">PA</div>
                     <div class="user-details">
                         <p class="user-name" data-i18n="user_name">Parent Account</p>
@@ -94,35 +118,31 @@
                 <p class="journal-subheading" data-i18n="journal_subheading">Capture today's moments</p>
 
                 <form class="journal-form" id="journalForm">
+                    <!-- Stores the child this journal entry belongs to -->
+                    <input type="hidden" id="selectedChildId" name="childId">
                     <!-- Entry Title and Date -->
                     <div class="form-row">
                         <div class="form-group flex-2">
-                            <input
-                                type="text"
-                                id="entryTitle"
-                                placeholder="Entry title (e.g. Lena's big day)"
-                                data-i18n-placeholder="entry_title_placeholder"
-                                class="form-input"
-                            />
+                            <input type="text" id="entryTitle" placeholder="Entry title (e.g. Lena's big day)"
+                                data-i18n-placeholder="entry_title_placeholder" class="form-input" />
                         </div>
                         <div class="form-group flex-1">
-                            <input
-                                type="text"
-                                id="entryDate"
-                                placeholder="Date: mm/dd/yyyy"
-                                data-i18n-placeholder="entry_date_placeholder"
-                                class="form-input"
-                                maxlength="10"
-                            />
+                            <input type="date" id="entryDate" class="form-input" />
                         </div>
                     </div>
 
                     <!-- Who is this entry about? -->
                     <div class="form-section">
-                        <label class="section-label" data-i18n="who_about">WHO IS THIS ENTRY ABOUT?</label>
-                        <div class="button-group">
-                            <button type="button" class="tag-btn add-child-option" onclick="window.location.href='add-child.html'">
-                                <span data-i18n="add_child_option">+ Add Child</span>
+                        <label class="section-label" data-i18n="who_about">
+                            WHO IS THIS ENTRY ABOUT?
+                        </label>
+
+                        <div class="button-group" id="journalChildSelector">
+                            <button type="button" class="tag-btn add-child-option"
+                                onclick="window.location.href='add-child.html'">
+                                <span data-i18n="add_child_option">
+                                    + Add Child
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -130,13 +150,8 @@
                     <!-- What happened? -->
                     <div class="form-section">
                         <label class="section-label" data-i18n="what_happened">WHAT HAPPENED?</label>
-                        <textarea
-                            id="storyText"
-                            placeholder="Write your story here..."
-                            data-i18n-placeholder="story_placeholder"
-                            class="story-textarea"
-                            rows="6"
-                        ></textarea>
+                        <textarea id="storyText" placeholder="Write your story here..."
+                            data-i18n-placeholder="story_placeholder" class="story-textarea" rows="6"></textarea>
                     </div>
 
                     <!-- Mood -->
@@ -165,10 +180,14 @@
                     <div class="form-section">
                         <label class="section-label" data-i18n="tags_label">TAGS</label>
                         <div class="button-group">
-                            <button type="button" class="tag-btn" data-tag="milestone" data-i18n="tag_milestone"># Milestone</button>
-                            <button type="button" class="tag-btn" data-tag="funny" data-i18n="tag_funny"># Funny</button>
-                            <button type="button" class="tag-btn" data-tag="firsttime" data-i18n="tag_firsttime"># First Time</button>
-                            <button type="button" class="tag-btn" data-tag="familytime" data-i18n="tag_familytime"># Family Time</button>
+                            <button type="button" class="tag-btn" data-tag="milestone" data-i18n="tag_milestone">#
+                                Milestone</button>
+                            <button type="button" class="tag-btn" data-tag="funny" data-i18n="tag_funny">#
+                                Funny</button>
+                            <button type="button" class="tag-btn" data-tag="firsttime" data-i18n="tag_firsttime"># First
+                                Time</button>
+                            <button type="button" class="tag-btn" data-tag="familytime" data-i18n="tag_familytime">#
+                                Family Time</button>
                             <button type="button" class="tag-btn add-tag-btn" data-i18n="add_tag">+ Add tag</button>
                         </div>
                     </div>
@@ -197,7 +216,8 @@
 
                     <!-- Submit Buttons -->
                     <div class="form-actions-journal">
-                        <button type="button" class="cancel-btn-journal" onclick="window.location.href='index.html'" data-i18n="cancel_btn">
+                        <button type="button" class="cancel-btn-journal" onclick="window.location.href='index.html'"
+                            data-i18n="cancel_btn">
                             Cancel
                         </button>
                         <button type="submit" class="save-btn-journal">
@@ -209,69 +229,8 @@
             </div>
         </main>
     </div>
-<script src="journal-script.js"></script>
-
-<script>
-async function loadChildren() {
-    const userId = ;localStorage.getItem('userId') ||
-sessionStorage.getItem('userId')
-    if (!userId) {
-        window.location.href = 'login.html';
-        return;
-    }
-    
-    try {
-        const response = await fetch(`${API_URL}/api/children/parent/${userId}`);
-        const data = await response.json();
-        
-        if (data.success && data.data.length > 0) {
-            const childrenContainer = document.querySelector('.children');
-            const addBtn = childrenContainer.querySelector('.add-child-btn');
-            childrenContainer.innerHTML = '<p class="nav-heading">CHILDREN</p>';
-            
-            data.data.forEach(child => {
-                const childEl = document.createElement('div');
-                childEl.className = 'child-item';
-                childEl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:8px; cursor:pointer; border-radius:8px; margin:4px 0;';
-                childEl.innerHTML = `
-                    <span style="font-size:24px;">${child.avatar}</span>
-                    <span style="font-size:14px; font-weight:500;">${child.name}</span>
-                `;
-                childEl.addEventListener('click', () => {
-                    localStorage.setItem('selectedChildId', child.id);
-                    localStorage.setItem('selectedChildName', child.name);
-                    localStorage.setItem('selectedChildAvatar', child.avatar);
-                    window.location.href = 'index.html';
-                });
-                childrenContainer.appendChild(childEl);
-            });
-
-            if (addBtn) childrenContainer.appendChild(addBtn);
-            
-            const userName = localStorage.getItem('userName');
-            if (userName) {
-                const greeting = document.querySelector('.greeting');
-                if (greeting) greeting.textContent = `Hello, ${userName}! 👋`;
-            }
-        }
-    } catch (error) {
-        console.error('Error loading children:', error);
-    }
-}
-
-function updateHeaderDate() {
-    const dateEl = document.querySelector('.date');
-    if (dateEl) {
-        const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
-        dateEl.textContent = new Date().toLocaleDateString('en-US', options);
-    }
-}
-
-loadChildren();
-updateHeaderDate();
-</script>
+    <script src="journal-script.js"></script>
+    <script src="new-entry-children.js"></script>
     <script src="logout.js"></script>
     <script src="session.js"></script>
-<script src="i18n.js"></script>
-</body>
-</html>
+    <script src="i18n.js"></script>
