@@ -11,7 +11,10 @@ const API_URL =
   window.location.hostname === 'localhost' ||
   window.location.hostname === '127.0.0.1'
     ? 'http://localhost:3000'
-    : 'https://storybond-backend.vercel.app';
+    : window.location.origin;
+
+  const SUPABASE_URL = 'https://axhirebelwkzsncellxh.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_wvas5PH4QFod9WraSdtNmQ_3zXTqmqP';
 
 
 const DOM = {
@@ -65,16 +68,16 @@ const Auth = {
         document.getElementById('rememberMe')?.checked ?? false;
         console.log('Remember Me value:', rememberMe);
 
-      const response = await fetch(`${API_URL}/api/auth/login`, {
+      const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          apikey: SUPABASE_ANON_KEY
         },
 
         body: JSON.stringify({
-          username: email,
-          password: password,
-          rememberMe: rememberMe
+          email,
+          password
         })
       });
 
@@ -82,12 +85,13 @@ const Auth = {
 
       console.log('Login response:', response.status, data);
 
-      if (response.ok && data.success) {
+      if (response.ok && data.access_token) {
         const storage = rememberMe
           ? localStorage
           : sessionStorage;
 
-        // Clear any previous login/session data
+        // Clear any previous login/session data from BOTH storages,
+        // so a stale token from a prior session never lingers.
         localStorage.removeItem('userId');
         localStorage.removeItem('userName');
         localStorage.removeItem('userEmail');
@@ -101,27 +105,39 @@ const Auth = {
         sessionStorage.removeItem('refreshToken');
 
         // Store current user
-        storage.setItem('userId', data.data.user.id);
-        storage.setItem('userName', data.data.user.full_name);
-        storage.setItem('userEmail', data.data.user.email);
+        storage.setItem('userId', data.user.id);
+        storage.setItem('userName', data.user.user_metadata?.full_name || email);
+        storage.setItem('userEmail', data.user.email);
 
-        // Store Supabase session
-        if (data.data.session) {
-          storage.setItem(
-            'accessToken',
-            data.data.session.access_token
-          );
+        // Store Supabase session tokens
+        storage.setItem('accessToken', data.access_token);
+        storage.setItem('refreshToken', data.refresh_token);
 
-          storage.setItem(
-            'refreshToken',
-            data.data.session.refresh_token
-          );
-        }
-      } else {
-        console.error('Login rejected:', data);
+        return {
+          success: true,
+          data: {
+            user: {
+              id: data.user.id,
+              full_name: data.user.user_metadata?.full_name || email,
+              email: data.user.email
+            },
+            session: {
+              access_token: data.access_token,
+              refresh_token: data.refresh_token
+            }
+          }
+        };
       }
 
-      return data;
+      // Supabase returns an error_code / msg on failure, not a `success` flag.
+      // Map its "invalid credentials" case to the UI's expected shape.
+      if (data.error_code === 'invalid_credentials' || response.status === 400) {
+        return { success: false, code: 'USER_NOT_FOUND' };
+      }
+
+      console.error('Login rejected:', data);
+      return { success: false, error: data.msg || 'unknown' };
+
     } catch (error) {
       console.error('Login error:', error);
       return { success: false, error: 'network' };
