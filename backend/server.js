@@ -83,6 +83,10 @@ app.get('/', (req, res) => {
   res.json({ message: 'StoryBond API v2 is running!' });
 });
 
+app.get('/health', (req, res) => {
+  res.json({ success: true, service: 'storybond-backend', version: 2 });
+});
+
 // ============= AUTH ROUTES =============
 
 app.use('/api/auth', authRoutes);
@@ -2073,8 +2077,11 @@ app.get('/api/entries', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+}
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+module.exports = app;
