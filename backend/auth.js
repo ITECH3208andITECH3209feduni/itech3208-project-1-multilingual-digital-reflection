@@ -29,7 +29,8 @@ const supabaseAdmin = createClient(
     auth: {
       persistSession: false,
       autoRefreshToken: false
-    }  }
+    }
+  }
 );
 
 //Route for signing up a new user. 
@@ -85,8 +86,8 @@ router.post('/signup', async (req, res) => {
         success: false,
         error: 'Username must contain at least 3 characters.'
       });
-    } 
-    
+    }
+
     // check if username is already taken or email is already registered
     // check for duplicate accounts by querying the 'parents' table for existing records with the same username or email
     const { data: existingParent, error: lookupError } =
@@ -164,22 +165,22 @@ router.post('/signup', async (req, res) => {
           'id, auth_user_id, username, email, full_name, preferred_language'
         )
         .single();
-      
+
     if (parentError) {
-  console.error('Parent profile error:', parentError);
+      console.error('Parent profile error:', parentError);
 
-  await supabaseAdmin.auth.admin.deleteUser(
-    authData.user.id
-  );
+      await supabaseAdmin.auth.admin.deleteUser(
+        authData.user.id
+      );
 
-  return res.status(500).json({
-    success: false,
-    error: parentError.message,
-    details: parentError.details,
-    hint: parentError.hint,
-    code: parentError.code
-  });
-}
+      return res.status(500).json({
+        success: false,
+        error: parentError.message,
+        details: parentError.details,
+        hint: parentError.hint,
+        code: parentError.code
+      });
+    }
 
     return res.status(201).json({
       success: true,
@@ -193,7 +194,7 @@ router.post('/signup', async (req, res) => {
     });
   } catch (error) {
     console.error('Unexpected signup error:', error);
-    
+
     if (createdAuthUserId) {
       try {
         await supabaseAdmin.auth.admin.deleteUser(
@@ -424,5 +425,344 @@ router.post('/forgot-password', async (req, res) => {
     });
   }
 });
+
+// =============================================
+// CLINICIAN AUTHENTICATION
+// =============================================
+
+
+// ---------------------------------------------
+// Clinician signup
+// POST /api/auth/clinician/signup
+// ---------------------------------------------
+
+router.post(
+  '/clinician/signup',
+  async (req, res) => {
+
+    let createdAuthUserId = null;
+
+    try {
+
+      const {
+        email,
+        password,
+        full_name,
+        profession,
+        organisation
+      } = req.body;
+
+
+      if (
+        !email ||
+        !password ||
+        !full_name
+      ) {
+
+        return res.status(400).json({
+          success: false,
+          error:
+            'Email, password and full name are required.'
+        });
+      }
+
+
+      const normalisedEmail =
+        email.trim().toLowerCase();
+
+
+      // Check clinician profile does not already exist
+      const {
+        data: existingClinician,
+        error: lookupError
+      } = await supabaseAdmin
+        .from('clinicians')
+        .select('id')
+        .eq('email', normalisedEmail)
+        .maybeSingle();
+
+
+      if (lookupError) {
+        throw lookupError;
+      }
+
+
+      if (existingClinician) {
+
+        return res.status(409).json({
+          success: false,
+          error:
+            'A clinician account already exists with this email.'
+        });
+      }
+
+
+      // Create Supabase Auth account
+      const {
+        data: authData,
+        error: authError
+      } = await supabaseAuth.auth.signUp({
+        email: normalisedEmail,
+        password,
+        options: {
+          data: {
+            full_name:
+              full_name.trim(),
+
+            role:
+              'clinician'
+          }
+        }
+      });
+
+
+      if (authError) {
+        throw authError;
+      }
+
+
+      if (!authData.user) {
+
+        return res.status(500).json({
+          success: false,
+          error:
+            'Clinician authentication account was not created.'
+        });
+      }
+
+
+      createdAuthUserId =
+        authData.user.id;
+
+
+      // Create clinician profile
+      const {
+        data: clinician,
+        error: clinicianError
+      } = await supabaseAdmin
+        .from('clinicians')
+        .insert([
+          {
+            auth_user_id:
+              authData.user.id,
+
+            email:
+              normalisedEmail,
+
+            full_name:
+              full_name.trim(),
+
+            profession:
+              profession?.trim() ||
+              'psychologist',
+
+            organisation:
+              organisation?.trim() ||
+              null
+          }
+        ])
+        .select()
+        .single();
+
+
+      if (clinicianError) {
+
+        await supabaseAdmin
+          .auth
+          .admin
+          .deleteUser(
+            authData.user.id
+          );
+
+        throw clinicianError;
+      }
+
+
+      return res.status(201).json({
+        success: true,
+        message:
+          'Clinician account created successfully.',
+        data: {
+          user: clinician,
+          session:
+            authData.session
+        }
+      });
+
+    } catch (error) {
+
+      console.error(
+        'Clinician signup error:',
+        error
+      );
+
+
+      if (createdAuthUserId) {
+
+        try {
+
+          await supabaseAdmin
+            .auth
+            .admin
+            .deleteUser(
+              createdAuthUserId
+            );
+
+        } catch (cleanupError) {
+
+          console.error(
+            'Clinician cleanup error:',
+            cleanupError
+          );
+        }
+      }
+
+
+      return res.status(500).json({
+        success: false,
+        error:
+          error.message ||
+          'Unable to create clinician account.'
+      });
+    }
+  }
+);
+
+
+// ---------------------------------------------
+// Clinician login
+// POST /api/auth/clinician/login
+// ---------------------------------------------
+
+router.post(
+  '/clinician/login',
+  async (req, res) => {
+
+    try {
+
+      const {
+        email,
+        password
+      } = req.body;
+
+
+      if (!email || !password) {
+
+        return res.status(400).json({
+          success: false,
+          error:
+            'Email and password are required.'
+        });
+      }
+
+
+      const normalisedEmail =
+        email.trim().toLowerCase();
+
+
+      // Authenticate with Supabase Auth
+      const {
+        data: authData,
+        error: authError
+      } =
+        await supabaseAuth
+          .auth
+          .signInWithPassword({
+            email:
+              normalisedEmail,
+            password
+          });
+
+
+      if (
+        authError ||
+        !authData.user ||
+        !authData.session
+      ) {
+
+        return res.status(401).json({
+          success: false,
+          error:
+            'Invalid email or password.'
+        });
+      }
+
+
+      // Load clinician profile
+      const {
+        data: clinician,
+        error: clinicianError
+      } = await supabaseAdmin
+        .from('clinicians')
+        .select(`
+          id,
+          auth_user_id,
+          email,
+          full_name,
+          profession,
+          organisation
+        `)
+        .eq(
+          'auth_user_id',
+          authData.user.id
+        )
+        .maybeSingle();
+
+
+      if (clinicianError) {
+        throw clinicianError;
+      }
+
+
+      if (!clinician) {
+
+        return res.status(403).json({
+          success: false,
+          error:
+            'This account is not registered as a clinician.'
+        });
+      }
+
+
+      return res.json({
+        success: true,
+        message:
+          'Clinician login successful.',
+        data: {
+
+          user: {
+            ...clinician,
+            role: 'clinician'
+          },
+
+          session: {
+            access_token:
+              authData.session.access_token,
+
+            refresh_token:
+              authData.session.refresh_token,
+
+            expires_at:
+              authData.session.expires_at
+          }
+        }
+      });
+
+    } catch (error) {
+
+      console.error(
+        'Clinician login error:',
+        error
+      );
+
+
+      return res.status(500).json({
+        success: false,
+        error:
+          'Clinician login is temporarily unavailable.'
+      });
+    }
+  }
+);
 
 module.exports = router;

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoryBond - Clinician Access</title>
+<link rel="stylesheet" href="clinician-access.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="rainbow-top"></div>
+<div class="access-page">
+<header class="access-header">
+<div class="brand-block"><div class="brand-logo">🦊</div><div><h1>StoryBond</h1><p>Manage Clinician Access</p></div></div>
+<a href="index.html" class="back-link">← Back to Home</a>
+</header>
+<main class="access-main">
+<section class="intro-card">
+<div><span class="eyebrow">PARENT CONTROLS</span><h2>Share a child's StoryBond</h2><p>You choose which child a clinician can view and exactly what information they can access.</p></div>
+<div class="security-pill">🔒 Parent controlled</div>
+</section>
+<div class="access-grid">
+<section class="access-panel">
+<div class="panel-heading"><div><span class="panel-step">1</span><div><h3>Grant or update access</h3><p>Select one child and enter the clinician email.</p></div></div></div>
+<form id="clinicianAccessForm" class="access-form">
+<label for="childSelect">Child</label>
+<select id="childSelect" required><option value="">Loading children...</option></select>
+<label for="clinicianEmail">Clinician email</label>
+<input type="email" id="clinicianEmail" placeholder="clinician@example.com" autocomplete="email" required>
+<fieldset class="permission-fieldset">
+<legend>What can they view?</legend>
+<label class="permission-option"><input type="checkbox" id="canViewJournal" checked><span class="permission-icon">📖</span><span><strong>Journal entries</strong><small>Memories, milestones and notes</small></span></label>
+<label class="permission-option"><input type="checkbox" id="canViewWeeklyProgress" checked><span class="permission-icon">📊</span><span><strong>Weekly progress</strong><small>Weekly check-ins and parent notes</small></span></label>
+</fieldset>
+<button type="submit" class="primary-btn" id="grantAccessButton">Grant access</button>
+<p id="accessFormMessage" class="form-message" aria-live="polite"></p>
+</form>
+</section>
+<section class="access-panel">
+<div class="panel-heading"><div><span class="panel-step">2</span><div><h3>Current clinician access</h3><p>Review active and previously revoked access.</p></div></div><button type="button" id="refreshAccessButton" class="refresh-btn">↻ Refresh</button></div>
+<div id="accessList" class="access-list"><div class="loading-state">Loading access records...</div></div>
+</section>
+</div>
+</main>
+</div>
+<script src="clinician-access.js"></script>
+</body>
+</html>
