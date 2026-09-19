@@ -1,8 +1,3 @@
-const CLINICIAN_API_URL =
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3000'
-    : 'https://storybond-backend.vercel.app';
 
 const CLINICIAN_STORAGE_KEYS = [
   'clinicianId',
@@ -23,7 +18,7 @@ function clearClinicianSession() {
 
 async function loginClinician(email, password, rememberMe) {
   const response = await fetch(
-    `${CLINICIAN_API_URL}/api/auth/clinician/login`,
+    `${API_URL}/api/auth/clinician/login`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

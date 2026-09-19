@@ -9,13 +9,6 @@
 // 
 
 
-// Local backend API address.
-const API_URL =
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3000'
-    : 'https://storybond-backend.vercel.app';
-
 // General signup settings.
 const CONFIG = {
   // Must match the password requirement in backend/auth.js.

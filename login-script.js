@@ -7,14 +7,6 @@ const CONFIG = {
   DELAY_MS:      1400,
 };
 
-const API_URL =
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3000'
-    : window.location.origin;
-
-  const SUPABASE_URL = 'https://axhirebelwkzsncellxh.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_wvas5PH4QFod9WraSdtNmQ_3zXTqmqP';
 
 
 const DOM = {

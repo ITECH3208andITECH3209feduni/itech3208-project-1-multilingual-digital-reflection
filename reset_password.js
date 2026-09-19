@@ -3,17 +3,7 @@ import { createClient }
     from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 
-// supabase configuration
-// Use the same Supabase project URL as your backend.
-
-const SUPABASE_URL = 'https://axhirebelwkzsncellxh.supabase.co';
-
-// Use ONLY the anon key here.
-// Never place the service-role key in frontend JavaScript.
-const SUPABASE_ANON_KEY = 'sb_publishable_wvas5PH4QFod9WraSdtNmQ_3zXTqmqP';
-
-
-// Create Supabase client.
+// Create Supabase client (SUPABASE_URL and SUPABASE_ANON_KEY come from config.js).
 const supabase = createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY

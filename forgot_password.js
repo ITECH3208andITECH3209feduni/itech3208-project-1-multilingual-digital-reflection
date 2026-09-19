@@ -1,13 +1,3 @@
-// connect to the backend API
-const API_URL =
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3000'
-    : window.location.origin;
-
-  const SUPABASE_URL = 'https://axhirebelwkzsncellxh.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_wvas5PH4QFod9WraSdtNmQ_3zXTqmqP';
-
 // retrieve the form and input elements from the DOM
 
 const form = document.getElementById('forgotPasswordForm');

@@ -1,8 +1,3 @@
-const CLINICIAN_API_URL =
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3000'
-    : 'https://storybond-backend.vercel.app';
 
 function getClinicianStorageValue(key) {
   return localStorage.getItem(key) || sessionStorage.getItem(key);
@@ -87,7 +82,7 @@ function formatProgressValue(value) {
 
 async function clinicianFetch(path) {
   const response = await fetch(
-    `${CLINICIAN_API_URL}${path}`,
+    `${API_URL}${path}`,
     {
       headers: getClinicianAuthHeaders()
     }
