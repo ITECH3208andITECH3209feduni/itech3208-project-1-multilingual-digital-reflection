@@ -3,6 +3,10 @@
     {
       "source": "/",
       "destination": "/login.html"
+    },
+    {
+      "source": "/backend/:path*",
+      "destination": "/login.html"
     }
   ],
   "cleanUrls": false,
