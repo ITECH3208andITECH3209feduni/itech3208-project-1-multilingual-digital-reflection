@@ -52,7 +52,7 @@ const Validator = {
 };
 
 const Auth = {
-  login: async (email, password) => {
+  login: async (loginIdentifier, password) => {
     try {
       // Get the checkbox after the page has loaded.
       // If it does not exist, default to false.
@@ -60,15 +60,17 @@ const Auth = {
         document.getElementById('rememberMe')?.checked ?? false;
         console.log('Remember Me value:', rememberMe);
 
-      const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      // Log in through the backend, which accepts a username OR an email.
+      // Supabase itself only accepts an email, so calling it directly here
+      // rejected every account that signs in with a username.
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          apikey: SUPABASE_ANON_KEY
+          'Content-Type': 'application/json'
         },
 
         body: JSON.stringify({
-          email,
+          loginIdentifier,
           password
         })
       });
@@ -77,7 +79,9 @@ const Auth = {
 
       console.log('Login response:', response.status, data);
 
-      if (response.ok && data.access_token) {
+      if (response.ok && data.success) {
+        const user = data.data.user;
+        const session = data.data.session;
         const storage = rememberMe
           ? localStorage
           : sessionStorage;
@@ -97,38 +101,31 @@ const Auth = {
         sessionStorage.removeItem('refreshToken');
 
         // Store current user
-        storage.setItem('userId', data.user.id);
-        storage.setItem('userName', data.user.user_metadata?.full_name || email);
-        storage.setItem('userEmail', data.user.email);
+        storage.setItem('userId', user.id);
+        storage.setItem('userName', user.full_name || user.username || loginIdentifier);
+        storage.setItem('userEmail', user.email);
 
         // Store Supabase session tokens
-        storage.setItem('accessToken', data.access_token);
-        storage.setItem('refreshToken', data.refresh_token);
+        storage.setItem('accessToken', session.access_token);
+        storage.setItem('refreshToken', session.refresh_token);
 
         return {
           success: true,
           data: {
-            user: {
-              id: data.user.id,
-              full_name: data.user.user_metadata?.full_name || email,
-              email: data.user.email
-            },
-            session: {
-              access_token: data.access_token,
-              refresh_token: data.refresh_token
-            }
+            user,
+            session
           }
         };
       }
 
-      // Supabase returns an error_code / msg on failure, not a `success` flag.
-      // Map its "invalid credentials" case to the UI's expected shape.
-      if (data.error_code === 'invalid_credentials' || response.status === 400) {
+      // The backend tells "no such account" apart from "wrong password",
+      // so the page can offer to sign the person up instead.
+      if (data.code === 'USER_NOT_FOUND' || response.status === 404) {
         return { success: false, code: 'USER_NOT_FOUND' };
       }
 
       console.error('Login rejected:', data);
-      return { success: false, error: data.msg || 'unknown' };
+      return { success: false, error: data.error || 'unknown' };
 
     } catch (error) {
       console.error('Login error:', error);
