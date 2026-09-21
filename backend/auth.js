@@ -382,23 +382,72 @@ router.get('/me', async (req, res) => {
 
 // POST /api/auth/forgot-password
 // This route will initiate the password reset process for a user by sending a password reset email. It uses Supabase Auth's resetPasswordForEmail method to send the email with a redirect link to the password reset page.
+// Sites allowed to receive a password reset link. The link is emailed, so the
+// target is never taken from the request without checking it against this list.
+const ALLOWED_RESET_ORIGINS = [
+  'https://storybond-frontend.vercel.app',
+  'http://localhost:3000',
+  'http://127.0.0.1:5500',
+  'http://localhost:5500'
+];
+
 router.post('/forgot-password', async (req, res) => {
   try {
-    const email = String(req.body.email || '')
-      .trim()
-      .toLowerCase();
+    // Accept a username or an email, the same as the login route, because the
+    // login page asks for either and people reuse whichever they signed in with.
+    const identifier = String(
+      req.body.loginIdentifier || req.body.email || ''
+    ).trim();
 
-    if (!email) {
+    if (!identifier) {
       return res.status(400).json({
         success: false,
-        error: 'Email is required.'
+        error: 'Username or email is required.'
       });
     }
+
+    let email = identifier.toLowerCase();
+
+    if (!identifier.includes('@')) {
+      const { data: parentLookup, error: lookupError } =
+        await supabaseAdmin
+          .from('parents')
+          .select('email')
+          .eq('username', identifier)
+          .maybeSingle();
+
+      if (lookupError) {
+        console.error('Password reset lookup error:', lookupError);
+
+        return res.status(500).json({
+          success: false,
+          error: 'Password reset is temporarily unavailable.'
+        });
+      }
+
+      // Say the same thing whether or not the username exists, so this route
+      // cannot be used to discover which accounts are registered.
+      if (!parentLookup) {
+        return res.status(200).json({
+          success: true,
+          message:
+            'If an account exists for that username or email, a password reset link has been sent.'
+        });
+      }
+
+      email = parentLookup.email;
+    }
+
+    const requestOrigin = String(req.headers.origin || '');
+
+    const frontendUrl = ALLOWED_RESET_ORIGINS.includes(requestOrigin)
+      ? requestOrigin
+      : process.env.FRONTEND_URL || 'http://127.0.0.1:5500';
 
     const { error } = await supabaseAuth.auth.resetPasswordForEmail(
       email,
       {
-        redirectTo: `${process.env.FRONTEND_URL || 'http://127.0.0.1:5500'}/reset_password.html`
+        redirectTo: `${frontendUrl}/reset_password.html`
       }
     );
 
@@ -413,7 +462,8 @@ router.post('/forgot-password', async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: 'If an account exists for that email, a password reset link has been sent.'
+      message:
+        'If an account exists for that username or email, a password reset link has been sent.'
     });
 
   } catch (error) {

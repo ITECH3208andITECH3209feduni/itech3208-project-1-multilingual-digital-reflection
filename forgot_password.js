@@ -12,19 +12,19 @@ form.addEventListener('submit', async (event) => {
   message.textContent = 'Sending reset link...';
   // get the email value from the input field
   try {
+    // Send this through the backend, which accepts a username or an email.
+    // Supabase on its own only accepts an email.
     const response = await fetch(
-      `${SUPABASE_URL}/auth/v1/recover`,
+      `${API_URL}/api/auth/forgot-password`,
       {
         method: 'POST',
 
         headers: {
-          'Content-Type': 'application/json',
-          apikey: SUPABASE_ANON_KEY
+          'Content-Type': 'application/json'
         },
 
         body: JSON.stringify({
-          email,
-          redirect_to: `${window.location.origin}/reset_password.html`
+          loginIdentifier: email
         })
       }
     );
