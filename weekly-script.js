@@ -264,10 +264,18 @@ const WeeklyRecap = {
                         );
 
 
+                    // Keep the translation key in step with the label, so
+                    // switching language while the form is open does not
+                    // reset the button to "Open Progress Check-In".
+                    toggleProgressFormBtn.setAttribute(
+                        'data-i18n',
+                        isOpen ? 'close_checkin' : 'open_checkin'
+                    );
+
                     toggleProgressFormBtn.textContent =
                         isOpen
-                            ? '✕ Close Progress Check-In'
-                            : '🌱 Open Progress Check-In';
+                            ? t('close_checkin')
+                            : t('open_checkin');
                 }
             );
         }
@@ -1800,7 +1808,7 @@ const WeeklyRecap = {
         if (weekRangeEl) {
 
             weekRangeEl.textContent =
-                'Select a child to view their week';
+                t('select_child_week');
         }
 
 
@@ -1891,7 +1899,7 @@ async function loadChildrenIntoSidebar() {
             );
 
         childrenContainer.innerHTML =
-            '<p class="nav-heading">CHILDREN</p>';
+            `<p class="nav-heading" data-i18n="nav_children">${t('nav_children')}</p>`;
 
         const children =
             data.data || [];
@@ -1905,7 +1913,7 @@ async function loadChildrenIntoSidebar() {
                 'no-children';
 
             empty.textContent =
-                'No children yet';
+                t('no_children');
 
             childrenContainer.appendChild(
                 empty
@@ -2144,3 +2152,15 @@ document
             );
         }
     );
+
+// =====================================================
+// LANGUAGE CHANGE
+// =====================================================
+
+// The sidebar child list is drawn from data, so it is rebuilt here rather
+// than by the page-wide translation pass.
+document.addEventListener('storybond:languagechange', async () => {
+    if (!getAccessToken()) return;
+
+    await loadChildrenIntoSidebar();
+});

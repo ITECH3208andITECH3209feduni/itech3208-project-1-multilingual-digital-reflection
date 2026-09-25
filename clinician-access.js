@@ -1006,3 +1006,12 @@ document.addEventListener(
         ]);
     }
 );
+
+// Redraw the child picker and access list when the language changes.
+document.addEventListener('storybond:languagechange', async () => {
+    if (!getParentUserId() || !getParentAccessToken()) return;
+
+    await loadChildren();
+
+    await loadClinicianAccess();
+});

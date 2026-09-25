@@ -985,3 +985,36 @@ label:not(.remember-row) {
     font-size: 25px;
   }
 }
+/* ── Language switch (EN / TR) ── */
+/* The clinician pages use their own stylesheet, so the switcher that the
+   parent pages get from styles.css is defined here too. */
+
+.lang-switcher-auth {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+
+  margin: 14px auto 0;
+}
+
+.lang-switcher-auth .lang-btn {
+  padding: 8px 22px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #fff;
+
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  color: #7b7b93;
+
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.lang-switcher-auth .lang-btn.active {
+  background: linear-gradient(135deg, #9674d9, #6db5e0);
+  color: #fff;
+}

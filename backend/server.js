@@ -2057,6 +2057,151 @@ app.get(
   }
 );
 
+// ============= TRANSLATION =============
+//
+// Translates what parents write (entry titles and stories) between English
+// and Turkish, so a clinician or family member reading in the other language
+// can follow along. The static labels around it come from i18n.js instead.
+//
+// MyMemory is used because it is free and needs no API key. It allows a few
+// thousand characters per day per address, so results are cached in memory
+// and anything long is refused rather than silently cut short.
+
+const TRANSLATION_CACHE = new Map();
+const TRANSLATION_CACHE_LIMIT = 500;
+const TRANSLATION_MAX_LENGTH = 2000;
+const SUPPORTED_LANGUAGES = ['en', 'tr'];
+
+// Parents and clinicians both read entries, so either signed-in role may
+// translate one. Anyone without a valid token is turned away.
+async function requireParentOrClinician(req, res, next) {
+  const authorization = req.headers.authorization;
+
+  if (!authorization?.startsWith('Bearer ')) {
+    return res.status(401).json({
+      success: false,
+      error: 'Authentication required.'
+    });
+  }
+
+  const { data: authData, error: authError } =
+    await supabaseAdmin.auth.getUser(authorization.slice(7));
+
+  if (authError || !authData.user) {
+    return res.status(401).json({
+      success: false,
+      error: 'Your session is invalid or has expired.'
+    });
+  }
+
+  req.authUserId = authData.user.id;
+
+  next();
+}
+
+app.post('/api/translate', requireParentOrClinician, async (req, res) => {
+  try {
+    const text = String(req.body.text || '').trim();
+    const from = String(req.body.from || 'en').toLowerCase();
+    const to = String(req.body.to || 'tr').toLowerCase();
+
+    if (!text) {
+      return res.status(400).json({
+        success: false,
+        error: 'There is nothing to translate.'
+      });
+    }
+
+    if (
+      !SUPPORTED_LANGUAGES.includes(from) ||
+      !SUPPORTED_LANGUAGES.includes(to)
+    ) {
+      return res.status(400).json({
+        success: false,
+        error: 'Only English and Turkish are supported.'
+      });
+    }
+
+    if (from === to) {
+      return res.json({ success: true, data: { text, cached: false } });
+    }
+
+    if (text.length > TRANSLATION_MAX_LENGTH) {
+      return res.status(413).json({
+        success: false,
+        error: `Entries longer than ${TRANSLATION_MAX_LENGTH} characters cannot be translated.`
+      });
+    }
+
+    const cacheKey = `${from}|${to}|${text}`;
+
+    if (TRANSLATION_CACHE.has(cacheKey)) {
+      return res.json({
+        success: true,
+        data: { text: TRANSLATION_CACHE.get(cacheKey), cached: true }
+      });
+    }
+
+    const params = new URLSearchParams({
+      q: text,
+      langpair: `${from}|${to}`
+    });
+
+    // A contact address raises the free daily allowance. Optional.
+    if (process.env.TRANSLATION_CONTACT_EMAIL) {
+      params.set('de', process.env.TRANSLATION_CONTACT_EMAIL);
+    }
+
+    const response = await fetch(
+      `https://api.mymemory.translated.net/get?${params.toString()}`,
+      { signal: AbortSignal.timeout(12000) }
+    );
+
+    const payload = await response.json();
+    const translated = payload?.responseData?.translatedText;
+
+    // MyMemory answers 200 with the quota message in the body, so the text
+    // itself has to be checked rather than just the status code.
+    const quotaHit =
+      typeof translated === 'string' &&
+      translated.toUpperCase().includes('MYMEMORY WARNING');
+
+    if (!response.ok || !translated || quotaHit) {
+      console.error(
+        'Translation failed:',
+        response.status,
+        payload?.responseDetails || translated
+      );
+
+      return res.status(503).json({
+        success: false,
+        error:
+          "The translation service is unavailable right now. Please try again later."
+      });
+    }
+
+    // Keep the cache from growing without limit: drop the oldest entry.
+    if (TRANSLATION_CACHE.size >= TRANSLATION_CACHE_LIMIT) {
+      TRANSLATION_CACHE.delete(TRANSLATION_CACHE.keys().next().value);
+    }
+
+    TRANSLATION_CACHE.set(cacheKey, translated);
+
+    return res.json({
+      success: true,
+      data: { text: translated, cached: false }
+    });
+
+  } catch (error) {
+    console.error('Translation error:', error);
+
+    return res.status(503).json({
+      success: false,
+      error: 'The translation service could not be reached.'
+    });
+  }
+});
+
 // ============= TEST ROUTES =============
 // Test route to check if the server is running
 app.get('/api/test', (req, res) => {

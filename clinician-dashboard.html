@@ -5,24 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StoryBond - Clinician Dashboard</title>
   <link rel="stylesheet" href="clinician.css">
+    <link rel="stylesheet" href="translate.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="clinician-dashboard-page">
   <div class="rainbow-top"></div>
+  <div class="lang-switcher-auth clinician-lang">
+    <button class="lang-btn active">EN</button>
+    <button class="lang-btn">TR</button>
+  </div>
 
   <div class="clinician-layout">
     <aside class="clinician-sidebar">
       <div class="clinician-brand sidebar-brand">
         <div class="clinician-logo">🦊</div>
-        <div><h1>StoryBond</h1><p>Clinician Portal</p></div>
+        <div><h1>StoryBond</h1><p data-i18n="clinician_portal">Clinician Portal</p></div>
       </div>
 
       <div class="sidebar-section">
-        <p class="sidebar-label">SHARED CHILDREN</p>
+        <p class="sidebar-label" data-i18n="shared_children">SHARED CHILDREN</p>
         <div id="sharedChildrenList" class="shared-children-list">
-          <div class="sidebar-empty">Loading...</div>
+          <div class="sidebar-empty" data-i18n="loading">Loading...</div>
         </div>
       </div>
 
@@ -34,32 +39,32 @@
         </div>
       </div>
 
-      <button id="clinicianLogoutButton" class="secondary-clinician-btn full-width" type="button">Log out</button>
+      <button id="clinicianLogoutButton" class="secondary-clinician-btn full-width" type="button" data-i18n="log_out">Log out</button>
     </aside>
 
     <main class="clinician-main">
       <header class="clinician-page-header">
         <div>
-          <span class="eyebrow">READ-ONLY ACCESS</span>
-          <h2 id="dashboardTitle">Clinician Dashboard</h2>
-          <p id="dashboardSubtitle">Select a child shared with you to review their StoryBond information.</p>
+          <span class="eyebrow" data-i18n="readonly_access">READ-ONLY ACCESS</span>
+          <h2 id="dashboardTitle" data-i18n="clinician_dashboard_title">Clinician Dashboard</h2>
+          <p id="dashboardSubtitle" data-i18n="clinician_dashboard_sub">Select a child shared with you to review their StoryBond information.</p>
         </div>
-        <div class="readonly-badge">🔒 Read only</div>
+        <div class="readonly-badge" data-i18n="read_only_badge">🔒 Read only</div>
       </header>
 
       <section id="noChildState" class="empty-state-card">
         <div class="empty-state-icon">👶</div>
-        <h3>No child selected</h3>
-        <p>Choose a child from the left to view journal entries and weekly progress.</p>
+        <h3 data-i18n="no_child_selected">No child selected</h3>
+        <p data-i18n="no_child_selected_sub">Choose a child from the left to view journal entries and weekly progress.</p>
       </section>
 
       <section id="childContent" class="child-content" hidden>
         <section class="child-summary-card">
           <div class="child-summary-avatar" id="selectedChildAvatar">👶</div>
           <div>
-            <span class="eyebrow">SHARED PROFILE</span>
+            <span class="eyebrow" data-i18n="shared_profile">SHARED PROFILE</span>
             <h3 id="selectedChildName">Child</h3>
-            <p id="selectedChildDetails">StoryBond information shared by parent</p>
+            <p id="selectedChildDetails" data-i18n="shared_by_parent">StoryBond information shared by parent</p>
           </div>
           <div class="permission-pills" id="permissionPills"></div>
         </section>
@@ -69,12 +74,12 @@
             <div class="panel-heading">
               <div>
                 <span class="panel-icon">📖</span>
-                <div><h3>Journal Entries</h3><p>Parent-recorded memories and milestones</p></div>
+                <div><h3 data-i18n="journal_entries_title">Journal Entries</h3><p data-i18n="journal_entries_sub">Parent-recorded memories and milestones</p></div>
               </div>
               <span class="count-badge" id="journalCount">0</span>
             </div>
             <div id="journalEntriesContent" class="panel-content">
-              <div class="content-loading">Select a child to load entries.</div>
+              <div class="content-loading" data-i18n="select_child_entries">Select a child to load entries.</div>
             </div>
           </section>
 
@@ -82,12 +87,12 @@
             <div class="panel-heading">
               <div>
                 <span class="panel-icon">📊</span>
-                <div><h3>Weekly Progress</h3><p>Parent weekly check-ins</p></div>
+                <div><h3 data-i18n="weekly_progress_title">Weekly Progress</h3><p data-i18n="weekly_progress_sub">Parent weekly check-ins</p></div>
               </div>
               <span class="count-badge" id="progressCount">0</span>
             </div>
             <div id="weeklyProgressContent" class="panel-content">
-              <div class="content-loading">Select a child to load progress.</div>
+              <div class="content-loading" data-i18n="select_child_progress">Select a child to load progress.</div>
             </div>
           </section>
         </div>
@@ -96,6 +101,8 @@
   </div>
 
   <script src="config.js"></script>
+  <script src="translate.js"></script>
   <script src="clinician-dashboard.js"></script>
+  <script src="i18n.js"></script>
 </body>
 </html>

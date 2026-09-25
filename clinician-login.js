@@ -29,14 +29,14 @@ async function loginClinician(email, password, rememberMe) {
   const data = await response.json();
 
   if (!response.ok || !data.success) {
-    throw new Error(data.error || 'Unable to sign in.');
+    throw new Error(data.error || t('unable_signin'));
   }
 
   const clinician = data.data?.user;
   const session = data.data?.session;
 
   if (!clinician || !session?.access_token) {
-    throw new Error('The clinician session could not be created.');
+    throw new Error(t('session_not_created'));
   }
 
   clearClinicianSession();
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     message.textContent = '';
     message.className = 'form-message';
     loginButton.disabled = true;
-    loginButton.textContent = 'Signing in...';
+    loginButton.textContent = t('signing_in');
 
     try {
       await loginClinician(
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rememberMe.checked
       );
 
-      message.textContent = '✓ Sign in successful.';
+      message.textContent = t('signin_success');
       message.classList.add('success');
 
       window.location.href = 'clinician-dashboard.html';
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
       message.classList.add('error');
     } finally {
       loginButton.disabled = false;
-      loginButton.textContent = 'Sign in';
+      loginButton.textContent = t('signin_btn');
     }
   });
 });

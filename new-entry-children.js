@@ -242,7 +242,7 @@ async function loadChildren() {
 
 
             childrenContainer.innerHTML =
-                '<p class="nav-heading">CHILDREN</p>';
+                `<p class="nav-heading" data-i18n="nav_children">${t('nav_children')}</p>`;
 
 
             children.forEach(child => {
@@ -541,3 +541,8 @@ document.addEventListener(
         updateHeaderDate();
     }
 );
+
+// Redraw the sidebar child list when the language changes.
+document.addEventListener('storybond:languagechange', () => {
+    loadChildren();
+});

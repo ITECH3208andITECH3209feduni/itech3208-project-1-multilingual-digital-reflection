@@ -539,7 +539,7 @@
                         </div>
 
                         <button type="button" class="open-progress-btn" id="toggleProgressFormBtn" aria-expanded="false"
-                            aria-controls="weeklyProgressForm">
+                            aria-controls="weeklyProgressForm" data-i18n="open_checkin">
                             🌱 Open Progress Check-In
                         </button>
 
@@ -716,7 +716,7 @@
 
 
                     childrenContainer.innerHTML =
-                        '<p class="nav-heading">CHILDREN</p>';
+                        `<p class="nav-heading" data-i18n="nav_children">${t('nav_children')}</p>`;
 
 
                     data.data.forEach(

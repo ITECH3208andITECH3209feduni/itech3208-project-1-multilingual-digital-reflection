@@ -11,41 +11,46 @@
 </head>
 <body>
 <div class="rainbow-top"></div>
+<div class="lang-switcher-auth clinician-lang">
+<button class="lang-btn active">EN</button>
+<button class="lang-btn">TR</button>
+</div>
 <div class="access-page">
 <header class="access-header">
-<div class="brand-block"><div class="brand-logo">🦊</div><div><h1>StoryBond</h1><p>Manage Clinician Access</p></div></div>
-<a href="index.html" class="back-link">← Back to Home</a>
+<div class="brand-block"><div class="brand-logo">🦊</div><div><h1>StoryBond</h1><p data-i18n="manage_clinician_access">Manage Clinician Access</p></div></div>
+<a href="index.html" class="back-link" data-i18n="back_to_home">← Back to Home</a>
 </header>
 <main class="access-main">
 <section class="intro-card">
-<div><span class="eyebrow">PARENT CONTROLS</span><h2>Share a child's StoryBond</h2><p>You choose which child a clinician can view and exactly what information they can access.</p></div>
-<div class="security-pill">🔒 Parent controlled</div>
+<div><span class="eyebrow" data-i18n="parent_controls">PARENT CONTROLS</span><h2 data-i18n="share_child_title">Share a child's StoryBond</h2><p data-i18n="share_child_sub">You choose which child a clinician can view and exactly what information they can access.</p></div>
+<div class="security-pill" data-i18n="parent_controlled">🔒 Parent controlled</div>
 </section>
 <div class="access-grid">
 <section class="access-panel">
-<div class="panel-heading"><div><span class="panel-step">1</span><div><h3>Grant or update access</h3><p>Select one child and enter the clinician email.</p></div></div></div>
+<div class="panel-heading"><div><span class="panel-step">1</span><div><h3 data-i18n="grant_update_access">Grant or update access</h3><p data-i18n="grant_update_sub">Select one child and enter the clinician email.</p></div></div></div>
 <form id="clinicianAccessForm" class="access-form">
-<label for="childSelect">Child</label>
-<select id="childSelect" required><option value="">Loading children...</option></select>
-<label for="clinicianEmail">Clinician email</label>
+<label for="childSelect" data-i18n="child_label">Child</label>
+<select id="childSelect" required><option value="" data-i18n="loading_children">Loading children...</option></select>
+<label for="clinicianEmail" data-i18n="clinician_email_label">Clinician email</label>
 <input type="email" id="clinicianEmail" placeholder="clinician@example.com" autocomplete="email" required>
 <fieldset class="permission-fieldset">
-<legend>What can they view?</legend>
-<label class="permission-option"><input type="checkbox" id="canViewJournal" checked><span class="permission-icon">📖</span><span><strong>Journal entries</strong><small>Memories, milestones and notes</small></span></label>
-<label class="permission-option"><input type="checkbox" id="canViewWeeklyProgress" checked><span class="permission-icon">📊</span><span><strong>Weekly progress</strong><small>Weekly check-ins and parent notes</small></span></label>
+<legend data-i18n="what_can_view">What can they view?</legend>
+<label class="permission-option"><input type="checkbox" id="canViewJournal" checked><span class="permission-icon">📖</span><span><strong data-i18n="perm_journal">Journal entries</strong><small data-i18n="perm_journal_sub">Memories, milestones and notes</small></span></label>
+<label class="permission-option"><input type="checkbox" id="canViewWeeklyProgress" checked><span class="permission-icon">📊</span><span><strong data-i18n="perm_weekly">Weekly progress</strong><small data-i18n="perm_weekly_sub">Weekly check-ins and parent notes</small></span></label>
 </fieldset>
-<button type="submit" class="primary-btn" id="grantAccessButton">Grant access</button>
+<button type="submit" class="primary-btn" id="grantAccessButton" data-i18n="grant_access_btn">Grant access</button>
 <p id="accessFormMessage" class="form-message" aria-live="polite"></p>
 </form>
 </section>
 <section class="access-panel">
-<div class="panel-heading"><div><span class="panel-step">2</span><div><h3>Current clinician access</h3><p>Review active and previously revoked access.</p></div></div><button type="button" id="refreshAccessButton" class="refresh-btn">↻ Refresh</button></div>
-<div id="accessList" class="access-list"><div class="loading-state">Loading access records...</div></div>
+<div class="panel-heading"><div><span class="panel-step">2</span><div><h3 data-i18n="current_access">Current clinician access</h3><p data-i18n="current_access_sub">Review active and previously revoked access.</p></div></div><button type="button" id="refreshAccessButton" class="refresh-btn" data-i18n="refresh_btn">↻ Refresh</button></div>
+<div id="accessList" class="access-list"><div class="loading-state" data-i18n="loading_access_records">Loading access records...</div></div>
 </section>
 </div>
 </main>
 </div>
 <script src="config.js"></script>
 <script src="clinician-access.js"></script>
+<script src="i18n.js"></script>
 </body>
 </html>
