@@ -271,6 +271,24 @@ router.post('/login', async (req, res) => {
       });
 
     if (authError || !authData.user || !authData.session) {
+      // Supabase refuses an unconfirmed account with a generic error. Saying
+      // "wrong password" there sends people round in circles, because no
+      // password will ever work until the email is confirmed.
+      const isUnconfirmed =
+        authError?.code === 'email_not_confirmed' ||
+        /email not confirmed/i.test(authError?.message || '');
+
+      if (isUnconfirmed) {
+        console.error('Login blocked, email not confirmed:', email);
+
+        return res.status(403).json({
+          success: false,
+          error:
+            'This account has not been confirmed yet. Please open the confirmation link in your email, then log in.',
+          code: 'EMAIL_NOT_CONFIRMED'
+        });
+      }
+
       return res.status(401).json({
         success: false,
         error: 'Invalid username or password.'
