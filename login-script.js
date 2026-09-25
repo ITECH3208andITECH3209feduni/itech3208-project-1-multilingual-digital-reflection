@@ -119,8 +119,10 @@ const Auth = {
       }
 
       // The backend tells "no such account" apart from "wrong password",
-      // so the page can offer to sign the person up instead.
-      if (data.code === 'USER_NOT_FOUND' || response.status === 404) {
+      // so the page can offer to sign the person up instead. Only its explicit
+      // code means that: a 404 is also returned when the account exists but has
+      // no StoryBond profile, and that needs its own message, not "sign up".
+      if (data.code === 'USER_NOT_FOUND') {
         return { success: false, code: 'USER_NOT_FOUND' };
       }
 
@@ -192,6 +194,16 @@ const App = {
       DOM.showError(email, "❌ This user doesn't exist!", emailErr);
       signupLink.href = `signup.html?email=${encodeURIComponent(emailVal)}`;
       DOM.show(signupPrompt, 'is-visible');
+    } else if (result.error === 'network') {
+      DOM.showError(
+        email,
+        '❌ Cannot reach StoryBond right now. Check your connection and try again.',
+        emailErr
+      );
+    } else if (result.error && result.error !== 'unknown') {
+      // Show what the server actually said (unconfirmed email, missing
+      // profile, ...) instead of blaming the password for every failure.
+      DOM.showError(email, `❌ ${result.error}`, emailErr);
     } else {
       DOM.showError(email, '❌ Wrong username or password. Try again!', emailErr);
     }
