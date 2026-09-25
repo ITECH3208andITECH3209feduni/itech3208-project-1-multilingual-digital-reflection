@@ -2000,30 +2000,9 @@ async function loadChildrenIntoSidebar() {
                         );
 
 
-                        // Use the same storage location
-                        // as the current login session.
-                        const storage =
-                            localStorage.getItem(
-                                'accessToken'
-                            )
-                                ? localStorage
-                                : sessionStorage;
-
-
-                        storage.setItem(
-                            'selectedChildId',
-                            child.id
-                        );
-
-                        storage.setItem(
-                            'selectedChildName',
-                            child.name
-                        );
-
-                        storage.setItem(
-                            'selectedChildAvatar',
-                            child.avatar || '👶'
-                        );
+                        // Stored in one place only, so a leftover choice
+                        // in the other storage cannot override it.
+                        storeSelectedChild(child);
 
 
                         // Reset back to current week

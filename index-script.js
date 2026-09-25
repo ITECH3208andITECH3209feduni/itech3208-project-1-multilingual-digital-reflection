@@ -350,30 +350,7 @@ function selectChild(
     childElement
 ) {
 
-    const storage =
-        localStorage.getItem(
-            'accessToken'
-        )
-            ? localStorage
-            : sessionStorage;
-
-
-    storage.setItem(
-        'selectedChildId',
-        child.id
-    );
-
-
-    storage.setItem(
-        'selectedChildName',
-        child.name
-    );
-
-
-    storage.setItem(
-        'selectedChildAvatar',
-        child.avatar || '👶'
-    );
+    storeSelectedChild(child);
 
 
     // Existing clinician-access display
