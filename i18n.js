@@ -84,6 +84,8 @@ const TRANSLATIONS = {
     login_btn: "🚀 Let's Go!",
     login_footer_text: 'New here?',
     login_footer_link: 'Create an account!',
+    signup_prompt_text: 'No account with that email yet.',
+    signup_prompt_link: 'Create an account →',
 
     // signup.html
     signup_subtitle: 'Create your parent account 🎨',
@@ -327,6 +329,8 @@ const TRANSLATIONS = {
     login_btn: '🚀 Hadi Başlayalım!',
     login_footer_text: 'Yeni misiniz?',
     login_footer_link: 'Hesap oluşturun!',
+    signup_prompt_text: 'Bu e-postayla kayıtlı hesap yok.',
+    signup_prompt_link: 'Hesap oluştur →',
 
     // signup.html
     signup_subtitle: 'Ebeveyn hesabınızı oluşturun 🎨',
@@ -528,7 +532,7 @@ function currentLang() {
   return localStorage.getItem('storybondLang') || 'en';
 }
 
-// Look up one phrase from the page scripts, e.g. alert(t('select_child_first')).
+// Look up one phrase from the page scripts, e.g. alert(t('alert_select_child')).
 // Falls back to English, then to the key itself, so a missing translation
 // never blanks out the message.
 function t(key, fallback) {
