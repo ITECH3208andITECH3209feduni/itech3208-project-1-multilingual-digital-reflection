@@ -33,22 +33,7 @@ function getActiveStorage() {
 
 function saveSelectedChild(child) {
 
-    const storage = getActiveStorage();
-
-    storage.setItem(
-        'selectedChildId',
-        child.id
-    );
-
-    storage.setItem(
-        'selectedChildName',
-        child.name
-    );
-
-    storage.setItem(
-        'selectedChildAvatar',
-        child.avatar || '👶'
-    );
+    storeSelectedChild(child);
 
     // Store selected child in the journal form
     const hiddenChildInput =

@@ -4,7 +4,12 @@ function logoutUser() {
     'userName',
     'userEmail',
     'accessToken',
-    'refreshToken'
+    'refreshToken',
+    // The chosen child belongs to the session too: leaving it behind meant
+    // the next person to log in inherited it, and it overrode their own pick.
+    'selectedChildId',
+    'selectedChildName',
+    'selectedChildAvatar'
   ];
 
   // Clear persistent login data

@@ -100,6 +100,14 @@ const Auth = {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('refreshToken');
 
+        // The previously chosen child belongs to whoever was logged in
+        // before. Left behind, it overrides the child this person picks.
+        ['selectedChildId', 'selectedChildName', 'selectedChildAvatar']
+          .forEach((key) => {
+            localStorage.removeItem(key);
+            sessionStorage.removeItem(key);
+          });
+
         // Store current user
         storage.setItem('userId', user.id);
         storage.setItem('userName', user.full_name || user.username || loginIdentifier);
