@@ -41,7 +41,7 @@ function escapeHtml(value) {
 
 function formatDate(dateValue) {
   if (!dateValue) {
-    return 'Date not recorded';
+    return t('date_not_recorded');
   }
 
   const date = new Date(dateValue);
@@ -50,11 +50,14 @@ function formatDate(dateValue) {
     return dateValue;
   }
 
-  return date.toLocaleDateString('en-AU', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric'
-  });
+  return date.toLocaleDateString(
+    currentLang() === 'tr' ? 'tr-TR' : 'en-AU',
+    {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    }
+  );
 }
 
 function makeInitials(name) {
@@ -104,7 +107,7 @@ async function clinicianFetch(path) {
   if (!response.ok || !data.success) {
     throw new Error(
       data.error ||
-      'Unable to load clinician data.'
+      t('unable_load_clinician')
     );
   }
 
@@ -115,12 +118,12 @@ function loadClinicianAccount() {
   const name =
     getClinicianStorageValue(
       'clinicianName'
-    ) || 'Clinician';
+    ) || t('clinician_fallback');
 
   const profession =
     getClinicianStorageValue(
       'clinicianProfession'
-    ) || 'Clinician';
+    ) || t('clinician_fallback');
 
   const organisation =
     getClinicianStorageValue(
@@ -159,7 +162,7 @@ async function loadSharedChildren() {
     if (!grants.length) {
       container.innerHTML = `
         <div class="sidebar-empty">
-          No children are currently shared with you.
+          ${t('no_children_shared')}
         </div>
       `;
 
@@ -199,12 +202,12 @@ async function loadSharedChildren() {
           <span class="shared-child-text">
             <strong>
               ${escapeHtml(
-                child.name || 'Child'
+                child.name || t('child_fallback')
               )}
             </strong>
 
             <small>
-              Shared profile
+              ${t(shared_profile_label)}
             </small>
           </span>
         `;
@@ -261,8 +264,14 @@ async function loadSharedChildren() {
   }
 }
 
+// The child currently on screen, so the page can be redrawn in the other
+// language without asking the server for everything again.
+let activeGrant = null;
+
 async function selectChild(grant) {
   const child = grant.children;
+
+  activeGrant = grant;
 
   document.getElementById(
     'noChildState'
@@ -280,33 +289,45 @@ async function selectChild(grant) {
   document.getElementById(
     'selectedChildName'
   ).textContent =
-    child.name || 'Child';
+    child.name || t('child_fallback');
 
-  document.getElementById(
+  const title = document.getElementById(
     'dashboardTitle'
-  ).textContent =
-    `${child.name || 'Child'}'s StoryBond`;
+  );
 
-  document.getElementById(
+  const details = document.getElementById(
     'selectedChildDetails'
-  ).textContent =
+  );
+
+  // These two carry the child's own details now, so the page-wide
+  // translation pass must stop overwriting them with the generic heading.
+  title.removeAttribute('data-i18n');
+  details.removeAttribute('data-i18n');
+
+  title.textContent = t('child_storybond_title').replace(
+    '{name}',
+    child.name || t('child_fallback')
+  );
+
+  details.textContent =
     child.date_of_birth
-      ? `Born ${formatDate(
-          child.date_of_birth
-        )}`
-      : 'Date of birth not recorded';
+      ? t('born_on').replace(
+          '{date}',
+          formatDate(child.date_of_birth)
+        )
+      : t('dob_not_recorded');
 
   renderPermissionPills(grant);
 
   document.getElementById(
     'journalEntriesContent'
   ).innerHTML =
-    '<div class="content-loading">Loading journal entries...</div>';
+    `<div class="content-loading">${t('loading_entries')}</div>`;
 
   document.getElementById(
     'weeklyProgressContent'
   ).innerHTML =
-    '<div class="content-loading">Loading weekly progress...</div>';
+    `<div class="content-loading">${t('loading_weekly')}</div>`;
 
   await Promise.all([
     loadJournalEntries(
@@ -326,7 +347,7 @@ function renderPermissionPills(grant) {
 
   if (grant.can_view_journal) {
     pills.push(
-      '<span class="permission-pill">📖 Journal</span>'
+      `<span class="permission-pill">${t(pill_journal)}</span>`
     );
   }
 
@@ -334,7 +355,7 @@ function renderPermissionPills(grant) {
     grant.can_view_weekly_progress
   ) {
     pills.push(
-      '<span class="permission-pill">📊 Weekly Progress</span>'
+      `<span class="permission-pill">${t(pill_weekly)}</span>`
     );
   }
 
@@ -363,7 +384,7 @@ async function loadJournalEntries(
 
     container.innerHTML = `
       <div class="permission-denied-card">
-        🔒 Journal access has not been shared by the parent.
+        ${t('journal_not_shared')}
       </div>
     `;
 
@@ -382,7 +403,7 @@ async function loadJournalEntries(
     if (!entries.length) {
       container.innerHTML = `
         <div class="content-empty">
-          No journal entries have been recorded yet.
+          ${t('no_journal_entries_yet')}
         </div>
       `;
 
@@ -481,7 +502,7 @@ async function loadWeeklyProgress(
 
     container.innerHTML = `
       <div class="permission-denied-card">
-        🔒 Weekly progress access has not been shared by the parent.
+        ${t('weekly_not_shared')}
       </div>
     `;
 
@@ -502,7 +523,7 @@ async function loadWeeklyProgress(
 
       container.innerHTML = `
         <div class="content-empty">
-          No weekly progress checks have been recorded yet.
+          ${t('no_weekly_yet')}
         </div>
       `;
 
@@ -637,12 +658,11 @@ function showNoAccessState() {
     </div>
 
     <h3>
-      No active child access
+      ${t('no_active_access')}
     </h3>
 
     <p>
-      A parent has not currently shared a child profile
-      with this clinician account.
+      ${t('no_active_access_sub')}
     </p>
   `;
 
@@ -686,3 +706,16 @@ document.addEventListener(
     await loadSharedChildren();
   }
 );
+// Redraw in the newly chosen language. The lists and cards below are built
+// from data, so the page-wide translation pass cannot relabel them.
+document.addEventListener('storybond:languagechange', async () => {
+  if (!getClinicianAccessToken()) return;
+
+  loadClinicianAccount();
+
+  await loadSharedChildren();
+
+  if (activeGrant) {
+    await selectChild(activeGrant);
+  }
+});

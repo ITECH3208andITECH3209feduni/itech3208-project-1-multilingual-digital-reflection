@@ -422,7 +422,7 @@ const ChildForm = {
 
 
             alert(
-                `✅ ${name} has been added successfully!`
+                t('child_added').replace('{name}', name)
             );
 
 
@@ -441,7 +441,7 @@ const ChildForm = {
             );
 
             alert(
-                `❌ Error: ${error.message}`
+                t('error_prefix').replace('{message}', error.message)
             );
 
 
@@ -504,7 +504,7 @@ document.addEventListener(
                 'click',
                 () => {
                     alert(
-                        'Opening profile settings...'
+                        t('opening_profile')
                     );
                 }
             );

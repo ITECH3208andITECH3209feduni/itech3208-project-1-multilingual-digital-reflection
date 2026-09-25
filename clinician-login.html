@@ -12,41 +12,46 @@
 </head>
 <body class="clinician-auth-page">
   <div class="rainbow-top"></div>
+  <div class="lang-switcher-auth">
+    <button class="lang-btn active">EN</button>
+    <button class="lang-btn">TR</button>
+  </div>
   <main class="clinician-auth-shell">
     <section class="clinician-auth-card">
       <div class="clinician-brand">
         <div class="clinician-logo">🦊</div>
-        <div><h1>StoryBond</h1><p>Clinician Access</p></div>
+        <div><h1>StoryBond</h1><p data-i18n="clinician_access_tagline">Clinician Access</p></div>
       </div>
 
       <div class="clinician-auth-heading">
-        <span class="eyebrow">READ-ONLY PORTAL</span>
-        <h2>Clinician sign in</h2>
-        <p>Sign in to view child information that a parent has explicitly shared with you.</p>
+        <span class="eyebrow" data-i18n="clinician_portal_eyebrow">READ-ONLY PORTAL</span>
+        <h2 data-i18n="clinician_signin_title">Clinician sign in</h2>
+        <p data-i18n="clinician_signin_sub">Sign in to view child information that a parent has explicitly shared with you.</p>
       </div>
 
       <form id="clinicianLoginForm" class="clinician-form">
-        <label for="clinicianEmail">Email</label>
+        <label for="clinicianEmail" data-i18n="email_label">Email</label>
         <input type="email" id="clinicianEmail" autocomplete="email" placeholder="clinician@example.com" required>
 
-        <label for="clinicianPassword">Password</label>
+        <label for="clinicianPassword" data-i18n="password_label">Password</label>
         <input type="password" id="clinicianPassword" autocomplete="current-password" placeholder="Enter your password" required>
 
         <label class="remember-row">
           <input type="checkbox" id="clinicianRememberMe">
-          <span>Remember me on this device</span>
+          <span data-i18n="remember_device">Remember me on this device</span>
         </label>
 
-        <button type="submit" class="primary-clinician-btn" id="clinicianLoginButton">Sign in</button>
+        <button type="submit" class="primary-clinician-btn" id="clinicianLoginButton" data-i18n="signin_btn">Sign in</button>
         <p id="clinicianLoginMessage" class="form-message" aria-live="polite"></p>
       </form>
 
-      <div class="clinician-security-note">🔒 Access is controlled by the parent and may be revoked at any time.</div>
-      <a href="login.html" class="back-to-parent-login">← Parent login</a>
+      <div class="clinician-security-note" data-i18n="clinician_security_note">🔒 Access is controlled by the parent and may be revoked at any time.</div>
+      <a href="login.html" class="back-to-parent-login" data-i18n="parent_login_link">← Parent login</a>
     </section>
   </main>
   <script src="config.js"></script>
   <script src="password-toggle.js"></script>
   <script src="clinician-login.js"></script>
+  <script src="i18n.js"></script>
 </body>
 </html>

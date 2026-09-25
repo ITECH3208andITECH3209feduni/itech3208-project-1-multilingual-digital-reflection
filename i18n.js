@@ -127,6 +127,109 @@ const TRANSLATIONS = {
     birthday_label: 'Birthday',
     color_label: 'Color',
     add_child_empty_state: 'Add a child to start capturing memories',
+
+    // Messages the page scripts show (alerts, empty states, loading text)
+    loading: 'Loading...',
+    loading_children: 'Loading children...',
+    loading_access_records: 'Loading access records...',
+    loading_clinician_access: 'Loading clinician access...',
+    loading_entries: 'Loading journal entries...',
+    select_child_week: 'Select a child to view their week',
+    open_checkin: '🌱 Open Progress Check-In',
+    close_checkin: '✕ Close Progress Check-In',
+    alert_login_first: '⚠️ Please log in first',
+    alert_select_child: '⚠️ Please select a child first!',
+    alert_entry_title: '⚠️ Please enter an entry title',
+    alert_entry_date: '⚠️ Please select a date',
+    alert_entry_content: '⚠️ Please write about what happened',
+    alert_entry_saved: '✅ Journal entry saved successfully!',
+    alert_entry_updated: '✅ Journal entry updated successfully!',
+    alert_entry_load_failed: '❌ Could not load this entry for editing.',
+
+    // clinician-login.html
+    clinician_portal_eyebrow: 'READ-ONLY PORTAL',
+    clinician_signin_title: 'Clinician sign in',
+    clinician_signin_sub:
+      'Sign in to view child information that a parent has explicitly shared with you.',
+    email_label: 'Email',
+    remember_device: 'Remember me on this device',
+    signin_btn: 'Sign in',
+    clinician_security_note:
+      '🔒 Access is controlled by the parent and may be revoked at any time.',
+    parent_login_link: '← Parent login',
+    clinician_access_tagline: 'Clinician Access',
+
+    // clinician-dashboard.html
+    clinician_portal: 'Clinician Portal',
+    shared_children: 'SHARED CHILDREN',
+    readonly_access: 'READ-ONLY ACCESS',
+    clinician_dashboard_title: 'Clinician Dashboard',
+    clinician_dashboard_sub:
+      'Select a child shared with you to review their StoryBond information.',
+    read_only_badge: '🔒 Read only',
+    no_child_selected: 'No child selected',
+    no_child_selected_sub:
+      'Choose a child from the left to view journal entries and weekly progress.',
+    shared_profile: 'SHARED PROFILE',
+    shared_by_parent: 'StoryBond information shared by parent',
+    journal_entries_title: 'Journal Entries',
+    journal_entries_sub: 'Parent-recorded memories and milestones',
+    weekly_progress_title: 'Weekly Progress',
+    weekly_progress_sub: 'Parent weekly check-ins',
+    select_child_entries: 'Select a child to load entries.',
+    select_child_progress: 'Select a child to load progress.',
+
+    // clinician-access.html
+    manage_clinician_access: 'Manage Clinician Access',
+    back_to_home: '← Back to Home',
+    parent_controls: 'PARENT CONTROLS',
+    share_child_title: "Share a child's StoryBond",
+    share_child_sub:
+      'You choose which child a clinician can view and exactly what information they can access.',
+    parent_controlled: '🔒 Parent controlled',
+    grant_update_access: 'Grant or update access',
+    grant_update_sub: 'Select one child and enter the clinician email.',
+    child_label: 'Child',
+    clinician_email_label: 'Clinician email',
+    what_can_view: 'What can they view?',
+    perm_journal: 'Journal entries',
+    perm_journal_sub: 'Memories, milestones and notes',
+    perm_weekly: 'Weekly progress',
+    perm_weekly_sub: 'Weekly check-ins and parent notes',
+    grant_access_btn: 'Grant access',
+    current_access: 'Current clinician access',
+    current_access_sub: 'Review active and previously revoked access.',
+    refresh_btn: '↻ Refresh',
+
+    // Text the clinician dashboard script draws
+    loading_weekly: 'Loading weekly progress...',
+    no_children_shared: 'No children are currently shared with you.',
+    journal_not_shared: '🔒 Journal access has not been shared by the parent.',
+    weekly_not_shared:
+      '🔒 Weekly progress access has not been shared by the parent.',
+    no_journal_entries_yet: 'No journal entries have been recorded yet.',
+    no_weekly_yet: 'No weekly progress checks have been recorded yet.',
+    no_active_access: 'No active child access',
+    no_active_access_sub:
+      'A parent has not currently shared a child profile with this clinician account.',
+    unable_load_clinician: 'Unable to load clinician data.',
+    child_fallback: 'Child',
+    clinician_fallback: 'Clinician',
+    child_storybond_title: "{name}'s StoryBond",
+    born_on: 'Born {date}',
+    dob_not_recorded: 'Date of birth not recorded',
+    date_not_recorded: 'Date not recorded',
+    shared_profile_label: 'Shared profile',
+    pill_journal: '📖 Journal',
+    pill_weekly: '📊 Weekly Progress',
+    signing_in: 'Signing in...',
+    signin_success: '✓ Sign in successful.',
+    unable_signin: 'Unable to sign in.',
+    session_not_created: 'The clinician session could not be created.',
+    error_prefix: '❌ Error: {message}',
+    revoke_failed: 'Unable to revoke access: {message}',
+    child_added: '✅ {name} has been added successfully!',
+    opening_profile: 'Opening profile settings...',
   },
 
   tr: {
@@ -256,6 +359,109 @@ const TRANSLATIONS = {
     birthday_label: 'Doğum günü',
     color_label: 'Renk',
     add_child_empty_state: 'Anıları kaydetmeye başlamak için bir çocuk ekleyin',
+
+    // Sayfa betiklerinin gösterdiği mesajlar
+    loading: 'Yükleniyor...',
+    loading_children: 'Çocuklar yükleniyor...',
+    loading_access_records: 'Erişim kayıtları yükleniyor...',
+    loading_clinician_access: 'Klinisyen erişimi yükleniyor...',
+    loading_entries: 'Günlük kayıtları yükleniyor...',
+    select_child_week: 'Haftasını görmek için bir çocuk seçin',
+    open_checkin: '🌱 İlerleme Değerlendirmesini Aç',
+    close_checkin: '✕ İlerleme Değerlendirmesini Kapat',
+    alert_login_first: '⚠️ Lütfen önce giriş yapın',
+    alert_select_child: '⚠️ Lütfen önce bir çocuk seçin!',
+    alert_entry_title: '⚠️ Lütfen bir başlık girin',
+    alert_entry_date: '⚠️ Lütfen bir tarih seçin',
+    alert_entry_content: '⚠️ Lütfen neler olduğunu yazın',
+    alert_entry_saved: '✅ Günlük kaydı başarıyla kaydedildi!',
+    alert_entry_updated: '✅ Günlük kaydı başarıyla güncellendi!',
+    alert_entry_load_failed: '❌ Bu kayıt düzenlemek için yüklenemedi.',
+
+    // clinician-login.html
+    clinician_portal_eyebrow: 'SALT OKUNUR PORTAL',
+    clinician_signin_title: 'Klinisyen girişi',
+    clinician_signin_sub:
+      'Bir ebeveynin sizinle açıkça paylaştığı çocuk bilgilerini görmek için giriş yapın.',
+    email_label: 'E-posta',
+    remember_device: 'Bu cihazda beni hatırla',
+    signin_btn: 'Giriş yap',
+    clinician_security_note:
+      '🔒 Erişim ebeveyn tarafından kontrol edilir ve istenildiği zaman kaldırılabilir.',
+    parent_login_link: '← Ebeveyn girişi',
+    clinician_access_tagline: 'Klinisyen Erişimi',
+
+    // clinician-dashboard.html
+    clinician_portal: 'Klinisyen Portalı',
+    shared_children: 'PAYLAŞILAN ÇOCUKLAR',
+    readonly_access: 'SALT OKUNUR ERİŞİM',
+    clinician_dashboard_title: 'Klinisyen Paneli',
+    clinician_dashboard_sub:
+      'StoryBond bilgilerini incelemek için sizinle paylaşılan bir çocuk seçin.',
+    read_only_badge: '🔒 Salt okunur',
+    no_child_selected: 'Çocuk seçilmedi',
+    no_child_selected_sub:
+      'Günlük kayıtlarını ve haftalık ilerlemeyi görmek için soldan bir çocuk seçin.',
+    shared_profile: 'PAYLAŞILAN PROFİL',
+    shared_by_parent: 'Ebeveyn tarafından paylaşılan StoryBond bilgileri',
+    journal_entries_title: 'Günlük Kayıtları',
+    journal_entries_sub: 'Ebeveynin kaydettiği anılar ve dönüm noktaları',
+    weekly_progress_title: 'Haftalık İlerleme',
+    weekly_progress_sub: 'Ebeveynin haftalık değerlendirmeleri',
+    select_child_entries: 'Kayıtları yüklemek için bir çocuk seçin.',
+    select_child_progress: 'İlerlemeyi yüklemek için bir çocuk seçin.',
+
+    // clinician-access.html
+    manage_clinician_access: 'Klinisyen Erişimini Yönet',
+    back_to_home: '← Ana Sayfaya Dön',
+    parent_controls: 'EBEVEYN KONTROLLERİ',
+    share_child_title: "Bir çocuğun StoryBond'unu paylaşın",
+    share_child_sub:
+      'Bir klinisyenin hangi çocuğu görebileceğine ve tam olarak hangi bilgilere erişebileceğine siz karar verirsiniz.',
+    parent_controlled: '🔒 Ebeveyn kontrolünde',
+    grant_update_access: 'Erişim ver veya güncelle',
+    grant_update_sub: 'Bir çocuk seçin ve klinisyenin e-postasını girin.',
+    child_label: 'Çocuk',
+    clinician_email_label: 'Klinisyen e-postası',
+    what_can_view: 'Neleri görebilirler?',
+    perm_journal: 'Günlük kayıtları',
+    perm_journal_sub: 'Anılar, dönüm noktaları ve notlar',
+    perm_weekly: 'Haftalık ilerleme',
+    perm_weekly_sub: 'Haftalık değerlendirmeler ve ebeveyn notları',
+    grant_access_btn: 'Erişim ver',
+    current_access: 'Mevcut klinisyen erişimi',
+    current_access_sub: 'Etkin ve daha önce kaldırılmış erişimleri inceleyin.',
+    refresh_btn: '↻ Yenile',
+
+    // Klinisyen panelinin oluşturduğu metinler
+    loading_weekly: 'Haftalık ilerleme yükleniyor...',
+    no_children_shared: 'Şu anda sizinle paylaşılan bir çocuk yok.',
+    journal_not_shared: '🔒 Günlük erişimi ebeveyn tarafından paylaşılmadı.',
+    weekly_not_shared:
+      '🔒 Haftalık ilerleme erişimi ebeveyn tarafından paylaşılmadı.',
+    no_journal_entries_yet: 'Henüz günlük kaydı girilmemiş.',
+    no_weekly_yet: 'Henüz haftalık ilerleme değerlendirmesi girilmemiş.',
+    no_active_access: 'Etkin çocuk erişimi yok',
+    no_active_access_sub:
+      'Bir ebeveyn şu anda bu klinisyen hesabıyla çocuk profili paylaşmıyor.',
+    unable_load_clinician: 'Klinisyen verileri yüklenemedi.',
+    child_fallback: 'Çocuk',
+    clinician_fallback: 'Klinisyen',
+    child_storybond_title: "{name} adlı çocuğun StoryBond'u",
+    born_on: 'Doğum: {date}',
+    dob_not_recorded: 'Doğum tarihi kaydedilmemiş',
+    date_not_recorded: 'Tarih kaydedilmemiş',
+    shared_profile_label: 'Paylaşılan profil',
+    pill_journal: '📖 Günlük',
+    pill_weekly: '📊 Haftalık İlerleme',
+    signing_in: 'Giriş yapılıyor...',
+    signin_success: '✓ Giriş başarılı.',
+    unable_signin: 'Giriş yapılamadı.',
+    session_not_created: 'Klinisyen oturumu oluşturulamadı.',
+    error_prefix: '❌ Hata: {message}',
+    revoke_failed: 'Erişim kaldırılamadı: {message}',
+    child_added: '✅ {name} başarıyla eklendi!',
+    opening_profile: 'Profil ayarları açılıyor...',
   },
 };
 
@@ -287,11 +493,33 @@ function applyLanguage(lang) {
 
   document.documentElement.setAttribute('lang', lang);
   localStorage.setItem('storybondLang', lang);
+
+  // Lists and cards drawn by the page scripts cannot be re-labelled by the
+  // loops above, so they listen for this and redraw themselves.
+  document.dispatchEvent(
+    new CustomEvent('storybond:languagechange', { detail: { lang } })
+  );
+}
+
+// The language the page is showing right now.
+function currentLang() {
+  return localStorage.getItem('storybondLang') || 'en';
+}
+
+// Look up one phrase from the page scripts, e.g. alert(t('select_child_first')).
+// Falls back to English, then to the key itself, so a missing translation
+// never blanks out the message.
+function t(key, fallback) {
+  const dict = TRANSLATIONS[currentLang()] || TRANSLATIONS.en;
+
+  if (dict[key] !== undefined) return dict[key];
+  if (TRANSLATIONS.en[key] !== undefined) return TRANSLATIONS.en[key];
+
+  return fallback !== undefined ? fallback : key;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const savedLang = localStorage.getItem('storybondLang') || 'en';
-  applyLanguage(savedLang);
+  applyLanguage(currentLang());
 
   document.querySelectorAll('.lang-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
