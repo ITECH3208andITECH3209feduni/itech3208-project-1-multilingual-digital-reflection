@@ -347,7 +347,7 @@ function renderPermissionPills(grant) {
 
   if (grant.can_view_journal) {
     pills.push(
-      `<span class="permission-pill">${t(pill_journal)}</span>`
+      `<span class="permission-pill">${t('pill_journal')}</span>`
     );
   }
 
@@ -355,7 +355,7 @@ function renderPermissionPills(grant) {
     grant.can_view_weekly_progress
   ) {
     pills.push(
-      `<span class="permission-pill">${t(pill_weekly)}</span>`
+      `<span class="permission-pill">${t('pill_weekly')}</span>`
     );
   }
 
