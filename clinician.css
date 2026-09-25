@@ -134,7 +134,10 @@ label:not(.remember-row) {
 }
 
 .clinician-form input[type="email"],
-.clinician-form input[type="password"] {
+.clinician-form input[type="password"],
+/* Revealing a password switches it to type="text", so it must keep
+   these styles rather than falling back to the browser default. */
+.clinician-form .pw-wrap input[type="text"] {
   width: 100%;
   min-height: 48px;
 
