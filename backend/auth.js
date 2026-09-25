@@ -289,6 +289,34 @@ router.post('/login', async (req, res) => {
         });
       }
 
+      // Supabase throttles repeated attempts per IP. Reporting that as a bad
+      // password makes people try again, which extends the lockout.
+      const isRateLimited =
+        authError?.status === 429 ||
+        authError?.code === 'over_request_rate_limit' ||
+        /rate limit/i.test(authError?.message || '');
+
+      if (isRateLimited) {
+        console.error('Login blocked by rate limit:', email, authError?.message);
+
+        return res.status(429).json({
+          success: false,
+          error:
+            'Too many login attempts from this device. Please wait about an hour before trying again.',
+          code: 'RATE_LIMITED'
+        });
+      }
+
+      if (authError) {
+        console.error(
+          'Login refused:',
+          email,
+          authError.status,
+          authError.code,
+          authError.message
+        );
+      }
+
       return res.status(401).json({
         success: false,
         error: 'Invalid username or password.'
