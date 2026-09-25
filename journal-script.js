@@ -609,7 +609,7 @@ const JournalEntry = {
 
 
             alert(
-                '❌ Could not load this entry for editing.'
+                t('alert_entry_load_failed')
             );
         }
     },
@@ -977,7 +977,7 @@ const JournalEntry = {
         if (!title) {
 
             alert(
-                '⚠️ Please enter an entry title'
+                t('alert_entry_title')
             );
 
             return;
@@ -987,7 +987,7 @@ const JournalEntry = {
         if (!date) {
 
             alert(
-                '⚠️ Please select a date'
+                t('alert_entry_date')
             );
 
             return;
@@ -997,7 +997,7 @@ const JournalEntry = {
         if (!story) {
 
             alert(
-                '⚠️ Please write about what happened'
+                t('alert_entry_content')
             );
 
             return;
@@ -1007,7 +1007,7 @@ const JournalEntry = {
         if (!userId) {
 
             alert(
-                '⚠️ Please log in first'
+                t('alert_login_first')
             );
 
 
@@ -1021,7 +1021,7 @@ const JournalEntry = {
         if (!childId) {
 
             alert(
-                '⚠️ Please select a child first!'
+                t('alert_select_child')
             );
 
             return;
@@ -1173,8 +1173,8 @@ const JournalEntry = {
 
             alert(
                 isEdit
-                    ? '✅ Journal entry updated successfully!'
-                    : '✅ Journal entry saved successfully!'
+                    ? t('alert_entry_updated')
+                    : t('alert_entry_saved')
             );
 
 
@@ -1216,7 +1216,7 @@ const JournalEntry = {
 
 
             alert(
-                `❌ Error: ${error.message}`
+                t('error_prefix').replace('{message}', error.message)
             );
 
 

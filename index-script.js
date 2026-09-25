@@ -177,7 +177,7 @@ async function loadChildren() {
 
         // Clear existing child list
         childrenContainer.innerHTML =
-            '<p class="nav-heading">CHILDREN</p>';
+            `<p class="nav-heading" data-i18n="nav_children">${t('nav_children')}</p>`;
 
 
         data.data.forEach(
@@ -619,7 +619,7 @@ async function deleteChild(
 
 
         alert(
-            `❌ Error: ${error.message}`
+            t('error_prefix').replace('{message}', error.message)
         );
     }
 }
@@ -1521,7 +1521,7 @@ async function deleteEntry(
 
 
         alert(
-            `❌ Error: ${error.message}`
+            t('error_prefix').replace('{message}', error.message)
         );
     }
 }
@@ -1763,6 +1763,7 @@ function viewEntry(
 
 
             <p
+                class="entry-modal-content"
                 style="
                     line-height:1.6;
                     color:#333;
@@ -1771,6 +1772,9 @@ function viewEntry(
             >
                 ${content}
             </p>
+
+
+            <div class="translate-row"></div>
 
 
             <div
@@ -1783,6 +1787,30 @@ function viewEntry(
 
         </div>
     `;
+
+
+    // Offer to translate the parent's own words between English and Turkish.
+    // The heading and story are translated together, then swapped back on a
+    // second click.
+    const translateRow =
+        modal.querySelector('.translate-row');
+
+    const modalTitle =
+        modal.querySelector('h2');
+
+    const modalContent =
+        modal.querySelector('.entry-modal-content');
+
+    if (translateRow && modalTitle && modalContent) {
+
+        addTranslateButton(
+            translateRow,
+            [
+                { element: modalTitle, original: title },
+                { element: modalContent, original: content }
+            ]
+        );
+    }
 
 
     modal
@@ -2099,7 +2127,7 @@ async function loadClinicianAccessList() {
     try {
 
         container.innerHTML =
-            '<p class="clinician-access-empty">Loading clinician access...</p>';
+            `<p class="clinician-access-empty">${t('loading_clinician_access')}</p>`;
 
 
         const response =
@@ -2344,7 +2372,7 @@ async function revokeClinicianAccess(
 
 
         alert(
-            `Unable to revoke access: ${error.message}`
+            t('revoke_failed').replace('{message}', error.message)
         );
     }
 }
@@ -2436,3 +2464,24 @@ document.addEventListener(
         }
     }
 );
+
+
+// ==================================================
+// LANGUAGE CHANGE
+// ==================================================
+
+// Cards and lists here are built from data, so the page-wide translation
+// pass cannot relabel them. Draw them again in the chosen language.
+document.addEventListener('storybond:languagechange', async () => {
+    if (!getUserId() || !getAccessToken()) return;
+
+    updateGreeting();
+
+    updateHeaderDate();
+
+    await loadChildren();
+
+    await loadRecentEntries();
+
+    await loadClinicianAccessList();
+});
