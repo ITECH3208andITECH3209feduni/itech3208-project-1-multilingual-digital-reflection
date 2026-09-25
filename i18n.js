@@ -230,6 +230,17 @@ const TRANSLATIONS = {
     revoke_failed: 'Unable to revoke access: {message}',
     child_added: '✅ {name} has been added successfully!',
     opening_profile: 'Opening profile settings...',
+
+    // Live translation of what parents write
+    translate_to_tr: '🌐 Türkçeye çevir',
+    translate_to_en: '🌐 Translate to English',
+    show_original: '↩ Show original',
+    translating: 'Translating...',
+    translated_by: 'Machine translation',
+    translate_failed: 'Could not translate this text.',
+    untitled_entry: 'Untitled entry',
+    milestone_tag: '⭐ Milestone',
+    mood_prefix: 'Mood:',
   },
 
   tr: {
@@ -462,6 +473,17 @@ const TRANSLATIONS = {
     revoke_failed: 'Erişim kaldırılamadı: {message}',
     child_added: '✅ {name} başarıyla eklendi!',
     opening_profile: 'Profil ayarları açılıyor...',
+
+    // Ebeveynlerin yazdıklarının anlık çevirisi
+    translate_to_tr: '🌐 Türkçeye çevir',
+    translate_to_en: '🌐 İngilizceye çevir',
+    show_original: '↩ Özgün metni göster',
+    translating: 'Çevriliyor...',
+    translated_by: 'Makine çevirisi',
+    translate_failed: 'Bu metin çevrilemedi.',
+    untitled_entry: 'Başlıksız kayıt',
+    milestone_tag: '⭐ Dönüm noktası',
+    mood_prefix: 'Ruh hali:',
   },
 };
 

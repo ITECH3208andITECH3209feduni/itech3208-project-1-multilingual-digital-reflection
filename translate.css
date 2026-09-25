@@ -1,0 +1,44 @@
+/* Translate button shown next to what a parent wrote. */
+
+.translate-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    margin-bottom: 14px;
+}
+
+.translate-btn {
+    padding: 7px 14px;
+
+    border: 1px solid #ddd0f0;
+    border-radius: 10px;
+
+    background: #faf5ff;
+    color: #8b5cd6;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.translate-btn:hover:not(:disabled) {
+    background: #8b5cd6;
+    color: #fff;
+}
+
+.translate-btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+}
+
+/* Says when a translation is running, and marks the result as machine
+   translated so nobody mistakes it for the parent's own wording. */
+.translate-status {
+    color: #7b7685;
+    font-size: 12px;
+}

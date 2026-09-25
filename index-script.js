@@ -1763,6 +1763,7 @@ function viewEntry(
 
 
             <p
+                class="entry-modal-content"
                 style="
                     line-height:1.6;
                     color:#333;
@@ -1771,6 +1772,9 @@ function viewEntry(
             >
                 ${content}
             </p>
+
+
+            <div class="translate-row"></div>
 
 
             <div
@@ -1783,6 +1787,30 @@ function viewEntry(
 
         </div>
     `;
+
+
+    // Offer to translate the parent's own words between English and Turkish.
+    // The heading and story are translated together, then swapped back on a
+    // second click.
+    const translateRow =
+        modal.querySelector('.translate-row');
+
+    const modalTitle =
+        modal.querySelector('h2');
+
+    const modalContent =
+        modal.querySelector('.entry-modal-content');
+
+    if (translateRow && modalTitle && modalContent) {
+
+        addTranslateButton(
+            translateRow,
+            [
+                { element: modalTitle, original: title },
+                { element: modalContent, original: content }
+            ]
+        );
+    }
 
 
     modal

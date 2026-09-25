@@ -207,7 +207,7 @@ async function loadSharedChildren() {
             </strong>
 
             <small>
-              ${t(shared_profile_label)}
+              ${t('shared_profile_label')}
             </small>
           </span>
         `;
@@ -428,16 +428,16 @@ async function loadJournalEntries(
 
             ${
               entry.is_milestone
-                ? '<span class="milestone-tag">⭐ Milestone</span>'
+                ? `<span class="milestone-tag">${t('milestone_tag')}</span>`
                 : ''
             }
 
           </div>
 
-          <h4>
+          <h4 class="entry-title">
             ${escapeHtml(
               entry.title ||
-              'Untitled entry'
+              t('untitled_entry')
             )}
           </h4>
 
@@ -447,10 +447,12 @@ async function loadJournalEntries(
             )}
           </p>
 
+          <div class="translate-row"></div>
+
           <div class="entry-footer">
 
             <span>
-              Mood:
+              ${t('mood_prefix')}
               ${escapeHtml(
                 formatProgressValue(
                   entry.mood
@@ -470,6 +472,29 @@ async function loadJournalEntries(
       `
         )
         .join('');
+
+    // Let the clinician read each entry in the other language. The cards are
+    // rebuilt here each time, so the buttons are attached after rendering.
+    container
+      .querySelectorAll('.journal-entry-card')
+      .forEach((card, index) => {
+
+        const entry = entries[index];
+
+        addTranslateButton(
+          card.querySelector('.translate-row'),
+          [
+            {
+              element: card.querySelector('.entry-title'),
+              original: entry.title || t('untitled_entry')
+            },
+            {
+              element: card.querySelector('.entry-content'),
+              original: entry.content || ''
+            }
+          ]
+        );
+      });
 
   } catch (error) {
 
