@@ -77,6 +77,8 @@ const TRANSLATIONS = {
     login_subtitle: "Log in to start your adventure 🚀",
     login_email_label: 'Your Email or Username',
     password_label: 'Password',
+    show_password: 'Show password',
+    hide_password: 'Hide password',
     remember_me: 'Remember me',
     forgot_password_link: 'Forgot password?',
     login_btn: "🚀 Let's Go!",
@@ -204,6 +206,8 @@ const TRANSLATIONS = {
     login_subtitle: 'Maceranıza başlamak için giriş yapın 🚀',
     login_email_label: 'E-posta veya Kullanıcı Adınız',
     password_label: 'Şifre',
+    show_password: 'Şifreyi göster',
+    hide_password: 'Şifreyi gizle',
     remember_me: 'Beni hatırla',
     forgot_password_link: 'Şifremi unuttum?',
     login_btn: '🚀 Hadi Başlayalım!',
@@ -266,6 +270,15 @@ function applyLanguage(lang) {
   document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
     const key = el.getAttribute('data-i18n-placeholder');
     if (dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
+  });
+
+  // Icon-only buttons (the password eye) carry their wording in aria-label.
+  document.querySelectorAll('[data-i18n-aria-label]').forEach((el) => {
+    const key = el.getAttribute('data-i18n-aria-label');
+    if (dict[key] !== undefined) {
+      el.setAttribute('aria-label', dict[key]);
+      el.setAttribute('title', dict[key]);
+    }
   });
 
   document.querySelectorAll('.lang-btn').forEach((btn) => {
